@@ -32,6 +32,15 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// init service.
+var config = require('./config');
+var redis = require('redis');
+var services = require('./lib/services');
+var redisClient = redis.createClient(config.port, config.host);
+redisClient.select(config.database, function(err) {
+    app.services = services(redisClient);
+})
+
 routes(app);
 
 http.createServer(app).listen(app.get('port'), function(){
