@@ -1,0 +1,115 @@
+.line-gap {
+  margin: 15px;
+}
+.post-cell {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+}
+.reply-cell {
+  margin-top: -16px;
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 0 0 4px 4px;
+}
+.sidepanel {
+  margin: 12px 0;
+  padding: 10px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 4px;
+}
+.btn-half {
+  width: 50%;
+  margin-left: 25%;
+}
+.sns-login {
+  width: 47%;
+}
+.sns-login-qq {
+  color: #ffffff;
+  background-color: #0d6bca;
+  border-color: #0a5ab0;
+}
+.sns-login-qq:hover,
+.sns-login-qq:focus,
+.sns-login-qq:active,
+.sns-login-qq.active,
+.open .dropdown-toggle.sns-login-qq {
+  color: #ffffff;
+  background-color: #0b57a4;
+  border-color: #073c76;
+}
+.sns-login-qq:active,
+.sns-login-qq.active,
+.open .dropdown-toggle.sns-login-qq {
+  background-image: none;
+}
+.sns-login-qq.disabled,
+.sns-login-qq[disabled],
+fieldset[disabled] .sns-login-qq,
+.sns-login-qq.disabled:hover,
+.sns-login-qq[disabled]:hover,
+fieldset[disabled] .sns-login-qq:hover,
+.sns-login-qq.disabled:focus,
+.sns-login-qq[disabled]:focus,
+fieldset[disabled] .sns-login-qq:focus,
+.sns-login-qq.disabled:active,
+.sns-login-qq[disabled]:active,
+fieldset[disabled] .sns-login-qq:active,
+.sns-login-qq.disabled.active,
+.sns-login-qq[disabled].active,
+fieldset[disabled] .sns-login-qq.active {
+  background-color: #0d6bca;
+  border-color: #0a5ab0;
+}
+.sns-login-qq .badge {
+  color: #0d6bca;
+  background-color: #fff;
+}
+.sns-login-sina {
+  color: #ffffff;
+  background-color: #e24642;
+  border-color: #d23632;
+}
+.sns-login-sina:hover,
+.sns-login-sina:focus,
+.sns-login-sina:active,
+.sns-login-sina.active,
+.open .dropdown-toggle.sns-login-sina {
+  color: #ffffff;
+  background-color: #da2621;
+  border-color: #a32724;
+}
+.sns-login-sina:active,
+.sns-login-sina.active,
+.open .dropdown-toggle.sns-login-sina {
+  background-image: none;
+}
+.sns-login-sina.disabled,
+.sns-login-sina[disabled],
+fieldset[disabled] .sns-login-sina,
+.sns-login-sina.disabled:hover,
+.sns-login-sina[disabled]:hover,
+fieldset[disabled] .sns-login-sina:hover,
+.sns-login-sina.disabled:focus,
+.sns-login-sina[disabled]:focus,
+fieldset[disabled] .sns-login-sina:focus,
+.sns-login-sina.disabled:active,
+.sns-login-sina[disabled]:active,
+fieldset[disabled] .sns-login-sina:active,
+.sns-login-sina.disabled.active,
+.sns-login-sina[disabled].active,
+fieldset[disabled] .sns-login-sina.active {
+  background-color: #e24642;
+  border-color: #d23632;
+}
+.sns-login-sina .badge {
+  color: #e24642;
+  background-color: #fff;
+}

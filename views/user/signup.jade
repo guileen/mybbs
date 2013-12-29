@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  .container
+    .center-block(style='max-width:500px;')
+        h2 现在加入城邦。
+        a(href='#') 已有帐号？登录
+        form#signupform
+          .form-group.has-error
+            label(for='InputNickname') 昵称
+            input#InputNickname.form-control(type='text', placeholder='昵称', required, maxlength=25, pattern='^[0-9a-zA-Z\\u4e00-\\u9fbf_-]{2,25}$', value=nickname)
+            span.help-block 2-25 个中文、英文、数字
+          .form-group"
+            label(for='InputEmail') 邮箱
+            input#InputEmail.form-control(type='email', placeholder='邮箱', required, maxlength=50, value=email)
+            span.help-block 你的常用邮箱
+          .form-group
+            label(for='InputPassword') 密码
+            input#InputPassword.form-control(type='password', placeholder='密码', required, maxlength=25, pattern='.{6,25}', value=password)
+            span.help-block 6位以上
+          .checkbox
+            label
+              input(type='checkbox', checked=true)
+              | 在这台设备上保持登录状态
+          p 点击按钮意味着你同意
+            a(href='/tos') 《服务条款》
+          button.btn.btn-warning.btn-half(type='submit') 注册
+          .form-group
+  script.
+    autoValidate('#signupform');
