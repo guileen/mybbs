@@ -63,39 +63,47 @@ block content
         .sidepanel
           a.btn.btn-primary.btn-lg.btn-block(type='button', href="#", disabled=true) 创建城邦
           .text-center.text-muted 请先登录
-        .sidepanel
-          a.btn.pull-right.sns-login.sns-login-qq(href='/oauth/auth/qqconn?next=/oauth/account_callback') QQ登录
-          a.btn.sns-login.sns-login-sina(href='/oauth/auth/sina?next=/oauth/account_callback') 微博登录
-        .sidepanel
-          form
-            .form-group
-              label.sr-only(for='InputEmail') 帐号
-              input#InputEmail.form-control(type='email', placeholder='邮箱/手机号/用户名')
-            .form-group
-              label.sr-only(for='InputPassword') 密码
-              input#InputPassword.form-control(type='email', placeholder='密码')
-            .checkbox
-              label
-                input(type='checkbox', checked=true)
-                | 自动登录 - 
-                a(href='') 忘记密码
-            button.btn.btn-success.btn-half(type='submit') 登录
+        if user
+          .sidepanel
+            a(href='#')= user.nickname
+            | &nbsp;&nbsp;&nbsp;&nbsp;
+            a(href='#') 登出
+        else
+          //- not login
+          .sidepanel
+            a.btn.pull-right.sns-login.sns-login-qq(href='/oauth/auth/qqconn?next=/oauth/account_callback') QQ登录
+            a.btn.sns-login.sns-login-sina(href='/oauth/auth/sina?next=/oauth/account_callback') 微博登录
+          .sidepanel
+            form
+              .form-group
+                label.sr-only(for='InputEmail') 帐号
+                input#InputEmail.form-control(type='email', placeholder='邮箱/手机号/用户名')
+              .form-group
+                label.sr-only(for='InputPassword') 密码
+                input#InputPassword.form-control(type='email', placeholder='密码')
+              .checkbox
+                label
+                  input(type='checkbox', checked=true)
+                  | 自动登录 - 
+                  a(href='') 忘记密码
+              button.btn.btn-success.btn-half(type='submit') 登录
 
-        .sidepanel
-          h4 新来到城邦？
-            span.text-muted 注册
-          hr
-          form(action='/signup', method='post')
-            .form-group
-              label.sr-only(for='InputNickname') 昵称
-              input#InputNickname.form-control(type='text', placeholder='昵称', name='nickname')
-            .form-group
-              label.sr-only(for='InputEmail') 帐号
-              input#InputEmail.form-control(type='email', placeholder='邮箱', name='email')
-            .form-group
-              label.sr-only(for='InputPassword') 密码
-              input#InputPassword.form-control(type='password', placeholder='密码', name='password')
-            button.btn.btn-warning.btn-half(type='submit') 注册
+          .sidepanel
+            h4 新来到城邦？
+              span.text-muted 注册
+            hr
+            form(action='/signup', method='post')
+              .form-group
+                label.sr-only(for='InputNickname') 昵称
+                input#InputNickname.form-control(type='text', placeholder='昵称', name='nickname')
+              .form-group
+                label.sr-only(for='InputEmail') 帐号
+                input#InputEmail.form-control(type='email', placeholder='邮箱', name='email')
+              .form-group
+                label.sr-only(for='InputPassword') 密码
+                input#InputPassword.form-control(type='password', placeholder='密码', name='password')
+              button.btn.btn-warning.btn-half(type='submit') 注册
+          //- end not login
 
         .sidepanel
           p side side

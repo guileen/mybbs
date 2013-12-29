@@ -5,6 +5,8 @@ module.exports = function(app) {
    * GET home page.
    */
   app.get('/', function(req, res){
-      res.render('index', { title: 'Express' });
+      var user = req.session.user;
+      console.log(user);
+      res.render('index', { user: user });
   })
 }

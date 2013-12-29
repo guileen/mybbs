@@ -8,6 +8,8 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var RedisStore = require('connect-redis')(express);
+var config = require('./config');
 
 var app = express();
 
@@ -21,7 +23,14 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
-app.use(express.session());
+app.use(express.session({
+      store: new RedisStore({
+          port: config.port
+        , host: config.host
+        , db: config.session_db
+      })
+    , secret: 'my bbs secret'
+}));
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -33,7 +42,6 @@ if ('development' == app.get('env')) {
 }
 
 // init service.
-var config = require('./config');
 var redis = require('redis');
 var services = require('./lib/services');
 var redisClient = redis.createClient(config.port, config.host);

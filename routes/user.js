@@ -11,12 +11,22 @@ module.exports = function(app) {
             nickname: body.nickname
           , password: body.password
           , email: body.email
-        }, function(err, results) {
+        }, function(err, userInfo) {
             // TODO 500.
-            // TODO session, remember me.
             if(err) {return callback(err);}
-            // last url.
-            res.redirect('/');
+            req.session.regenerate(function(){
+                req.session.user = userInfo;
+                // remember me or not
+                if(body.rememberme) {
+                  req.session.cookie.expires = false;
+                  req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
+                } else {
+                  req.session.cookie.expires = true;
+                  req.session.cookie.maxAge = 10 * 1000;
+                }
+                // TODO last url.
+                res.redirect('/');
+            })
         })
       } else {
         res.render('user/signup', {
