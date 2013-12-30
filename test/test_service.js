@@ -5,16 +5,16 @@ describe('service', function(){
         // 只测试致命bug，创建用户，不可重名
         describe('#createUser', function(){
                 it('should save successfully', function(done) {
-                        service.createUser({username:'foo'}, function(err, user) {
+                        service.createUser({email:'foo@bar.com'}, function(err, user) {
                                 if(err) return done(err);
-                                user.username.should.equal('foo');
+                                user.email.should.equal('foo@bar.com');
                                 should.exists(user.id);
                                 done();
                         });
                 });
 
                 it('should not save duplicate', function(done) {
-                        service.createUser({username:'bar'}, function(err, bar) {
+                        service.createUser({email:'foo1@bar.com'}, function(err, bar) {
                                 if(err) done(err);
                                 service.createUser({username:'bar'}, function(err, bar) {
                                         should.exists(err);
@@ -36,7 +36,7 @@ describe('service', function(){
         // 加入群组
         describe('#joinGroup', function() {
                 it('should join successfully', function(done) {
-                        service.createUser({username:'user2'}, function(err, user) {
+                        service.createUser({email:'foo2@bar.com'}, function(err, user) {
                                 if(err) {return callback(err);}
                                 service.joinGroup(user.id, 1, function(err, data) {
                                         if(err) {return callback(err);}
