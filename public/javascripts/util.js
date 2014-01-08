@@ -212,24 +212,59 @@ function httpRequest(options, callback) {
 
   xhr.open(m, u, true);
   var hasContentType = false;
+  var hasAccept = false;
   for (var k in h) {
     v = h[k];
     xhr.setRequestHeader(k, v);
     if (k.toLowerCase() === 'content-type')
       hasContentType = true;
+    if (k.toLowerCase() === 'accept')
+      hasAccept = true;
   }
   if (d) {
     if (t == 'json') {
       d = JSON.stringify(d);
       t = 'application/json';
+      if (!hasAccept) {
+        xhr.setRequestHeader('Accept', t);
+      }
     }else {
       d = buildQueryString(d);
       t = 'application/x-www-form-urlencoded';
     }
-    if (!hasContentType)
+    if (!hasContentType) {
       xhr.setRequestHeader('Content-Type', t);
+    }
+
   }
   xhr.send(d);
+}
+
+/**
+ * make a form use ajax
+ * @param form {HTMLFormElement}
+ * @param callback {function(err, reply, xhr)}
+ *
+ */
+function jsonForm(form, signInButton, callback) {
+  if(typeof form == 'string') form = $(form);
+  if(typeof signInButton == 'string') signInButton = $(signInButton);
+  form.onsubmit = function() {
+    if(signInButton) {
+      addClass(signInButton, 'disabled');
+    }
+    var json = formSerialize(form);
+    httpRequest({
+        data: json
+      , url: form.action
+      , method: form.method
+      , type: 'json'
+      }, function(err, reply, xhr) {
+        removeClass(signInButton, 'disabled');
+        callback(err, reply, xhr);
+    });
+    return false;
+  }
 }
 
 // OO. Nothing needed except this.
@@ -258,6 +293,7 @@ window.u = window.util = {
   formSerialize: formSerialize,
   formDeserialize: formDeserialize,
   ajax: httpRequest,
+  jsonForm: jsonForm,
   merge: merge
 }
 
