@@ -18,9 +18,10 @@ block content
               所有
           li
             a(href='#') 发现
-          each group in user.groups
-            li
-              a(href='#')= group.name
+          if user
+            each group in user.groups
+              li
+                a(href='#')= group.name
 
         // posts
         .post-cell

@@ -8,6 +8,9 @@ module.exports = function(app) {
    */
   app.get('/', function(req, res){
       var user = req.session.user;
+      if(!user) {
+          return res.render('index');
+      }
       app.services.getGroupsOfUser(user.id, function(err, groups) {
           if(err) {return callback(err);}
           user.groups = groups;
