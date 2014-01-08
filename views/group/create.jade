@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+  .container
+    .center-block(style='max-width:500px;')
+      h2 创建社团
+      form#creategroupform(action='/group/create', method='post')
+        .form-group
+          label(for='InputGroupName') 社团名称
+          .input-group
+            input#InputGroupName.form-control(name='name', type='text', placeholder='社团名称', required, maxlength=25, pattern='^[0-9a-zA-Z\\u4e00-\\u9fbf_-]{2,25}$', value=name)
+            span.input-group-addon.groupsuffix-addon
+              select.groupsuffix-select
+                option 社
+                option 会
+                option 团
+                option 圈
+                //- option 群
+                option 组
+          span.help-block 2-25 个中文、英文、数字
+        .form-group
+          label(for='InputPrivacy') 内容隐私
+          select#InputPrivacy.form-control(name='privacy')
+            option(value='0', disabled) 公开社团 - 所有人可见(暂未开放)
+            option(value='1') 私密社团 - 仅对群内成员可见
+          span.help-block 私密社团只能通过群组号码找到
+        //- TODO 第一版暂时是自由加入
+        //- .form-group
+        //-   //- 设定群问题，可以满足3种需求，1，自由加入，2，限制加入，3. 审核加入
+        //-   label(for='InputQuestion') 加入者需要回答的问题
+        //-   input#InputQuestion.form-control(name='question', placeholder='问题描述', maxlength=50, value=question)
+        //-   span.help-block （可选）与群组的兴趣、领域、人群特征相关联的问题。如：我们的班长是谁？
+        //- .form-group
+        //-   label(for='InputAnswer') 问题答案
+        //-   input#InputAnswer.form-control(name='answer', placeholder='问题答案', maxlength=50, value=answer)
+        //-   span.help-block （可选）问题答案
+        //- .checkbox
+        //-   label
+        //-     input(name='approve', type='checkbox', checked=reviewjoin)
+        //-     | 申请加入时需要管理员审核
+        //- 有答案，不需审核，答对答案即加入, 答错无效
+        //- 有答案，需审核，答对答案后进入审核流程,答错无效
+        //- 无答案, 需审核, 用户输入申请留言。必须审核才能通过。
+        //- 无答案，不需审核，直接加入。
+
+        button.btn.btn-primary.btn-half(type='submit') 创建
+  script.
+    autoValidate('#creategroupform');
+

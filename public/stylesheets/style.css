@@ -1,6 +1,22 @@
 .line-gap {
   margin: 15px;
 }
+.callout {
+  margin: 20px 0;
+  padding: 20px;
+  border-left: 3px solid #eee;
+}
+.groupsuffix-addon {
+  padding: 0 16px;
+}
+.groupsuffix-select {
+  font-size: 16px;
+  border: none;
+}
+.callout-info {
+  background-color: #f4f8fa;
+  border-color: #bce8f1;
+}
 .post-cell {
   margin-top: 15px;
   margin-bottom: 15px;
@@ -23,6 +39,13 @@
   background-color: #f7f7f9;
   border: 1px solid #e1e1e8;
   border-radius: 4px;
+}
+.sidepanel h2,
+.sidepanel h3,
+.sidepanel h4,
+.sidepanel h5,
+.sidepanel h6 {
+  margin-top: 0px;
 }
 .btn-half {
   width: 50%;

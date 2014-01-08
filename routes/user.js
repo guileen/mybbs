@@ -1,3 +1,5 @@
+var util = require('../lib/util');
+
 module.exports = function(app) {
 
   app.get('/signup', function(req, res) {
@@ -38,4 +40,52 @@ module.exports = function(app) {
       }
   });
 
+  app.post('/signin', function(req, res, next) {
+          var body = req.body;
+          console.log(body);
+          if(body.email) {
+              app.services.getUserByEmail(body.email, function(err, userInfo) {
+                      if(err) {return callback(err);}
+                      if(!userInfo) {
+                          return res.format({
+                                  html: function() {
+                                      res.redirect('/');
+                                  }
+                                , json: function() {
+                                      res.send({code: 'notexist'});
+                                  }
+                          })
+                      }
+                      if(util.secrets.equals(body.password, userInfo.password)) {
+                          req.session.regenerate(function(){
+                                  req.session.user = userInfo;
+                                  // remember me or not
+                                  if(body.rememberme) {
+                                      req.session.cookie.expires = false;
+                                      req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
+                                  } else {
+                                      req.session.cookie.expires = true;
+                                      req.session.cookie.maxAge = 10 * 1000;
+                                  }
+                                  // TODO last url.
+                                  return res.format({
+                                          html: function(){
+                                              res.redirect('/');
+                                          },
+
+                                          json: function(){
+                                              res.send({code: 'success'});
+                                          }
+                                  });
+                          });
+                      }
+              })
+          }
+  })
+
+  app.get('/signout', function(req, res, next) {
+          req.session.regenerate(function(){
+                  res.redirect('/')
+          })
+  })
 }
