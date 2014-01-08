@@ -31,10 +31,16 @@ app.use(express.session({
       })
     , secret: 'my bbs secret'
 }));
+app.use(require('./routes/dynamicHelpers'));
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
+
+app.locals({
+    hello: 'world'
+});
+
 
 // development only
 if ('development' == app.get('env')) {
