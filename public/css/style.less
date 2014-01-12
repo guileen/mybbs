@@ -189,6 +189,13 @@ button:focus, button:click {
 }
 .sidenav-cover {
   display: none;
+  z-index: 10000;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0,0,0, 0.4);
 }
 // home page
 @media screen and (max-width:800px) {
@@ -208,6 +215,14 @@ button:focus, button:click {
   // sidebar hide left
   .sidenav {
     display: none;
+    z-index: 10002;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    max-width: 400px;
+    width: 75%;
+    background-color: #333;
   }
   .mb-show {
     display: block;
@@ -216,7 +231,7 @@ button:focus, button:click {
     display: none;
   }
   #btn-shownav {
-    z-index: 10001;
+    z-index: 10005;
     position: fixed;
     left: 10px;
     bottom: 10px;
@@ -235,26 +250,15 @@ button:focus, button:click {
     }
   }
   .shownav {
+    overflow:hidden;
     .sidenav {
-      z-index: 10002;
       display: block;
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      max-width: 400px;
-      width: 75%;
-      background-color: #333;
     }
     .sidenav-cover {
-      z-index: 10000;
       display: block;
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      background-color: rgba(0,0,0, 0.4);
+    }
+    .right-button-group {
+      display: none;
     }
   }
   // transition into right

@@ -1,0 +1,70 @@
+
+// 一个缝隙
+.line-gap {
+  margin: 15px;
+}
+
+// 一个消息横幅
+.callout {
+  margin: 20px 0;
+  padding: 20px;
+  border-left: 3px solid #eee;
+}
+
+// ----
+
+.callout-info {
+  background-color: #f4f8fa;
+  border-color: #bce8f1;
+}
+
+// copy from bootstrap mixins.less
+// Button variants
+// -------------------------
+// Easily pump out default styles, as well as :hover, :focus, :active,
+// and disabled options for all buttons
+.button-variant(@color; @background; @border) {
+  color: @color;
+  background-color: @background;
+  border-color: @border;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    color: @color;
+    background-color: darken(@background, 8%);
+        border-color: darken(@border, 12%);
+  }
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    background-image: none;
+  }
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      background-color: @background;
+          border-color: @border;
+    }
+  }
+
+  .badge {
+    color: @background;
+    background-color: #fff;
+  }
+}
+
+.btn-qq {
+  .button-variant(#fff, #0d6bca, #0a5ab0)
+}
+.btn-weibo {
+  .button-variant(#fff, #e24642, #d23632)
+}
+

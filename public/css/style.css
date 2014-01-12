@@ -190,6 +190,13 @@ button:click {
 }
 .sidenav-cover {
   display: none;
+  z-index: 10000;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 @media screen and (max-width: 800px) {
   .container {
@@ -207,6 +214,14 @@ button:click {
   }
   .sidenav {
     display: none;
+    z-index: 10002;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    max-width: 400px;
+    width: 75%;
+    background-color: #333;
   }
   .mb-show {
     display: block;
@@ -215,7 +230,7 @@ button:click {
     display: none;
   }
   #btn-shownav {
-    z-index: 10001;
+    z-index: 10005;
     position: fixed;
     left: 10px;
     bottom: 10px;
@@ -233,25 +248,16 @@ button:click {
   .right-button-group #btn-newpost {
     display: inline-block;
   }
+  .shownav {
+    overflow: hidden;
+  }
   .shownav .sidenav {
-    z-index: 10002;
     display: block;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    max-width: 400px;
-    width: 75%;
-    background-color: #333;
   }
   .shownav .sidenav-cover {
-    z-index: 10000;
     display: block;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+  }
+  .shownav .right-button-group {
+    display: none;
   }
 }

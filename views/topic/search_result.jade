@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .col-md-9
+        .line-gap
+        form(action='/group/enter', method='get')
+          .input-group
+            input.form-control(name='groupname')
+            .input-group-btn
+              button.btn.btn-primary(type='submit') 进入群组
+
+        .callout.callout-info
+          p 群组
+            span #{groupname}
+            | 不存在
+        .group-cell
+          p group name
+          p group description
+
+      .col-md-3
+        .sidepanel
+          p hello
+          p hello
+          p hello
+          p hello

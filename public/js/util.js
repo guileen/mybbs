@@ -54,7 +54,7 @@ function hasClass(el, cls) {
 }
 
 function addClass(el, cls) {
-  if (!hasClass(el, cls)) el.className += ' ' + cls;
+  if (!hasClass(el, cls)) el.className += (el.className && ' ') + cls;
 }
 
 function removeClass(el, cls) {
