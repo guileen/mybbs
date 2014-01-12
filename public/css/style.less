@@ -1,7 +1,7 @@
-// .container {
-//   margin-top: 50px;
-// }
+// @import("common.css")
+// @import "mobile.less" screen and (max-width: 768px)
 
+// common.less
 // 一个缝隙
 .line-gap {
   margin: 15px;
@@ -14,64 +14,11 @@
   border-left: 3px solid #eee;
 }
 
-// special
-.groupsuffix-addon {
-  padding: 0 16px;
-}
-
-.groupsuffix-select {
-  font-size: 16px;
-  // border: 1px solid #eee;
-  border: none;
-}
-
 // ----
 
 .callout-info {
   background-color: #f4f8fa;
   border-color: #bce8f1;
-}
-
-.post-cell {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding: 5px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px 4px 0 0;
-  // box-shadow: none;
-}
-
-.reply-cell {
-  margin-top: -16px;
-  margin-bottom: 5px;
-  padding: 5px;
-  background-color: #f7f7f9;
-  border: 1px solid #e1e1e8;
-  border-radius: 0 0 4px 4px;
-  // box-shadow: none;
-}
-
-.sidepanel {
-  margin: 12px 0;
-  padding: 10px;
-  background-color: #f7f7f9;
-  border: 1px solid #e1e1e8;
-  border-radius: 4px;
-  // box-shadow: none;
-
-  h2,h3,h4,h5,h6 {
-    margin-top: 0px;
-  }
-}
-
-.btn-half {
-  width: 50%;
-  margin-left: 25%;
-}
-
-.sns-login {
-  width: 47%;
 }
 
 // copy from bootstrap mixins.less
@@ -117,9 +64,200 @@
   }
 }
 
-.sns-login-qq {
+.btn-qq {
   .button-variant(#fff, #0d6bca, #0a5ab0)
 }
-.sns-login-sina {
+.btn-weibo {
   .button-variant(#fff, #e24642, #d23632)
+}
+
+// special
+.groupsuffix-addon {
+  padding: 0 16px;
+}
+
+.groupsuffix-select {
+  font-size: 16px;
+  // border: 1px solid #eee;
+  border: none;
+}
+
+.post-cell {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  // box-shadow: none;
+}
+
+.reply-cell {
+  margin-top: -16px;
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 0 0 4px 4px;
+  // box-shadow: none;
+}
+
+.sidepanel {
+  margin: 12px 0;
+  padding: 10px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 4px;
+  // box-shadow: none;
+
+  h2,h3,h4,h5,h6 {
+    margin-top: 0px;
+  }
+}
+
+.btn-half {
+  width: 50%;
+  margin-left: 25%;
+}
+
+.less-half {
+  width: 47%;
+}
+
+
+// topic/create
+body {
+  background-color: #fefefe;
+}
+.container {
+  background-color: white;
+  // TODO use less mixins and custom variables, make less gutter
+  // padding-left: 8px;
+  // padding-right: 8px;
+}
+.navbar {
+  min-height: 44px;
+}
+.navbar-padding {
+  margin-top: 45px;
+}
+.navbar-btn {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+button:focus, button:click {
+  outline: none;
+}
+#topicform {
+  textarea {
+       border: none;
+       // border: 1px solid #eee;
+       overflow: auto;
+       outline: none;
+       box-shadow: none;
+       resize: none;
+       width: 100%;
+       height: 300px;
+  }
+}
+
+// welcome page
+.page-welcome, .page-welcome .container {
+  background-color: #6699ff;
+}
+.login-panel {
+  padding: 15px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
+.btn-float {
+  display: block;
+  padding: 5px 8px;
+  opacity: 0.7;
+  // width: 32px;
+  // height: 32px;
+  border: 1px solid #888;
+  background-color: #ddd;
+}
+.mb-show {
+  display: none;
+}
+.mb-hide {
+  display: block;
+}
+.sidenav-cover {
+  display: none;
+}
+// home page
+@media screen and (max-width:800px) {
+  .container {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    .row {
+      margin: 0px;
+      padding: 0px;
+      .main-column {
+        margin: 0px;
+        padding: 0px;
+      }
+    }
+  }
+  // sidebar hide left
+  .sidenav {
+    display: none;
+  }
+  .mb-show {
+    display: block;
+  }
+  .mb-hide {
+    display: none;
+  }
+  #btn-shownav {
+    z-index: 10001;
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+  }
+  .right-button-group {
+    z-index: 10001;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 70px;
+    #btn-refresh {
+      display: inline-block;
+    }
+    #btn-newpost {
+      display: inline-block;
+    }
+  }
+  .shownav {
+    .sidenav {
+      z-index: 10002;
+      display: block;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      max-width: 400px;
+      width: 75%;
+      background-color: #333;
+    }
+    .sidenav-cover {
+      z-index: 10000;
+      display: block;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background-color: rgba(0,0,0, 0.4);
+    }
+  }
+  // transition into right
+  // show cover
+
 }

@@ -6,16 +6,98 @@
   padding: 20px;
   border-left: 3px solid #eee;
 }
+.callout-info {
+  background-color: #f4f8fa;
+  border-color: #bce8f1;
+}
+.btn-qq {
+  color: #ffffff;
+  background-color: #0d6bca;
+  border-color: #0a5ab0;
+}
+.btn-qq:hover,
+.btn-qq:focus,
+.btn-qq:active,
+.btn-qq.active,
+.open .dropdown-toggle.btn-qq {
+  color: #ffffff;
+  background-color: #0b57a4;
+  border-color: #073c76;
+}
+.btn-qq:active,
+.btn-qq.active,
+.open .dropdown-toggle.btn-qq {
+  background-image: none;
+}
+.btn-qq.disabled,
+.btn-qq[disabled],
+fieldset[disabled] .btn-qq,
+.btn-qq.disabled:hover,
+.btn-qq[disabled]:hover,
+fieldset[disabled] .btn-qq:hover,
+.btn-qq.disabled:focus,
+.btn-qq[disabled]:focus,
+fieldset[disabled] .btn-qq:focus,
+.btn-qq.disabled:active,
+.btn-qq[disabled]:active,
+fieldset[disabled] .btn-qq:active,
+.btn-qq.disabled.active,
+.btn-qq[disabled].active,
+fieldset[disabled] .btn-qq.active {
+  background-color: #0d6bca;
+  border-color: #0a5ab0;
+}
+.btn-qq .badge {
+  color: #0d6bca;
+  background-color: #fff;
+}
+.btn-weibo {
+  color: #ffffff;
+  background-color: #e24642;
+  border-color: #d23632;
+}
+.btn-weibo:hover,
+.btn-weibo:focus,
+.btn-weibo:active,
+.btn-weibo.active,
+.open .dropdown-toggle.btn-weibo {
+  color: #ffffff;
+  background-color: #da2621;
+  border-color: #a32724;
+}
+.btn-weibo:active,
+.btn-weibo.active,
+.open .dropdown-toggle.btn-weibo {
+  background-image: none;
+}
+.btn-weibo.disabled,
+.btn-weibo[disabled],
+fieldset[disabled] .btn-weibo,
+.btn-weibo.disabled:hover,
+.btn-weibo[disabled]:hover,
+fieldset[disabled] .btn-weibo:hover,
+.btn-weibo.disabled:focus,
+.btn-weibo[disabled]:focus,
+fieldset[disabled] .btn-weibo:focus,
+.btn-weibo.disabled:active,
+.btn-weibo[disabled]:active,
+fieldset[disabled] .btn-weibo:active,
+.btn-weibo.disabled.active,
+.btn-weibo[disabled].active,
+fieldset[disabled] .btn-weibo.active {
+  background-color: #e24642;
+  border-color: #d23632;
+}
+.btn-weibo .badge {
+  color: #e24642;
+  background-color: #fff;
+}
 .groupsuffix-addon {
   padding: 0 16px;
 }
 .groupsuffix-select {
   font-size: 16px;
   border: none;
-}
-.callout-info {
-  background-color: #f4f8fa;
-  border-color: #bce8f1;
 }
 .post-cell {
   margin-top: 15px;
@@ -51,88 +133,125 @@
   width: 50%;
   margin-left: 25%;
 }
-.sns-login {
+.less-half {
   width: 47%;
 }
-.sns-login-qq {
-  color: #ffffff;
-  background-color: #0d6bca;
-  border-color: #0a5ab0;
+body {
+  background-color: #fefefe;
 }
-.sns-login-qq:hover,
-.sns-login-qq:focus,
-.sns-login-qq:active,
-.sns-login-qq.active,
-.open .dropdown-toggle.sns-login-qq {
-  color: #ffffff;
-  background-color: #0b57a4;
-  border-color: #073c76;
+.container {
+  background-color: white;
 }
-.sns-login-qq:active,
-.sns-login-qq.active,
-.open .dropdown-toggle.sns-login-qq {
-  background-image: none;
+.navbar {
+  min-height: 44px;
 }
-.sns-login-qq.disabled,
-.sns-login-qq[disabled],
-fieldset[disabled] .sns-login-qq,
-.sns-login-qq.disabled:hover,
-.sns-login-qq[disabled]:hover,
-fieldset[disabled] .sns-login-qq:hover,
-.sns-login-qq.disabled:focus,
-.sns-login-qq[disabled]:focus,
-fieldset[disabled] .sns-login-qq:focus,
-.sns-login-qq.disabled:active,
-.sns-login-qq[disabled]:active,
-fieldset[disabled] .sns-login-qq:active,
-.sns-login-qq.disabled.active,
-.sns-login-qq[disabled].active,
-fieldset[disabled] .sns-login-qq.active {
-  background-color: #0d6bca;
-  border-color: #0a5ab0;
+.navbar-padding {
+  margin-top: 45px;
 }
-.sns-login-qq .badge {
-  color: #0d6bca;
-  background-color: #fff;
+.navbar-btn {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-.sns-login-sina {
-  color: #ffffff;
-  background-color: #e24642;
-  border-color: #d23632;
+button:focus,
+button:click {
+  outline: none;
 }
-.sns-login-sina:hover,
-.sns-login-sina:focus,
-.sns-login-sina:active,
-.sns-login-sina.active,
-.open .dropdown-toggle.sns-login-sina {
-  color: #ffffff;
-  background-color: #da2621;
-  border-color: #a32724;
+#topicform textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+  box-shadow: none;
+  resize: none;
+  width: 100%;
+  height: 300px;
 }
-.sns-login-sina:active,
-.sns-login-sina.active,
-.open .dropdown-toggle.sns-login-sina {
-  background-image: none;
+.page-welcome,
+.page-welcome .container {
+  background-color: #6699ff;
 }
-.sns-login-sina.disabled,
-.sns-login-sina[disabled],
-fieldset[disabled] .sns-login-sina,
-.sns-login-sina.disabled:hover,
-.sns-login-sina[disabled]:hover,
-fieldset[disabled] .sns-login-sina:hover,
-.sns-login-sina.disabled:focus,
-.sns-login-sina[disabled]:focus,
-fieldset[disabled] .sns-login-sina:focus,
-.sns-login-sina.disabled:active,
-.sns-login-sina[disabled]:active,
-fieldset[disabled] .sns-login-sina:active,
-.sns-login-sina.disabled.active,
-.sns-login-sina[disabled].active,
-fieldset[disabled] .sns-login-sina.active {
-  background-color: #e24642;
-  border-color: #d23632;
+.login-panel {
+  padding: 15px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
 }
-.sns-login-sina .badge {
-  color: #e24642;
-  background-color: #fff;
+.btn-float {
+  display: block;
+  padding: 5px 8px;
+  opacity: 0.7;
+  border: 1px solid #888;
+  background-color: #ddd;
+}
+.mb-show {
+  display: none;
+}
+.mb-hide {
+  display: block;
+}
+.sidenav-cover {
+  display: none;
+}
+@media screen and (max-width: 800px) {
+  .container {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+  }
+  .container .row {
+    margin: 0px;
+    padding: 0px;
+  }
+  .container .row .main-column {
+    margin: 0px;
+    padding: 0px;
+  }
+  .sidenav {
+    display: none;
+  }
+  .mb-show {
+    display: block;
+  }
+  .mb-hide {
+    display: none;
+  }
+  #btn-shownav {
+    z-index: 10001;
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+  }
+  .right-button-group {
+    z-index: 10001;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 70px;
+  }
+  .right-button-group #btn-refresh {
+    display: inline-block;
+  }
+  .right-button-group #btn-newpost {
+    display: inline-block;
+  }
+  .shownav .sidenav {
+    z-index: 10002;
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    max-width: 400px;
+    width: 75%;
+    background-color: #333;
+  }
+  .shownav .sidenav-cover {
+    z-index: 10000;
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 }
