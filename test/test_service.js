@@ -82,7 +82,7 @@ describe('service', function(){
         // 发帖
         describe('#createTopic', function(){
                 it('should create topic successfully', function(done) {
-                        service.createTopic({uid: 1, gid: 1}, done)
+                        service.topic.create({uid: 1, gid: 1}, done)
                 })
         })
 
