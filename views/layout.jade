@@ -1,11 +1,13 @@
+block variables
+- title = title ? 'mytxtbbs-' + title : 'mytxtbbs'
 doctype 5
 html
   head
     title= title
     link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/css/style.css')
     script(type='text/javascript', src='/javascripts/util.js')
     script(type='text/javascript', src='/javascripts/bootstrap-validation.js')
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-  body
+  body(class=bodyClass)
     block content

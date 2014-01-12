@@ -27,6 +27,13 @@ function getAbsolutOffset(el) {
   };
 }
 
+function getWindowSize() {
+  return {
+    w: window.innerWidth || document.documentElement.clientWidth,
+    h: window.innerHeight || document.documentElement.clientHeight,
+  }
+}
+
 // createHTMLElement
 var __nothing_dummyFregment;
 function createHTMLElement(html, el) {
@@ -247,24 +254,28 @@ function httpRequest(options, callback) {
  *
  */
 function jsonForm(form, signInButton, callback) {
-  if(typeof form == 'string') form = $(form);
-  if(typeof signInButton == 'string') signInButton = $(signInButton);
   form.onsubmit = function() {
-    if(signInButton) {
-      addClass(signInButton, 'disabled');
-    }
-    var json = formSerialize(form);
-    httpRequest({
-        data: json
-      , url: form.action
-      , method: form.method
-      , type: 'json'
-      }, function(err, reply, xhr) {
-        removeClass(signInButton, 'disabled');
-        callback(err, reply, xhr);
-    });
+    submitJsonForm(form, signInButton, callback);
     return false;
   }
+}
+
+function submitJsonForm(form, signInButton, callback) {
+  if(typeof form == 'string') form = $(form);
+  if(typeof signInButton == 'string') signInButton = $(signInButton);
+  if(signInButton) {
+    addClass(signInButton, 'disabled');
+  }
+  var json = formSerialize(form);
+  httpRequest({
+      data: json
+    , url: form.action
+    , method: form.method
+    , type: 'json'
+    }, function(err, reply, xhr) {
+      removeClass(signInButton, 'disabled');
+      callback(err, reply, xhr);
+  });
 }
 
 // OO. Nothing needed except this.
@@ -282,6 +293,7 @@ window.u = window.util = {
   q: $,
   s: $$,
   offset: getAbsolutOffset,
+  getWindowSize: getWindowSize,
   html: createHTMLElement,
   hasClass: hasClass,
   addClass: addClass,
@@ -294,6 +306,7 @@ window.u = window.util = {
   formDeserialize: formDeserialize,
   ajax: httpRequest,
   jsonForm: jsonForm,
+  submitJsonForm: submitJsonForm,
   merge: merge
 }
 

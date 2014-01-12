@@ -1,0 +1,38 @@
+extends ../layout
+
+block variables
+  -var title = '发帖'
+
+block content
+  .navbar.navbar-default.navbar-fixed-bottom
+    .container(style='max-width:600px;')
+      a#sendbtn.btn.btn-primary.navbar-btn.pull-right(href='#', onclick='submitForm()') 发送
+      //- a.btn.btn-default.navbar-btn(href='#', onclick='javascript:window.history.back(-1);return false;') 返回
+
+  //- .navbar-padding
+  .container(style='max-width:600px;')
+    .center-block
+      form#topicform(action='/topic/create', method='post')
+        input(type='hidden', name='gid', value=gid);
+        textarea#inputText(name='txt', placeholder='输入内容')
+      script.
+        function submitForm() {
+          u.submitJsonForm('#topicform', '#sendbtn', function(err, reply) {
+            console.log(reply);
+            if(reply.err) {
+              console.error(reply.err);
+            } else {
+              console.log(document.referer);
+              location.href = document.referrer || '/';
+            }
+          });
+        }
+        function onresize() {
+          var h = u.getWindowSize().h - 45;
+          console.log(h);
+          u.q('#inputText').style.height = h + 'px';
+        }
+        onresize();
+        window.addEventListener('resize', onresize);
+
+
