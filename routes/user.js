@@ -24,7 +24,7 @@ module.exports = function(app) {
                   req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
                 } else {
                   req.session.cookie.expires = true;
-                  req.session.cookie.maxAge = 10 * 1000;
+                  req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
                 }
                 // TODO last url.
                 res.redirect('/');
@@ -40,9 +40,12 @@ module.exports = function(app) {
       }
   });
 
+  app.get('/signin', function(req, res, next) {
+      res.render('user/signin', {})
+  });
+
   app.post('/signin', function(req, res, next) {
           var body = req.body;
-          console.log(body);
           if(body.email) {
               app.services.getUserByEmail(body.email, function(err, userInfo) {
                       if(err) {return callback(err);}
@@ -64,8 +67,8 @@ module.exports = function(app) {
                                       req.session.cookie.expires = false;
                                       req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
                                   } else {
-                                      req.session.cookie.expires = true;
-                                      req.session.cookie.maxAge = 10 * 1000;
+                                      req.session.cookie.expires = false;
+                                      req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
                                   }
                                   // TODO last url.
                                   return res.format({

@@ -1,0 +1,23 @@
+extend ../layout
+block variables
+  -var title = '欢迎'
+  -var bodyClass = 'page-login'
+block content
+  .container
+    p
+    form#signInForm(action='/signin', method='post')
+      .form-group
+        label.sr-only(for='InputEmail') 帐号
+        input#InputEmail.form-control(name='email', type='email', placeholder='邮箱/手机号/用户名', autofocus)
+      .form-group
+        label.sr-only(for='InputPassword') 密码
+        input#InputPassword.form-control(name='password', type='password', placeholder='密码')
+      button#signInButton.btn.btn-success.btn-block(type='submit') 登录
+    p
+    .text-center
+      a(href='') 注册帐号
+      span &nbsp;&nbsp;|&nbsp;&nbsp;
+      a(href='') 找回密码
+
+    script.
+      autoValidate('#signupform');

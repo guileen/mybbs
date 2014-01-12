@@ -1,0 +1,12 @@
+extend layout
+block variables
+  -var title = '欢迎'
+  -var bodyClass = 'page-welcome'
+block content
+  .text-center
+    h2 Hello World
+  .login-panel.fix-bottom
+    a.btn.btn-default.btn-block(href='/signup') 快速注册
+    a.btn.btn-default.btn-block(href='/signin') 帐号登录
+    a.btn.btn-weibo.btn-block(href='#') 微博登录
+    a.btn.btn-qq.btn-block(href='#') QQ登录

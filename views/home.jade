@@ -6,23 +6,33 @@ block content
   //- maybe should at bootom
   //-   a.navbar-brand(href='#') 城邦
 
+  .mb-show
+    button#btn-shownav.btn.btn-float
+      span.glyphicon.glyphicon-th-list
+    .right-button-group.btn-group
+      button#btn-refresh.btn.btn-float
+        span.glyphicon.glyphicon-refresh
+      button#btn-newpost.btn.btn-float
+        span.glyphicon.glyphicon-plus
+  //- .container.shownav
   .container
+    .sidenav-cover
     .row
-      .col-md-9
-        .line-gap
+      .main-column.col-md-8
+        //- .line-gap
         // main content
-        a.btn.btn-primary.pull-right(href='/topic/create') +新建贴子
-        ul.nav.nav-pills
-          li.active
-            a(href='#')
-              span.badge.pull-right 42
-              所有
-          li
-            a(href='#') 发现
-          if user
-            each group in user.groups
-              li
-                a(href='#')= group.name
+        a.btn.btn-primary.pull-right.mb-hide(href='/topic/create') +新建贴子
+        //- ul.nav.nav-pills
+        //-   li.active
+        //-     a(href='#')
+        //-       span.badge.pull-right 42
+        //-       所有
+        //-   li
+        //-     a(href='#') 发现
+        //-   if user
+        //-     each group in user.groups
+        //-       li
+        //-         a(href='#')= group.name
 
 
         // posts
@@ -62,7 +72,7 @@ block content
           p  comment
           p  comment
           p  comment
-      .col-md-3
+      .sidenav.col-md-4
         // side content
         .sidepanel
           form(action='/group/enter', method='get')
@@ -92,8 +102,8 @@ block content
         else
           //- not login
           .sidepanel
-            a.btn.pull-right.less-half.btn-qq(href='/oauth/auth/qqconn?next=/oauth/account_callback') QQ登录
-            a.btn.less-half.btn-sina(href='/oauth/auth/sina?next=/oauth/account_callback') 微博登录
+            a.btn.pull-right.sns-login.sns-login-qq(href='/oauth/auth/qqconn?next=/oauth/account_callback') QQ登录
+            a.btn.sns-login.sns-login-sina(href='/oauth/auth/sina?next=/oauth/account_callback') 微博登录
           .sidepanel
             form#signInForm(action='/signin', method='post')
               .form-group

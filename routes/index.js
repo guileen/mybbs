@@ -2,6 +2,7 @@ module.exports = function(app) {
 
   require('./user')(app);
   require('./group')(app);
+  require('./topic')(app);
 
   /*
    * GET home page.
@@ -9,7 +10,7 @@ module.exports = function(app) {
   app.get('/', function(req, res){
       var user = req.session.user;
       if(!user) {
-          return res.render('index');
+          return res.render('welcome');
       }
       app.services.getGroupsOfUser(user.id, function(err, groups) {
           if(err) {return callback(err);}
@@ -17,7 +18,7 @@ module.exports = function(app) {
           app.services.getOwnedGroups(user.id, function(err, ownedGroups) {
                   if(err) {return callback(err);}
                   user.ownedGroups = ownedGroups;
-                  res.render('index', {});
+                  res.render('home', {});
           })
       })
   })
