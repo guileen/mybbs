@@ -1,3 +1,23 @@
+function fixedAlert(msg, name) {
+  var container = u.q('#alertContainer');
+  var result = u.html('<div class="alert alert-' + name + '">' + msg + '</div>', container);
+  setTimeout(function(){
+      container.removeChild(result);
+  }, 3000);
+}
+function alertSuccess(msg) {
+  return fixedAlert(msg, 'success');
+}
+function alertInfo(msg) {
+  return fixedAlert(msg, 'info');
+}
+function alertWarn(msg) {
+  return fixedAlert(msg, 'warn');
+}
+function alertError(msg) {
+  return fixedAlert(msg, 'danger');
+}
+
 (function(exports) {
     function log(txt) {
       var el = u.q('#logger');
@@ -30,4 +50,5 @@
       }
     }
     exports.main = main;
+    exports.localStorage = localStorage || {};
 })(window);

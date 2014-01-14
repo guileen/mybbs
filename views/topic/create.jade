@@ -6,8 +6,8 @@ block variables
 block content
   .navbar.navbar-default.navbar-fixed-bottom
     .container(style='max-width:600px;')
-      a#sendbtn.btn.btn-primary.navbar-btn.pull-right(href='#', onclick='submitForm()') 发送
-      //- a.btn.btn-default.navbar-btn(href='#', onclick='javascript:window.history.back(-1);return false;') 返回
+      button#sendbtn.btn.btn-primary.navbar-btn.pull-right(onclick='submitForm()') 发送
+      button.btn.btn-default.navbar-btn(onclick='javascript:window.history.go(-1);return false;') 返回
 
   //- .navbar-padding
   .container(style='max-width:600px;')
@@ -20,10 +20,10 @@ block content
           u.submitJsonForm('#topicform', '#sendbtn', function(err, reply) {
             console.log(reply);
             if(reply.err) {
-              console.error(reply.err);
+              alert(reply.err);
             } else {
-              console.log(document.referer);
-              location.href = document.referrer || '/';
+              //- location.href = document.referrer || '/';
+              location.href = '/topic/' + reply.id + '/step-2';
             }
           });
         }

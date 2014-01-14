@@ -12,16 +12,23 @@ block content
     .right-button-group.btn-group
       button#btn-refresh.btn.btn-float
         span.glyphicon.glyphicon-refresh
-      button#btn-newpost.btn.btn-float
+      a#btn-newpost.btn.btn-default.btn-float(href='/topic/create')
         span.glyphicon.glyphicon-plus
+  .alert-container
+    #alertContainer.center-block
   //- .container.shownav
   .container
     .sidenav-cover
     .row
       .main-column.col-md-8
+        #alertContainer.center-block
+        form(style='padding:5px 10px;')
+          .input-group
+            input.form-control
+            span.input-group-btn
+              button.btn.btn-default 搜索
         //- .line-gap
         // main content
-        a.btn.btn-primary.pull-right.mb-hide(href='/topic/create') +新建贴子
         //- ul.nav.nav-pills
         //-   li.active
         //-     a(href='#')
@@ -74,80 +81,31 @@ block content
           p  comment
           p  comment
       .sidenav.col-md-4
-        // side content
-        .sidepanel
-          form(action='/group/enter', method='get')
-            .input-group
-              input.form-control(name='groupname')
-              .input-group-btn
-                button.btn.btn-primary(type='submit') 进入社团
-        .sidepanel
-          //- a.btn.btn-primary.btn-lg.btn-block(type='button', href="#", disabled=true) 创建自由城邦
-          //- .text-center.text-muted 建设中...
-          if !user || user.groups.length == 0
-            a.btn.btn-primary.btn-lg.btn-block(type='button', href="/group/create", disabled=!hasLogin) 创建社团
-            if !user
-              .text-center.text-muted 请先登录
-          else
-            a.pull-right(type='button', href="/group/create", disabled=!hasLogin) 创建社团
-            h4 我的群组
-            each group, index in user.ownedGroups
-              p
-                a.pull-right(href='#') [管理]
-                a(href='#')= group.name
-        if user
-          .sidepanel
-            a(href='#')= user.nickname
-            | &nbsp;&nbsp;&nbsp;&nbsp;
-            a(href='/signout') 登出
+        .line-gap
+        a.btn.btn-default.btn-block.side-control= user.nickname
+
+        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create') +新建贴子
+        .btn-group-vertical.btn-block.side-control
+          a.btn.btn-default.btn-block(href='#') 我的贴子
+          a.btn.btn-default.btn-block(href='#') 我的收藏
+          a.btn.btn-default.btn-block(href='#') 我的评论
+        if !user || user.groups.length == 0
+          .sidepanel.side-control
+            a.btn.btn-primary.btn-lg.btn-block(type='button', href="/group/create") 创建社团
         else
-          //- not login
-          .sidepanel
-            a.btn.pull-right.sns-login.sns-login-qq(href='/oauth/auth/qqconn?next=/oauth/account_callback') QQ登录
-            a.btn.sns-login.sns-login-sina(href='/oauth/auth/sina?next=/oauth/account_callback') 微博登录
-          .sidepanel
-            form#signInForm(action='/signin', method='post')
-              .form-group
-                label.sr-only(for='InputEmail') 帐号
-                input#InputEmail.form-control(name='email', type='email', placeholder='邮箱/手机号/用户名')
-              .form-group
-                label.sr-only(for='InputPassword') 密码
-                input#InputPassword.form-control(name='password', type='password', placeholder='密码')
-              .checkbox
-                label
-                  input(name='rememberme', type='checkbox', checked=true)
-                  | 自动登录 - 
-                  a(href='') 忘记密码
-              button#signInButton.btn.btn-success.btn-half(type='submit') 登录
-            script.
-              u.jsonForm('#signInForm', '#signInButton', function(err, reply, xhr) {
-                  if(reply.code == 'success') {
-                    location = location.href;
-                  } else {
-                    alert('用户名或密码错误');
-                  }
-              });
+          .btn-group-vertical.btn-block.side-control
+            each group, index in user.ownedGroups
+              a.btn.btn-default.btn-block(href='#')= group.name
+            a.btn.btn-default(href='#') 我的社团...
 
-          .sidepanel
-            h4 新来到城邦？
-              span.text-muted 注册
-            hr
-            form(action='/signup', method='post')
-              .form-group
-                label.sr-only(for='InputNickname') 昵称
-                input#InputNickname.form-control(type='text', placeholder='昵称', name='nickname')
-              .form-group
-                label.sr-only(for='InputEmail') 帐号
-                input#InputEmail.form-control(type='email', placeholder='邮箱', name='email')
-              .form-group
-                label.sr-only(for='InputPassword') 密码
-                input#InputPassword.form-control(type='password', placeholder='密码', name='password')
-              button.btn.btn-warning.btn-half(type='submit') 注册
-          //- end not login
+        a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
 
-        .sidepanel
-          p side side
-          p side side
-          p side side
-          p side side
-          p side side
+  script.
+    window.onpopstate = function(e) {
+        if(localStorage.operationState == 'success') {
+          alertSuccess('成功');
+        } else if(localStorage.operationState == 'fail') {
+          alertError('失败');
+        }
+        localStorage.operationState = '';
+    }

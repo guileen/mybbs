@@ -197,6 +197,22 @@ button:focus, button:click {
   right: 0;
   background-color: rgba(0,0,0, 0.4);
 }
+.side-control {
+  margin-bottom: 20px;
+}
+.alert-container {
+  position: fixed;
+  z-index: 9999;
+  top: 10px;
+  left: 50%;
+  background: transparent;
+  // width: 400px;
+  // margin-left: -200px;
+  // .alert {
+  //   max-width: 400px;
+  // }
+}
+
 // home page
 @media screen and (max-width:800px) {
   .container {
@@ -212,6 +228,9 @@ button:focus, button:click {
       }
     }
   }
+  .center-block {
+    padding: 0 10px;
+  }
   // sidebar hide left
   .sidenav {
     display: none;
@@ -223,6 +242,7 @@ button:focus, button:click {
     max-width: 400px;
     width: 75%;
     background-color: #333;
+    overflow: scroll;
   }
   .mb-show {
     display: block;

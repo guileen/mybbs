@@ -19,19 +19,29 @@ module.exports = function(app) {
                   gid: body.gid
                 , uid: req.session.user.id
                 , txt: body.txt
-          }, function(err, data) {
+                }, function(err, data /* 分词tags */) {
                   if(err) {
                       cclog.error(err);
                       return res.json({err: err.message})
                   }
-                  if(!body.gid) {
-
-                  }
-                  console.log(data);
-                  // res.redirect('/topic/' + data.id);
-                  res.json({id:data.id});
+                  // 
+                  res.json({id:data.id, gid: data.gid});
           })
   });
+
+  app.get('/topic/:topicid/step-2', function(req, res, next) {
+      var tid = req.param('topicid');
+      app.services.topic.get(tid, function(err, topic) {
+          if(err) {
+            cclog.error(err.stack);
+            return res.json({err: err.message});
+          }
+          if(topic.uid != req.session.user.id) {
+            return res.json({err: 'permission denined'});
+          }
+          res.render('topic/step-2', {topic: topic, groups: req.session.user.groups});
+      })
+  })
 
   // tiopic view by id
   app.get('/topic/:tiopicid', function(req, res, next) {

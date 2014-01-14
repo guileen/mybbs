@@ -198,6 +198,16 @@ button:click {
   right: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
+.side-control {
+  margin-bottom: 20px;
+}
+.alert-container {
+  position: fixed;
+  z-index: 9999;
+  top: 10px;
+  left: 50%;
+  background: transparent;
+}
 @media screen and (max-width: 800px) {
   .container {
     margin: 0px;
@@ -212,6 +222,9 @@ button:click {
     margin: 0px;
     padding: 0px;
   }
+  .center-block {
+    padding: 0 10px;
+  }
   .sidenav {
     display: none;
     z-index: 10002;
@@ -222,6 +235,7 @@ button:click {
     max-width: 400px;
     width: 75%;
     background-color: #333;
+    overflow: scroll;
   }
   .mb-show {
     display: block;
