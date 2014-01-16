@@ -1,3 +1,4 @@
+var homegroup = require('../lib/services/homegroup');
 module.exports = function(app) {
 
   require('./user')(app);
@@ -12,7 +13,9 @@ module.exports = function(app) {
       if(!user) {
           return res.render('welcome');
       }
-      app.services.getGroupsOfUser(user.id, function(err, groups) {
+      homegroup.getHomeGroup(user.id, function(err, groups) {
+          console.log('=========== groups ============= ', groups);
+      // app.services.getGroupsOfUser(user.id, function(err, groups) {
           if(err) {return callback(err);}
           user.groups = groups;
           app.services.getOwnedGroups(user.id, function(err, ownedGroups) {

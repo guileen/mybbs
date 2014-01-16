@@ -1,5 +1,6 @@
 var should = require('should');
 var service = require('./context').service;
+var homegroup = require('../lib/services/homegroup');
 
 describe('service', function(){
 
@@ -90,6 +91,15 @@ describe('service', function(){
         describe('#createReply', function() {
                 it('should create reply successfully', function(done) {
                         service.createReply({uid:1, tid: 1}, done);
+                })
+        })
+
+        describe('#getHomeGroup', function() {
+                it('should get home groups', function(done) {
+                        homegroup.getHomeGroup(1, function(err, data) {
+                                console.log('homegroup', data);
+                                done(err);
+                        })
                 })
         })
 })

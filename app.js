@@ -33,7 +33,10 @@ app.use(express.session({
 }));
 app.use(require('./routes/dynamicHelpers'));
 app.use(app.router);
-app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
+app.use(require('less-middleware')({ src: path.join(__dirname, 'public')
+    , debug: true
+    , paths: [path.join(__dirname, 'public/less')]
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
