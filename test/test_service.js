@@ -1,4 +1,5 @@
 var should = require('should');
+var cclog = require('cclog');
 var service = require('./context').service;
 var homegroup = require('../lib/services/homegroup');
 
@@ -84,6 +85,20 @@ describe('service', function(){
         describe('#createTopic', function(){
                 it('should create topic successfully', function(done) {
                         service.topic.create({uid: 1, gid: 1}, done)
+                })
+        })
+
+        describe('#getTopic', function() {
+                var tid;
+                before(function(done) {
+                        service.topic.create({uid: 1, gid: 1, text: 'show me the'}, function (err, data) {
+                                if(err) return done(err);
+                                tid = data.id;
+                                done();
+                        })
+                })
+                it('should get topic successfully', function(done){
+                        homegroup.getTopic(tid, done);
                 })
         })
 
