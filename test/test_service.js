@@ -98,7 +98,7 @@ describe('service', function(){
                         })
                 })
                 it('should get topic successfully', function(done){
-                        homegroup.getTopic(tid, done);
+                        service.topic.get(tid, done);
                 })
         })
 
