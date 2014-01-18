@@ -72,7 +72,7 @@ describe('service', function(){
                 })
                 // 获得用户群组列表
                 it('should get groups', function(done) {
-                        service.getGroupsOfUser(uid1, function(err, groups) {
+                        service.getJoinedGroups(uid1, function(err, groups) {
                                 if(err) {return callback(err);}
                                 groups.length.should.eql(3);
                                 done();
@@ -81,17 +81,22 @@ describe('service', function(){
 
         })
 
+        var tid;
         // 发帖
         describe('#createTopic', function(){
                 it('should create topic successfully', function(done) {
-                        service.topic.create({uid: 1, gid: 1}, done)
+                        service.topic.create({uid: uid1, gid: gid1}, function(err, data) {
+                            if(err) {return done(err);}
+                            tid1 = data.id;
+                            done();
+                        })
                 })
         })
 
         describe('#getTopic', function() {
                 var tid;
                 before(function(done) {
-                        service.topic.create({uid: 1, gid: 1, text: 'show me the'}, function (err, data) {
+                        service.topic.create({uid: uid1, gid: gid1, text: 'show me the'}, function (err, data) {
                                 if(err) return done(err);
                                 tid = data.id;
                                 done();
@@ -105,7 +110,7 @@ describe('service', function(){
         // 回复
         describe('#createReply', function() {
                 it('should create reply successfully', function(done) {
-                        service.createReply({uid:1, tid: 1}, done);
+                        service.createReply({uid:uid1, tid: tid1}, done);
                 })
         })
 

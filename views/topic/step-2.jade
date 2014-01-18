@@ -18,7 +18,7 @@ block content
           label(for='InputGroup') 发布到群组
           select#InputGroup(name='gid').form-control
             option(value='', selected) 无
-            each group in groups
+            each group in joinedGroups
               option(value=group.id)= group.name
         .form-group
           label(for='InputKeyword') 关键字

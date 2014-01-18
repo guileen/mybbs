@@ -1,3 +1,4 @@
+var cclog = require('cclog');
 var homegroup = require('../lib/services/homegroup');
 module.exports = function(app) {
 
@@ -13,15 +14,16 @@ module.exports = function(app) {
       if(!user) {
           return res.render('welcome');
       }
-      homegroup.getHomeGroup(user.id, function(err, groups) {
-          console.log('=========== groups ============= ', groups);
-      // app.services.getGroupsOfUser(user.id, function(err, groups) {
+      homegroup.getHomeGroup(user.id, function(err, homeGroups) {
+          cclog('=========== groups ============= ', JSON.stringify(homeGroups));
+      // app.services.getJoinedGroups(user.id, function(err, groups) {
           if(err) {return callback(err);}
-          user.groups = groups;
-          app.services.getOwnedGroups(user.id, function(err, ownedGroups) {
+          app.services.getJoinedGroups(user.id, function(err, joinedGroups) {
                   if(err) {return callback(err);}
-                  user.ownedGroups = ownedGroups;
-                  res.render('home', {});
+                  user.joinedGroups = joinedGroups;
+                  res.render('home', {
+                          homeGroups: homeGroups
+                  });
           })
       })
   })

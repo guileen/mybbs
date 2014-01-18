@@ -13,19 +13,51 @@ block content
   .container(style='max-width:600px;')
     .center-block
       form#topicform(action='/topic/create', method='post')
-        input(type='hidden', name='gid', value=gid);
-        textarea#inputText(name='txt', placeholder='输入内容')
+        #form-step1
+          input(type='hidden', name='gid', value=gid);
+          textarea#inputText(name='txt', placeholder='输入内容')
+        #form-step2.hide
+          .form-group
+            label(for='InputGroup') 发布到群组
+            select#InputGroup(name='gid').form-control
+              option(value='', selected) 无
+              each group in joinedGroups
+                option(value=group.id)= group.name
+          .form-group
+            label(for='InputKeyword') 关键字
+            input#InputKeyword.form-control(name='keywords', type='text')
       script.
+        var _formstep = 0;
         function submitForm() {
-          u.submitJsonForm('#topicform', '#sendbtn', function(err, reply) {
-            console.log(reply);
-            if(reply.err) {
-              alert(reply.err);
-            } else {
-              //- location.href = document.referrer || '/';
-              location.href = '/topic/' + reply.id + '/step-2';
-            }
-          });
+          if(_formstep == 0) {
+            console.log('step 1');
+            u.addClass(u.q('#form-step1'), 'hide');
+            u.removeClass(u.q('#form-step2'), 'hide');
+            _formstep = 1;
+          } else {
+            u.submitJsonForm('#topicform', '#sendbtn', function(err, reply) {
+              console.log(reply);
+              if(reply.err) {
+                alert(reply.err);
+                localStorage.operationState = 'fail';
+                u.set('lastop', {
+                  err: 1
+                  , action: 'createTopic'
+                  , message: '发帖失败'
+                })
+              } else {
+                localStorage.operationState = 'success';
+                localStorage.reply = JSON.stringify(reply);
+                u.set('lastop', {
+                    err: 0
+                  , action: 'createTopic'
+                  , message: '发帖成功'
+                  , topic: reply
+                })
+              }
+              history.go(-1);
+            });
+          }
         }
         function onresize() {
           var h = u.getWindowSize().h - 45;
@@ -34,5 +66,3 @@ block content
         }
         onresize();
         window.addEventListener('resize', onresize);
-
-

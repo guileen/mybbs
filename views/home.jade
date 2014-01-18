@@ -43,6 +43,20 @@ block content
 
         //- textarea#logger(style='width:100%', rows='5')
 
+        each _group in homeGroups
+          -var group = _group[0]
+          -var topics = _group[1]
+          .list-group
+            a.list-group-item(href='#').group-name
+              h5.list-group-item-heading= group.name
+            if topics.length
+              each topic in topics
+                a.list-group-item(href='/t/#{topic.id}')
+                  p.list-group-item-text= topic.txt
+            else
+              a.list-group-item(href="")
+                p.list-group-item-text 无
+
         // posts
         .post-cell
           p test test
@@ -89,12 +103,12 @@ block content
           a.btn.btn-default.btn-block(href='#') 我的贴子
           a.btn.btn-default.btn-block(href='#') 我的收藏
           a.btn.btn-default.btn-block(href='#') 我的评论
-        if !user || user.groups.length == 0
+        if !user || user.joinedGroups.length == 0
           .sidepanel.side-control
             a.btn.btn-primary.btn-lg.btn-block(type='button', href="/group/create") 创建社团
         else
           .btn-group-vertical.btn-block.side-control
-            each group, index in user.ownedGroups
+            each group, index in user.joinedGroups
               a.btn.btn-default.btn-block(href='#')= group.name
             a.btn.btn-default(href='#') 我的社团...
 

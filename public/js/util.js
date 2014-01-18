@@ -289,6 +289,18 @@ function merge(a, b) {
   return a;
 };
 
+function set(key, value) {
+  localStorage[key] = JSON.stringify(value);
+}
+
+function get(key) {
+  return JSON.parse(localStorage[key]);
+}
+
+function del(key) {
+  delete localStorage[key];
+}
+
 window.u = window.util = {
   q: $,
   s: $$,
@@ -307,6 +319,9 @@ window.u = window.util = {
   ajax: httpRequest,
   jsonForm: jsonForm,
   submitJsonForm: submitJsonForm,
+  set: set,
+  get: get,
+  del: del,
   merge: merge
 }
 

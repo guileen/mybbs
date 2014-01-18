@@ -208,6 +208,9 @@ button:click {
   left: 50%;
   background: transparent;
 }
+a.group-name {
+  background-color: #ccddee;
+}
 @media screen and (max-width: 800px) {
   .container {
     margin: 0px;
@@ -220,7 +223,7 @@ button:click {
   }
   .container .row .main-column {
     margin: 0px;
-    padding: 0px;
+    padding: 5px;
   }
   .center-block {
     padding: 0 10px;
