@@ -1,10 +1,6 @@
-extends layout
+extends ../layout
 
 block content
-  //- TODO see bootstrap "default navbar" for collapse in mobile
-  //- header.navbar.navbar-default.navbar-fixed-top
-  //- maybe should at bootom
-  //-   a.navbar-brand(href='#') 城邦
 
   .mb-show
     button#btn-shownav.btn.btn-float
@@ -27,68 +23,13 @@ block content
             input.form-control
             span.input-group-btn
               button.btn.btn-default 搜索
-        //- .line-gap
-        // main content
-        //- ul.nav.nav-pills
-        //-   li.active
-        //-     a(href='#')
-        //-       span.badge.pull-right 42
-        //-       所有
-        //-   li
-        //-     a(href='#') 发现
-        //-   if user
-        //-     each group in user.groups
-        //-       li
-        //-         a(href='#')= group.name
-
-        //- textarea#logger(style='width:100%', rows='5')
-
-        each _group in homeGroups
-          -var group = _group[0]
-          -var topics = _group[1]
-          .list-group
-            a.list-group-item(href='#').group-name
-              h5.list-group-item-heading= group.name
-            if topics.length
-              each topic in topics
-                a.list-group-item(href='/t/#{topic.id}')
-                  p.list-group-item-text= topic.txt
-            else
-              a.list-group-item(href="")
-                p.list-group-item-text 无
 
         // posts
         .post-cell
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-        .reply-cell
-          p  comment
-          p  comment
-          p  comment
-          p  comment
-        .post-cell
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-        .reply-cell
-          p  comment
-          p  comment
-          p  comment
-          p  comment
-        .post-cell
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
+          p= topic.group.name
+          p= topic.author.nickname
+          p= topic.txt
+
         .reply-cell
           p  comment
           p  comment
