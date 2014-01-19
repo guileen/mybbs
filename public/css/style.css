@@ -257,7 +257,11 @@ a.group-name {
     position: fixed;
     bottom: 10px;
     right: 10px;
-    width: 70px;
+    width: 200px;
+    text-align: right;
+  }
+  .right-button-group .btn {
+    display: inline-block;
   }
   .right-button-group #btn-refresh {
     display: inline-block;

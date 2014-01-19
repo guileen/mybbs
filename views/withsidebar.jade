@@ -1,0 +1,51 @@
+
+extends layout
+
+block content
+  block header
+  #fixed-buttons.mb-show
+    button#btn-shownav.btn.btn-float
+      #btn-shownav-icon.glyphicon.glyphicon-th-list
+    .right-button-group
+      block fixed-buttons
+  //- .alert-container
+  //-   #alertContainer.center-block
+  //- .container.shownav
+  .container
+    .sidenav-cover
+    .row
+      .main-column.col-md-8
+        #alertContainer.center-block
+        block main
+      .sidenav.col-md-4
+        .line-gap
+        a.btn.btn-default.btn-block.side-control= user.nickname
+
+        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create') +新建贴子
+        .btn-group-vertical.btn-block.side-control
+          a.btn.btn-default.btn-block(href='#') 我的贴子
+          a.btn.btn-default.btn-block(href='#') 我的收藏
+          a.btn.btn-default.btn-block(href='#') 我的评论
+        if !user || user.joinedGroups.length == 0
+          .sidepanel.side-control
+            a.btn.btn-primary.btn-lg.btn-block(type='button', href="/group/create") 创建社团
+        else
+          .btn-group-vertical.btn-block.side-control
+            each group, index in user.joinedGroups
+              a.btn.btn-default.btn-block(href='#')= group.name
+            a.btn.btn-default(href='#') 我的社团...
+
+        a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
+
+  script.
+    window.onpopstate = function(e) {
+        var lastop = u.get('lastop');
+        if(lastop) {
+          if(lastop.err) {
+            alertError(lastop.message);
+          } else if(localStorage.operationState == 'fail') {
+            alertSuccess(lastop.message);
+          }
+          u.del('lastop');
+        }
+    }

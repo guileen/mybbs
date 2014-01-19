@@ -1,126 +1,30 @@
-extends layout
+extends withsidebar
 
-block content
-  //- TODO see bootstrap "default navbar" for collapse in mobile
-  //- header.navbar.navbar-default.navbar-fixed-top
-  //- maybe should at bootom
-  //-   a.navbar-brand(href='#') 城邦
+block fixed-buttons
+  .btn-group
+    button#btn-refresh.btn.btn-float
+      span.glyphicon.glyphicon-refresh
+    a#btn-newpost.btn.btn-default.btn-float(href='/topic/create')
+      span.glyphicon.glyphicon-plus
 
-  .mb-show
-    button#btn-shownav.btn.btn-float
-      #btn-shownav-icon.glyphicon.glyphicon-th-list
-    .right-button-group.btn-group
-      button#btn-refresh.btn.btn-float
-        span.glyphicon.glyphicon-refresh
-      a#btn-newpost.btn.btn-default.btn-float(href='/topic/create')
-        span.glyphicon.glyphicon-plus
-  .alert-container
-    #alertContainer.center-block
-  //- .container.shownav
-  .container
-    .sidenav-cover
-    .row
-      .main-column.col-md-8
-        #alertContainer.center-block
-        form(style='padding:5px 10px;')
-          .input-group
-            input.form-control
-            span.input-group-btn
-              button.btn.btn-default 搜索
-        //- .line-gap
-        // main content
-        //- ul.nav.nav-pills
-        //-   li.active
-        //-     a(href='#')
-        //-       span.badge.pull-right 42
-        //-       所有
-        //-   li
-        //-     a(href='#') 发现
-        //-   if user
-        //-     each group in user.groups
-        //-       li
-        //-         a(href='#')= group.name
+block main
+  form(style='padding:5px 10px;')
+    .input-group
+      input.form-control
+      span.input-group-btn
+        button.btn.btn-default 搜索
 
-        //- textarea#logger(style='width:100%', rows='5')
+  each _group in homeGroups
+    -var group = _group[0]
+    -var topics = _group[1]
+    .list-group
+      a.list-group-item(href='#').group-name
+        h5.list-group-item-heading= group.name
+      if topics.length
+        each topic in topics
+          a.list-group-item(href='/t/#{topic.id}')
+            p.list-group-item-text= topic.txt
+      else
+        a.list-group-item(href="")
+          p.list-group-item-text 无
 
-        each _group in homeGroups
-          -var group = _group[0]
-          -var topics = _group[1]
-          .list-group
-            a.list-group-item(href='#').group-name
-              h5.list-group-item-heading= group.name
-            if topics.length
-              each topic in topics
-                a.list-group-item(href='/t/#{topic.id}')
-                  p.list-group-item-text= topic.txt
-            else
-              a.list-group-item(href="")
-                p.list-group-item-text 无
-
-        // posts
-        .post-cell
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-        .reply-cell
-          p  comment
-          p  comment
-          p  comment
-          p  comment
-        .post-cell
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-        .reply-cell
-          p  comment
-          p  comment
-          p  comment
-          p  comment
-        .post-cell
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-          p test test
-        .reply-cell
-          p  comment
-          p  comment
-          p  comment
-          p  comment
-      .sidenav.col-md-4
-        .line-gap
-        a.btn.btn-default.btn-block.side-control= user.nickname
-
-        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create') +新建贴子
-        .btn-group-vertical.btn-block.side-control
-          a.btn.btn-default.btn-block(href='#') 我的贴子
-          a.btn.btn-default.btn-block(href='#') 我的收藏
-          a.btn.btn-default.btn-block(href='#') 我的评论
-        if !user || user.joinedGroups.length == 0
-          .sidepanel.side-control
-            a.btn.btn-primary.btn-lg.btn-block(type='button', href="/group/create") 创建社团
-        else
-          .btn-group-vertical.btn-block.side-control
-            each group, index in user.joinedGroups
-              a.btn.btn-default.btn-block(href='#')= group.name
-            a.btn.btn-default(href='#') 我的社团...
-
-        a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
-
-  script.
-    window.onpopstate = function(e) {
-        var lastop = u.get('lastop');
-        if(lastop.err) {
-          alertError(lastop.message);
-        } else if(localStorage.operationState == 'fail') {
-          alertSuccess(lastop.message);
-        }
-        u.del('lastop');
-    }

@@ -1,67 +1,75 @@
-extends ../layout
+extends ../withsidebar
 
-block content
+block header
+  .navbar.navbar-default.navbar-fixed-top.mb-show
+    .container
+      button#sendbtn.btn.btn-primary.navbar-btn.pull-right(onclick='submitForm()') 更多...
+      button.btn.btn-default.navbar-btn(onclick='javascript:window.history.go(-1);return false;') 返回
+  .navbar-padding.mb-show
 
-  .mb-show
-    button#btn-shownav.btn.btn-float
-      #btn-shownav-icon.glyphicon.glyphicon-th-list
-    .right-button-group.btn-group
+block fixed-buttons
+  .pull-right
+    .btn-group
       button#btn-refresh.btn.btn-float
-        span.glyphicon.glyphicon-refresh
-      a#btn-newpost.btn.btn-default.btn-float(href='/topic/create')
-        span.glyphicon.glyphicon-plus
-  .alert-container
-    #alertContainer.center-block
-  //- .container.shownav
-  .container
-    .sidenav-cover
-    .row
-      .main-column.col-md-8
-        #alertContainer.center-block
-        form(style='padding:5px 10px;')
-          .input-group
-            input.form-control
-            span.input-group-btn
-              button.btn.btn-default 搜索
+        span.glyphicon.glyphicon-share
+        | 234
+      a#btn-newpost.btn.btn-default.btn-float(href='#', onclick='showComment(event)')
+        span.glyphicon.glyphicon-comment
+        | 153
 
-        // posts
-        .post-cell
-          p= topic.group.name
-          p= topic.author.nickname
-          p= topic.txt
+block main
 
-        .reply-cell
-          p  comment
-          p  comment
-          p  comment
-          p  comment
-      .sidenav.col-md-4
-        .line-gap
-        a.btn.btn-default.btn-block.side-control= user.nickname
+  // posts
+  .post-cell
+    p
+      span.pull-right= topic.create
+      a(href='#', onclick='showComment()')= topic.author.nickname
+    p= topic.txt
+    p 来自&nbsp;
+      a(href='/g/#{topic.group.id}')= topic.group.name
+    p
+      .btn-group.pull-right
+        button.btn.btn-default.mb-hide 转发 156
+        button.btn.btn-default.mb-hide 评论 156
+        //- button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
+        //-   span.caret
+        //- ul.dropdown-menu
+        //-   li: a(href="#") 收藏
+        //-   li: a(href="#") 分享...
+        //-   li: a(href="#") 垃圾信息
+        //-   li: a(href="#") 查看源文件
+      .btn-group
+        button.btn.btn-default 赞 1000
+        button.btn.btn-default 踩 200
 
-        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create') +新建贴子
-        .btn-group-vertical.btn-block.side-control
-          a.btn.btn-default.btn-block(href='#') 我的贴子
-          a.btn.btn-default.btn-block(href='#') 我的收藏
-          a.btn.btn-default.btn-block(href='#') 我的评论
-        if !user || user.joinedGroups.length == 0
-          .sidepanel.side-control
-            a.btn.btn-primary.btn-lg.btn-block(type='button', href="/group/create") 创建社团
-        else
-          .btn-group-vertical.btn-block.side-control
-            each group, index in user.joinedGroups
-              a.btn.btn-default.btn-block(href='#')= group.name
-            a.btn.btn-default(href='#') 我的社团...
-
-        a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
-
+  .reply-cell
+    p  comment
+    p  comment
+    p  comment
+    p  comment
+  form#commentform(action='/topic/comment', method='post')
+    input(type='hidden', name='tid', value=topic.id)
+    div(style='width:80px;height:100%').pull-right.center-block
+      button#sendbtn.btn.btn-primary(style='width:50px;height:100%', type='submit') 发送
+    div(style='margin-right:80px')
+      textarea#inputText.form-control(name='txt', placeholder='输入内容')
   script.
-    window.onpopstate = function(e) {
-        var lastop = u.get('lastop');
-        if(lastop.err) {
-          alertError(lastop.message);
-        } else if(localStorage.operationState == 'fail') {
-          alertSuccess(lastop.message);
-        }
-        u.del('lastop');
+    var inputText = u.q('#inputText')
+    function showComment(e) {
+      e.preventDefault();
+      inputText.focus();
     }
+    inputText.onfocus = function() {
+      u.addClass(u.q('#fixed-buttons'), 'hide');
+    }
+    inputText.onblur = function() {
+      setTimeout(function(){
+        u.removeClass(u.q('#fixed-buttons'), 'hide');
+      }, 500);
+    }
+    u.jsonForm('#commentform', '#sendbtn', function(err, reply) {
+      console.log(err);
+      console.log(reply);
+      u.html('<p>'+reply.txt+'</p>', '.reply-cell');
+      window.scroll(0, 10000)
+    })

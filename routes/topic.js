@@ -5,6 +5,7 @@ module.exports = function(app) {
   app.get('/t/:tid', function(req, res, next) {
           app.services.topic.getDetail(req.params.tid, function(err, topic) {
                   if(err) {return callback(err);}
+                  cclog(topic);
                   res.format({
                       json: function() {
                         res.send(topic)
@@ -45,5 +46,17 @@ module.exports = function(app) {
                   res.json({id:data.id, gid: data.gid});
           })
   });
+
+  app.post('/topic/comment', function(req, res, next) {
+      var body = req.body;
+      app.services.topic.createComment({
+          tid: body.tid
+        , txt: body.txt
+        , uid: req.session.user.id
+        }, function(err, data) {
+          if(err) {return callback(err);}
+          res.json(data);
+      })
+  })
 
 }

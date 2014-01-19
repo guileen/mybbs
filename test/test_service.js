@@ -5,7 +5,7 @@ var homegroup = require('../lib/services/homegroup');
 
 describe('service', function(){
 
-        var uid1, uid2, gid1, gid2;
+        var uid1, uid2, gid1, gid2, tid1, tid2;
         before(function(done) {
                 service.createUser({email:'test1@bar.com', password:'pass123'}, function(err, user) {
                         if(err) return done(err);
@@ -81,7 +81,6 @@ describe('service', function(){
 
         })
 
-        var tid;
         // 发帖
         describe('#createTopic', function(){
                 it('should create topic successfully', function(done) {
@@ -94,16 +93,15 @@ describe('service', function(){
         })
 
         describe('#getTopic', function() {
-                var tid;
                 before(function(done) {
                         service.topic.create({uid: uid1, gid: gid1, text: 'show me the'}, function (err, data) {
                                 if(err) return done(err);
-                                tid = data.id;
+                                tid2 = data.id;
                                 done();
                         })
                 })
                 it('should get topic successfully', function(done){
-                        service.topic.get(tid, done);
+                        service.topic.get(tid2, done);
                 })
         })
 

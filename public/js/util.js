@@ -43,6 +43,7 @@ function createHTMLElement(html, el) {
   __nothing_dummyFregment.innerHTML = html;
   var result = __nothing_dummyFregment.firstChild;
   if(el){
+    if(typeof el == 'string') el = $(el);
     el.appendChild(result);
   }
   return result;
@@ -254,6 +255,7 @@ function httpRequest(options, callback) {
  *
  */
 function jsonForm(form, signInButton, callback) {
+  if(typeof form == 'string') form = $(form);
   form.onsubmit = function() {
     submitJsonForm(form, signInButton, callback);
     return false;
@@ -290,11 +292,12 @@ function merge(a, b) {
 };
 
 function set(key, value) {
-  localStorage[key] = JSON.stringify(value);
+  localStorage[key] = value && JSON.stringify(value);
 }
 
 function get(key) {
-  return JSON.parse(localStorage[key]);
+  var v = localStorage[key];
+  return v && JSON.parse(v);
 }
 
 function del(key) {
