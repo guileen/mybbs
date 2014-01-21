@@ -43,10 +43,9 @@ block main
         button.btn.btn-default 踩 200
 
   .reply-cell
-    p  comment
-    p  comment
-    p  comment
-    p  comment
+    for reply in topic.comments
+      span= reply.user.nickname
+      p= reply.txt
   form#commentform(action='/topic/comment', method='post')
     input(type='hidden', name='tid', value=topic.id)
     div(style='width:80px;height:100%').pull-right.center-block
@@ -61,9 +60,11 @@ block main
     }
     inputText.onfocus = function() {
       u.addClass(u.q('#fixed-buttons'), 'hide');
+      if(showIntpuTimer) clearTimeout(showIntpuTimer);
     }
+    var showIntpuTimer;
     inputText.onblur = function() {
-      setTimeout(function(){
+      showIntpuTimer = setTimeout(function(){
         u.removeClass(u.q('#fixed-buttons'), 'hide');
       }, 500);
     }
@@ -71,5 +72,8 @@ block main
       console.log(err);
       console.log(reply);
       u.html('<p>'+reply.txt+'</p>', '.reply-cell');
+      var input = u.q('#inputText');
+      input.value = '';
+      input.focus();
       window.scroll(0, 10000)
     })
