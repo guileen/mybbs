@@ -1,0 +1,28 @@
+extends ../withsidebar
+
+block fixed-buttons
+  .btn-group
+    button#btn-refresh.btn.btn-float
+      span.glyphicon.glyphicon-refresh
+    a#btn-newpost.btn.btn-default.btn-float(href='/topic/create')
+      span.glyphicon.glyphicon-plus
+
+block main
+  form(style='padding:5px 10px;')
+    .input-group
+      input.form-control
+      span.input-group-btn
+        button.btn.btn-default 搜索
+
+  a.btn.btn-default.pull-right(href='/g/#{group.id}/join') 加入
+  h4= group.name
+
+  .list-group
+    if topics.length
+      each topic in topics
+        a.list-group-item(href='/t/#{topic.id}')
+          p.list-group-item-text= topic.txt
+    else
+      a.list-group-item(href="")
+        p.list-group-item-text 无
+

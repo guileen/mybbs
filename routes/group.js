@@ -1,7 +1,18 @@
+var homegroup = require('../lib/services/homegroup');
+
 module.exports = function(app) {
 
   // group view by slug url
   app.get('/g/:group', function(req, res, next) {
+      var gid = req.params.group;
+      app.services.getGroup(gid, function(err, group) {
+          homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
+              res.render('group/list', {
+                  group: group
+                , topics: topics
+              })
+          })
+      })
   });
 
 

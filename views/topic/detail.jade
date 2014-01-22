@@ -23,7 +23,7 @@ block main
   .post-cell
     p
       span.pull-right= topic.create
-      a(href='#', onclick='showComment()')= topic.author.nickname
+      a(href='/u/#{topic.author.id}', onclick='showComment()')= topic.author.nickname
     p= topic.txt
     p 来自&nbsp;
       a(href='/g/#{topic.group.id}')= topic.group.name
@@ -71,7 +71,7 @@ block main
     u.jsonForm('#commentform', '#sendbtn', function(err, reply) {
       console.log(err);
       console.log(reply);
-      u.html('<p>'+reply.txt+'</p>', '.reply-cell');
+      u.html('<div><p>#{user.nickname}</p><p>'+reply.txt+'</p></div>', '.reply-cell');
       var input = u.q('#inputText');
       input.value = '';
       input.focus();
