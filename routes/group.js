@@ -15,6 +15,31 @@ module.exports = function(app) {
       })
   });
 
+  app.get('/g/:group/detail', function(req, res) {
+      var gid = req.params.group;
+      app.services.getGroup(gid, function(err, group) {
+          app.services.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
+              app.services.getMembers(gid, 0, 50, function(err, members) {
+                  if(err) console.log(err.stack || err);
+                  console.log(members);
+                  res.render('group/detail', {
+                      group: group
+                    , isJoinedGroup: isJoinedGroup
+                    , members: members
+                  })
+              })
+          })
+      })
+
+  })
+
+  // group view by slug url
+  app.get('/g/:group/join', function(req, res, next) {
+      var gid = req.params.group;
+      app.services.joinGroup(req.session.user.id, req.params.group, function(err) {
+          res.redirect('/g/' + gid);
+      })
+  });
 
   // group.
   app.get('/group/create', function(req, res, next) {

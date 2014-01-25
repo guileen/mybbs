@@ -1,0 +1,9 @@
+extends ../withsidebar
+block main
+  if !isJoinedGroup
+    a.btn.btn-default.pull-right(href='/g/#{group.id}/join') 加入
+  h4= group.name
+
+  h4 成员列表
+  for member in members
+    p= member.nickname
