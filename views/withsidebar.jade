@@ -32,8 +32,9 @@ block content
         else
           .btn-group-vertical.btn-block.side-control
             each group, index in user.joinedGroups
-              a.btn.btn-default.btn-block(href='#')= group.name
-            a.btn.btn-default(href='#') 我的社团...
+              a.btn.btn-default.btn-block(href='/g/#{group.id}')= group.name
+            //- a.btn.btn-default(href='#') 更多...
+            a.btn.btn-default(type='button', href="/group/create") 创建社团+
 
         a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
 

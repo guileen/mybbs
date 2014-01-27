@@ -3,7 +3,9 @@ extends ../layout
 block content
   .container
     .center-block(style='max-width:500px;')
-      h2 创建社团
+      ol.breadcrumb
+        li: a(href='/') 首页
+        li.active 创建社团
       form#creategroupform(action='/group/create', method='post')
         .form-group
           label(for='InputGroupName') 社团名称

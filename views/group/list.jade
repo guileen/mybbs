@@ -8,14 +8,15 @@ block fixed-buttons
       span.glyphicon.glyphicon-plus
 
 block main
-  form(style='padding:5px 10px;')
-    .input-group
-      input.form-control
-      span.input-group-btn
-        button.btn.btn-default 搜索
-
+  //- form(style='padding:5px 10px;')
+  //-   .input-group
+  //-     input.form-control
+  //-     span.input-group-btn
+  //-       button.btn.btn-default 搜索
   a.btn.btn-default.pull-right(href="/g/#{group.id}/detail") 详细信息
-  h4= group.name
+  ol.breadcrumb
+    li: a(href='/') 首页
+    li.active= group.name
 
   .list-group
     if topics.length

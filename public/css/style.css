@@ -10,6 +10,9 @@
   background-color: #f4f8fa;
   border-color: #bce8f1;
 }
+.breadcrumb {
+  margin-bottom: 5px;
+}
 .btn-qq {
   color: #ffffff;
   background-color: #0d6bca;
@@ -100,12 +103,9 @@ fieldset[disabled] .btn-weibo.active {
   border: none;
 }
 .post-cell {
-  margin-top: 15px;
   margin-bottom: 15px;
   padding: 5px;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px 4px 0 0;
 }
 .reply-cell {
   margin-top: -16px;
@@ -113,7 +113,7 @@ fieldset[disabled] .btn-weibo.active {
   padding: 5px;
   background-color: #f7f7f9;
   border: 1px solid #e1e1e8;
-  border-radius: 0 0 4px 4px;
+  border-radius: 4px;
 }
 .sidepanel {
   margin: 12px 0;

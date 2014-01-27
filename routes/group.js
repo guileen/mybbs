@@ -57,7 +57,7 @@ module.exports = function(app) {
                 , approve: body.approve || 0
           }, function(err, data) {
                   if(err) {return callback(err);}
-                  res.redirect('/group/' + data.id);
+                  res.redirect('/g/' + data.id);
           })
   });
 

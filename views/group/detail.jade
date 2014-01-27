@@ -2,8 +2,23 @@ extends ../withsidebar
 block main
   if !isJoinedGroup
     a.btn.btn-default.pull-right(href='/g/#{group.id}/join') 加入
-  h4= group.name
+  //- h4 #{group.name} 
+  ol.breadcrumb
+    li: a(href='/') 首页
+    li: a(href='/g/#{group.id}')= group.name
+  span
+    input(value='http://ibbs.cc/g/#{group.id}', style='width:180px')
+    button.btn.btn-sm 复制
 
   h4 成员列表
+  form
+    input
+    button.btn.btn-sm 添加成员
+
   for member in members
-    p= member.nickname
+    p
+      .btn-group.pull-right
+        button.btn.btn-primary.btn-xs 设为管理员
+        button.btn.btn-danger.btn-xs 移除
+      a(href='/u/#{member.id}')= member.nickname
+

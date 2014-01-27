@@ -8,17 +8,17 @@ block fixed-buttons
       span.glyphicon.glyphicon-plus
 
 block main
-  form(style='padding:5px 10px;')
-    .input-group
-      input.form-control
-      span.input-group-btn
-        button.btn.btn-default 搜索
+  //- form(style='padding:5px 10px;')
+  //-   .input-group
+  //-     input.form-control
+  //-     span.input-group-btn
+  //-       button.btn.btn-default 搜索
 
   each _group in homeGroups
     -var group = _group[0]
     -var topics = _group[1]
     .list-group
-      a.list-group-item(href='#').group-name
+      a.list-group-item(href='/g/#{group.id}').group-name
         h5.list-group-item-heading= group.name
       if topics.length
         each topic in topics
