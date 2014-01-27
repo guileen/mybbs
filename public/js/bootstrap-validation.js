@@ -3,7 +3,6 @@ function autoValidate(form) {
   u.s('.form-group', form).forEach(function(group) {
       u.s('input, textarea', group).forEach(function(input) {
           function check(e) {
-              console.log(e);
               if(input.checkValidity()) {
                 u.removeClass(group, 'has-error');
                 e && u.addClass(group, 'has-success');

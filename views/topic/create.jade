@@ -20,7 +20,8 @@ block content
           .form-group
             label(for='InputGroup') 发布到群组
             select#InputGroup(name='gid').form-control
-              //- option(value='', selected) 无
+              if joinedGroups.length == 0
+                option(value='', selected) 无
               each group in joinedGroups
                 option(value=group.id)= group.name
           .form-group
@@ -61,7 +62,6 @@ block content
         }
         function onresize() {
           var h = u.getWindowSize().h - 45;
-          console.log(h);
           u.q('#inputText').style.height = h + 'px';
         }
         onresize();

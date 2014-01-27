@@ -16,7 +16,7 @@ block main
   a.btn.btn-default.pull-right(href="/g/#{group.id}/detail") 详细信息
   ol.breadcrumb
     li: a(href='/') 首页
-    li.active= group.name
+    li.active #{group.name}&nbsp;&nbsp;&nbsp;#{group.id}
 
   .list-group
     if topics.length
@@ -24,6 +24,5 @@ block main
         a.list-group-item(href='/t/#{topic.id}')
           p.list-group-item-text= topic.txt
     else
-      a.list-group-item(href="")
-        p.list-group-item-text 无
-
+      .fixw-sm.center-block
+        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create?gid=#{group.id}') 在 [#{group.name}] 发布第一个贴子

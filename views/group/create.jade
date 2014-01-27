@@ -6,19 +6,11 @@ block content
       ol.breadcrumb
         li: a(href='/') 首页
         li.active 创建社团
+      p 现在创建群组可得3位最短群组id, 截止 2014年3月1日
       form#creategroupform(action='/group/create', method='post')
         .form-group
           label(for='InputGroupName') 社团名称
-          .input-group
-            input#InputGroupName.form-control(name='name', type='text', placeholder='社团名称', required, maxlength=25, pattern='^[0-9a-zA-Z\\u4e00-\\u9fbf_-]{2,25}$', value=name)
-            span.input-group-addon.groupsuffix-addon
-              select.groupsuffix-select
-                option 社
-                option 会
-                option 团
-                option 圈
-                //- option 群
-                option 组
+          input#InputGroupName.form-control(name='name', type='text', placeholder='社团名称', required, maxlength=25, pattern='^[0-9a-zA-Z\\u4e00-\\u9fbf_-]{2,25}$', value=name)
           span.help-block 2-25 个中文、英文、数字
         .form-group
           label(for='InputPrivacy') 内容隐私

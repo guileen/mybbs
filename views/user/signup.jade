@@ -3,8 +3,10 @@ extends ../layout
 block content
   .container
     .center-block(style='max-width:500px;')
-        h2 现在加入城邦。
-        a(href='#') 已有帐号？登录
+        ol.breadcrumb
+          li: a(href='/') 首页
+          li.active 注册
+        #alertContainer.center-block
         form#signupform(action='/signup', method='post')
           .form-group
             label(for='InputNickname') 昵称
@@ -26,5 +28,8 @@ block content
             input(name='agree', type='hidden', value='true')
             a(href='/tos') 《服务条款》
           button.btn.btn-warning.btn-half(type='submit') 注册
+  if(exists)
+    script.
+      alertError('邮箱已存在')
   script.
     autoValidate('#signupform');

@@ -3,7 +3,10 @@ block variables
   -var title = '欢迎'
   -var bodyClass = 'page-login'
 block content
-  .container
+  .container.fixw-sm
+    ol.breadcrumb
+      li: a(href='/') 首页
+      li.active 登录
     p
     form#signInForm(action='/signin', method='post')
       .form-group

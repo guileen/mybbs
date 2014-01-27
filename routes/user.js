@@ -15,7 +15,13 @@ module.exports = function(app) {
           , email: body.email
         }, function(err, userInfo) {
             // TODO 500.
-            if(err) {return callback(err);}
+            if(err) {
+              if(err.code == 'USEREXIST') {
+                body.exists = true;
+                return res.render('user/signup', body);
+              }
+
+            }
             req.session.regenerate(function(){
                 req.session.user = userInfo;
                 // remember me or not
@@ -31,12 +37,7 @@ module.exports = function(app) {
             })
         })
       } else {
-        res.render('user/signup', {
-            nickname: body.nickname
-          , password: body.password
-          , email: body.email
-          , rememberme: body.rememberme
-        });
+        res.render('user/signup', body);
       }
   });
 

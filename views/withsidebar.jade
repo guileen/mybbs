@@ -17,6 +17,7 @@ block content
       .main-column.col-md-8
         #alertContainer.center-block
         block main
+        .bottom-padding
       .sidenav.col-md-4
         .line-gap
         a.btn.btn-default.btn-block.side-control= user.nickname
@@ -26,15 +27,12 @@ block content
           a.btn.btn-default.btn-block(href='#') 我的贴子
           a.btn.btn-default.btn-block(href='#') 我的收藏
           a.btn.btn-default.btn-block(href='#') 我的评论
-        if !user || user.joinedGroups.length == 0
-          .sidepanel.side-control
-            a.btn.btn-primary.btn-lg.btn-block(type='button', href="/group/create") 创建社团
-        else
-          .btn-group-vertical.btn-block.side-control
-            each group, index in user.joinedGroups
-              a.btn.btn-default.btn-block(href='/g/#{group.id}')= group.name
-            //- a.btn.btn-default(href='#') 更多...
-            a.btn.btn-default(type='button', href="/group/create") 创建社团+
+        .btn-group-vertical.btn-block.side-control
+          each group, index in user.joinedGroups
+            a.btn.btn-default.btn-block(href='/g/#{group.id}')= group.name
+          //- a.btn.btn-default(href='#') 更多...
+          a.btn.btn-default(type='button', href="/group/explore") 加入社团
+          a.btn.btn-default.btn-success(type='button', href="/group/create") 创建社团*
 
         a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
 

@@ -10,6 +10,12 @@
   background-color: #f4f8fa;
   border-color: #bce8f1;
 }
+.fixw-sm {
+  max-width: 400px;
+}
+.fixw-lg {
+  max-width: 600px;
+}
 .breadcrumb {
   margin-bottom: 5px;
 }
@@ -171,9 +177,7 @@ button:click {
 }
 .login-panel {
   padding: 15px;
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
+  margin-bottom: 10px;
 }
 .btn-float {
   display: block;
@@ -246,11 +250,19 @@ a.group-name {
   .mb-hide {
     display: none;
   }
+  .mb-bottom {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+  }
   #btn-shownav {
     z-index: 10005;
     position: fixed;
     left: 10px;
     bottom: 10px;
+  }
+  .bottom-padding {
+    height: 45px;
   }
   .right-button-group {
     z-index: 10001;

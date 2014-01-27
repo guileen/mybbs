@@ -1,4 +1,5 @@
 var homegroup = require('../lib/services/homegroup');
+var explorer = require('../lib/services/explorer');
 
 module.exports = function(app) {
 
@@ -41,6 +42,33 @@ module.exports = function(app) {
       })
   });
 
+  app.post('/group/search-join', function(req, res, next) {
+      var gname = req.body.gname;
+      explorer.searchGroup(gname, function(err, data) {
+          if(err) {
+            cclog.error(err);
+            return res.json({err:1, msg: err.message});
+          }
+          if(data.length == 1) {
+            return res.redirect('/g/' + data[0].id + '/join');
+          }
+          res.render('group/search-join', {
+              groups: data
+          })
+      })
+  })
+
+  app.post('/group/search', function(req, res, next) {
+      var gname = req.body.gname;
+      explorer.searchGroup(gname, function(err, data) {
+          if(err) {
+            cclog.error(err);
+            return res.json({err:1, msg: err.message});
+          }
+          res.json(data);
+      })
+  })
+
   // group.
   app.get('/group/create', function(req, res, next) {
           res.render('group/create');
@@ -71,12 +99,9 @@ module.exports = function(app) {
           });
   });
 
-  // group view by id
-  app.get('/group/:groupid', function(req, res, next) {
-          app.services.getGroup(req.params.groupid, function(err, data) {
-                  if(err) {return callback(err);}
-                  res.send(data);
-          });
+  app.get('/group/explore', function(req, res, next) {
+      res.render('group/explore', {
+      })
   })
 
 }

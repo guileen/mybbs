@@ -1,0 +1,30 @@
+extends ../withsidebar
+block main
+  ol.breadcrumb
+    li: a(href='/') 首页
+    li.active 加入群组
+
+  form#searchForm(action='/group/search', method='post')
+    input(name='gname', placeholder='输入群号码加入')
+    button.btn.btn-primary#submitSearch(type='submit') 加入
+  p 为您推荐以下社团
+  - for(var i = 0; i < 10; i ++)
+    p
+      a(href='/g/foo') 某某群
+      a.btn.btn-default.btn-sm(href='/g/foo/join') 加入
+  p 你也可以创建自己的社团
+  a.btn.btn-default(type='button', href="/group/create") 创建社团+
+
+  script.
+    u.jsonForm('#searchForm', '#submitSearch', function(err, reply) {
+      if(err) {
+        console.log(err);
+        }
+      if(reply.length == 0) {
+          alertWarn('No such group');
+        } else if(reply.length == 1) {
+          location.href = '/g/' + reply[0].id + '/join';
+        } else {
+          // TODO show results
+        }
+    })
