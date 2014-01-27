@@ -13,10 +13,15 @@ block main
   //-     input.form-control
   //-     span.input-group-btn
   //-       button.btn.btn-default 搜索
-  a.btn.btn-default.pull-right(href="/g/#{group.id}/detail") 详细信息
+  .btn-group.pull-right
+    //- a.mb-hide.btn.btn-primary(href="/topic/create?gid=#{group.id}") 发帖
+    a.btn.btn-default(href="/g/#{group.id}/detail") 资料
   ol.breadcrumb
     li: a(href='/') 首页
-    li.active #{group.name}&nbsp;&nbsp;&nbsp;#{group.id}
+    li.active 
+      span(style='color:#cc66cc;') #{group.id}
+      &nbsp;
+      span #{group.name}
 
   .list-group
     if topics.length

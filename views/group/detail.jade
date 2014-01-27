@@ -6,6 +6,7 @@ block main
   ol.breadcrumb
     li: a(href='/') 首页
     li: a(href='/g/#{group.id}')= group.name
+    li.active 详细信息
   span
     input(value='http://ibbs.cc/g/#{group.id}', style='width:180px')
     button.btn.btn-sm 复制

@@ -100,7 +100,10 @@ module.exports = function(app) {
   });
 
   app.get('/group/explore', function(req, res, next) {
-      res.render('group/explore', {
+      explorer.randGroups(10, function(err, groups){
+          res.render('group/explore', {
+              groups: groups
+          })
       })
   })
 

@@ -36,17 +36,17 @@ function alertError(msg) {
       // mobile nav button
       var btnShowNav = u.q('#btn-shownav');
       var btnShowNavIcon = u.q('#btn-shownav-icon');
-      if(btnShowNav) {
-        FastClick.attach(btnShowNav);
-        btnShowNav.ontouchend = function() {
-          log('touchend' + Date.now());
-        }
-        btnShowNav.onclick = function() {
-          log('click' + Date.now());
+      var cover = u.q('.sidenav-cover');
+      function toggleNav() {
           u.toggleClass(document.body, 'shownav');
           u.toggleClass(btnShowNavIcon, 'glyphicon-th-list');
           u.toggleClass(btnShowNavIcon, 'glyphicon-remove');
-        }
+      }
+      if(btnShowNav) {
+        FastClick.attach(btnShowNav);
+        btnShowNav.onclick = toggleNav;
+        FastClick.attach(cover);
+        cover.onclick = toggleNav;
       }
     }
     exports.main = main;

@@ -16,13 +16,17 @@ module.exports = function(app) {
       }
       homegroup.getHomeGroup(user.id, function(err, homeGroups) {
           cclog('=========== groups ============= ', JSON.stringify(homeGroups));
-      // app.services.getJoinedGroups(user.id, function(err, groups) {
           if(err) {return callback(err);}
+          user.joinedGroups = [];
+          if(homeGroups.length == 0) {
+            return res.redirect('/group/explore')
+          }
           app.services.getJoinedGroups(user.id, function(err, joinedGroups) {
                   if(err) {return callback(err);}
                   user.joinedGroups = joinedGroups;
                   res.render('home', {
                           homeGroups: homeGroups
+                        , joinedGroups: joinedGroups
                   });
           })
       })

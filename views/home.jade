@@ -13,15 +13,6 @@ block main
   //-     input.form-control
   //-     span.input-group-btn
   //-       button.btn.btn-default 搜索
-
-  if homeGroups.length == 0
-    p 为您推荐以下社团
-    - for(var i = 0; i < 10; i ++)
-      p
-        a(href='/g/foo') 某某群
-        a.btn.btn-default.btn-sm(href='/g/foo/join') 加入
-    p 你也可以创建自己的社团
-    a.btn.btn-default(type='button', href="/group/create") 创建社团+
   each _group in homeGroups
     -var group = _group[0]
     -var topics = _group[1]
@@ -33,6 +24,7 @@ block main
           a.list-group-item(href='/t/#{topic.id}')
             p.list-group-item-text= topic.txt
       else
-        a.list-group-item(href="")
-          p.list-group-item-text 无
+        a.list-group-item(href="/topic/create?gid=#{group.id}")
+          p.list-group-item-text
+            strong 在 [#{group.name}] 发布第一个帖子
 

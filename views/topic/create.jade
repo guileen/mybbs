@@ -23,7 +23,7 @@ block content
               if joinedGroups.length == 0
                 option(value='', selected) 无
               each group in joinedGroups
-                option(value=group.id)= group.name
+                option(value=group.id, selected=group.id==gid)= group.name
           .form-group
             label(for='InputKeyword') 关键字
             input#InputKeyword.form-control(name='keywords', type='text')

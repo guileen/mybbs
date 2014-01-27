@@ -22,7 +22,7 @@ block content
         .line-gap
         a.btn.btn-default.btn-block.side-control= user.nickname
 
-        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create') +新建贴子
+        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create?gid=#{group && group.id || ""}') +新建贴子
         .btn-group-vertical.btn-block.side-control
           a.btn.btn-default.btn-block(href='#') 我的贴子
           a.btn.btn-default.btn-block(href='#') 我的收藏
