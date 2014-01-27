@@ -1,7 +1,7 @@
 extends ../withsidebar
 block main
   if !isJoinedGroup
-    a.btn.btn-default.pull-right(href='/g/#{group.id}/join') 加入
+    a.btn.btn-primary.pull-right(href='/g/#{group.id}/join') 加入
   //- h4 #{group.name} 
   ol.breadcrumb
     li: a(href='/') 首页

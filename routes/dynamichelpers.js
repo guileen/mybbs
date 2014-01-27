@@ -4,11 +4,12 @@ module.exports = function(req, res, next) {
     res.locals.user = res.locals.loginUser = user;
     res.locals.hasLogin = !!user;
     next();
-    res.on('finish', function() {
-        clearTimeout(timer);
-    })
     var timer = setTimeout(function(){
         res.writeHead(500, 'Timeout');
         res.end('Timeout');
-    }, 1000);
+    }, 10000);
+    res.on('finish', function() {
+        // on finish
+        clearTimeout(timer);
+    })
 }

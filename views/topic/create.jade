@@ -56,7 +56,12 @@ block content
                   , topic: reply
                 })
               }
-              history.go(-1);
+              //- history.go(-1);
+              if(reply.gid) {
+                location.href = '/g/' + reply.gid;
+              } else {
+                location.href = '/';
+              }
             });
           }
         }

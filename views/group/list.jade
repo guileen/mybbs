@@ -14,7 +14,9 @@ block main
   //-     span.input-group-btn
   //-       button.btn.btn-default 搜索
   .btn-group.pull-right
-    //- a.mb-hide.btn.btn-primary(href="/topic/create?gid=#{group.id}") 发帖
+    if !isJoinedGroup
+      a.btn.btn-primary(href='/g/#{group.id}/join') 加入
+    a.mb-hide.btn.btn-primary(href="/topic/create?gid=#{group.id}") 发帖
     a.btn.btn-default(href="/g/#{group.id}/detail") 资料
   ol.breadcrumb
     li: a(href='/') 首页
@@ -30,4 +32,4 @@ block main
           p.list-group-item-text= topic.txt
     else
       .fixw-sm.center-block
-        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create?gid=#{group.id}') 在 [#{group.name}] 发布第一个贴子
+        a.btn.btn-primary.btn-block.side-control(href='/topic/create?gid=#{group.id}') 在 [#{group.name}] 发布第一个贴子
