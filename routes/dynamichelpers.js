@@ -9,7 +9,6 @@ module.exports = function(req, res, next) {
         res.end('Timeout');
     }, 1000);
     res.on('finish', function() {
-        console.log('on finish')
         // on finish
         clearTimeout(timer);
     })

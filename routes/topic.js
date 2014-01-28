@@ -5,8 +5,11 @@ module.exports = function(app) {
   // tiopic view by slug url
   app.get('/t/:tid', function(req, res, next) {
           topicdao.getDetail(req.params.tid, function(err, topic) {
-                  if(err) {return callback(err);}
-                  cclog(topic);
+                  if(err) throw err;
+                  if(!topic) {
+                      res.writeHead(404, 'Not Found');
+                      return res.end('No such topic');
+                  }
                   res.format({
                       json: function() {
                         res.send(topic)

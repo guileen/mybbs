@@ -54,12 +54,16 @@ if ('development' == app.get('env')) {
 var redis = require('redis');
 var services = require('./lib/services');
 var redisClient = redis.createClient(config.port, config.host);
+services.init(redisClient);
 redisClient.select(config.database, function(err) {
-    app.services = services(redisClient);
+        if(err) throw err;
 })
 
 routes(app);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+var server = module.exports = http.createServer(app);
+if(!module.parent) {
+  server.listen(app.get('port'), function(){
+      console.log('Express server listening on port ' + app.get('port'));
+  });
+}

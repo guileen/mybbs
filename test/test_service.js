@@ -1,9 +1,10 @@
+require('./init');
 var should = require('should');
 var cclog = require('cclog');
-var service = require('./context').service;
 var homegroup = require('../lib/services/homegroup');
 var userdao = require('../lib/services/userdao');
 var topicdao = require('../lib/services/topicdao');
+var groupdao = require('../lib/services/groupdao');
 
 describe('service', function(){
 
@@ -15,10 +16,10 @@ describe('service', function(){
                         userdao.create({email:'test2@bar.com', password:'pass123'}, function(err, user) {
                                 if(err) {return done(err);}
                                 uid2 = user.id;
-                                service.createGroup({name: 'group1', owner:uid1}, function(err, group) {
+                                groupdao.createGroup({name: 'group1', owner:uid1}, function(err, group) {
                                         if(err) {return callback(err);}
                                         gid1 = group.id;
-                                        service.createGroup({name: 'group2', owner:uid2}, function(err, group) {
+                                        groupdao.createGroup({name: 'group2', owner:uid2}, function(err, group) {
                                                 if(err) {return callback(err);}
                                                 gid2 = group.id;
                                                 should.exists(uid1);
@@ -58,7 +59,7 @@ describe('service', function(){
         // 创建群组
         describe('#createGroup', function(){
                 it('should save successfully', function(done) {
-                        service.createGroup({
+                        groupdao.createGroup({
                                 owner: uid1
                         }, done);
                 })
@@ -67,14 +68,14 @@ describe('service', function(){
         // 加入群组
         describe('#joinGroup', function() {
                 it('should join successfully', function(done) {
-                        service.joinGroup(uid1, gid2, function(err, data) {
+                        groupdao.joinGroup(uid1, gid2, function(err, data) {
                                 if(err) {return callback(err);}
-                                service.assertUserInGroup(uid1, gid2, done);
+                                groupdao.assertUserInGroup(uid1, gid2, done);
                         })
                 })
                 // 获得用户群组列表
                 it('should get groups', function(done) {
-                        service.getJoinedGroups(uid1, function(err, groups) {
+                        groupdao.getJoinedGroups(uid1, function(err, groups) {
                                 if(err) {return callback(err);}
                                 groups.length.should.eql(3);
                                 done();

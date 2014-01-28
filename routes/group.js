@@ -6,8 +6,13 @@ module.exports = function(app) {
   // group view by slug url
   app.get('/g/:group', function(req, res, next) {
       var gid = req.params.group;
-      app.services.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
       app.services.getGroup(gid, function(err, group) {
+          if(err) throw err;
+          if(!group) {
+            res.writeHead(404, 'Not Found');
+            return res.end('No such group');
+          }
+      app.services.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
           homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
               res.render('group/list', {
                   group: group

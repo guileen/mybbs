@@ -1,5 +1,6 @@
 module.exports = {
     port: 6379
   , host: 'localhost'
-  , database: 5
+  , database: 0
+  , session_db: 1
 }

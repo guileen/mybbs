@@ -47,9 +47,10 @@ module.exports = function(app) {
   });
 
   app.post('/signin', function(req, res, next) {
-          var email = req.body.email;
+          var body = req.body;
+          var email = body.email;
           if(email) {
-              userdao.getByEmailOrId(body.email, function(err, userInfo) {
+              userdao.getByEmailOrId(email, function(err, userInfo) {
                       if(err) {return callback(err);}
                       if(!userInfo) {
                           return res.format({
