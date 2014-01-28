@@ -9,19 +9,18 @@ module.exports = function(app) {
 
   app.post('/signup', function(req, res) {
       var body = req.body;
-      if(body.agree) {
         userdao.create({
             nickname: body.nickname
           , password: body.password
           , email: body.email
         }, function(err, userInfo) {
-            // TODO 500.
             if(err) {
               if(err.code == 'USEREXIST') {
                 body.exists = true;
                 return res.render('user/signup', body);
               }
-
+              res.writeHead(500)
+              return res.send('error')
             }
             req.session.regenerate(function(){
                 req.session.user = userInfo;
@@ -37,9 +36,6 @@ module.exports = function(app) {
                 res.redirect('/');
             })
         })
-      } else {
-        res.render('user/signup', body);
-      }
   });
 
   app.get('/signin', function(req, res, next) {

@@ -1,18 +1,19 @@
 var homegroup = require('../lib/services/homegroup');
 var explorer = require('../lib/services/explorer');
+var groupdao = require('../lib/services/groupdao');
 
 module.exports = function(app) {
 
   // group view by slug url
   app.get('/g/:group', function(req, res, next) {
       var gid = req.params.group;
-      app.services.getGroup(gid, function(err, group) {
+      groupdao.getGroup(gid, function(err, group) {
           if(err) throw err;
           if(!group) {
             res.writeHead(404, 'Not Found');
             return res.end('No such group');
           }
-      app.services.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
+      groupdao.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
           homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
               res.render('group/list', {
                   group: group
@@ -26,9 +27,9 @@ module.exports = function(app) {
 
   app.get('/g/:group/detail', function(req, res) {
       var gid = req.params.group;
-      app.services.getGroup(gid, function(err, group) {
-          app.services.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
-              app.services.getMembers(gid, 0, 50, function(err, members) {
+      groupdao.getGroup(gid, function(err, group) {
+          groupdao.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
+              groupdao.getMembers(gid, 0, 50, function(err, members) {
                   if(err) console.log(err.stack || err);
                   console.log(members);
                   res.render('group/detail', {
@@ -45,7 +46,7 @@ module.exports = function(app) {
   // group view by slug url
   app.get('/g/:group/join', function(req, res, next) {
       var gid = req.params.group;
-      app.services.joinGroup(req.session.user.id, req.params.group, function(err) {
+      groupdao.joinGroup(req.session.user.id, req.params.group, function(err) {
           res.redirect('/g/' + gid);
       })
   });
@@ -84,7 +85,7 @@ module.exports = function(app) {
 
   app.post('/group/create', function(req, res, next) {
           var body = req.body;
-          app.services.createGroup({
+          groupdao.createGroup({
                   name: body.name
                 , owner: req.session.user.id
                 , privacy: body.privacy
@@ -93,7 +94,14 @@ module.exports = function(app) {
                 , approve: body.approve || 0
           }, function(err, data) {
                   if(err) {return callback(err);}
-                  res.redirect('/g/' + data.id);
+                  res.format({
+                      json: function() {
+                        res.send(data);
+                      }
+                    , html: function() {
+                        res.redirect('/g/' + data.id);
+                      }
+                  })
           })
   });
 

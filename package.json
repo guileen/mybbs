@@ -13,5 +13,8 @@
     "redis": "*",
     "async": "*",
     "connect-redis": "1.4.6"
+  },
+  "devDependencies": {
+    "cookie": "*"
   }
 }
