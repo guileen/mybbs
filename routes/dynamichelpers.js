@@ -5,7 +5,8 @@ module.exports = function(req, res, next) {
     res.locals.hasLogin = !!user;
     next();
     var timer = setTimeout(function(){
-        // res.writeHead(500, 'Timeout');
+        if(!res.headersSent)
+          res.writeHead(500, 'Timeout');
         res.end('Timeout');
     }, 1000);
     res.on('finish', function() {

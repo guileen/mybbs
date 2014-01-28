@@ -8,7 +8,7 @@ function MockSocket(){
 util.inherits(MockSocket, EventEmitter);
 
 MockSocket.prototype.destroy = function() {
-
+    console.log('socket destoried')
 }
 
 
@@ -21,6 +21,10 @@ function MockRequest(url, method){
     this.connection = {}; // TODO
 }
 util.inherits(MockRequest, EventEmitter);
+
+MockRequest.prototype.setHeader = function(name, value) {
+    this.headers[name.toLowerCase()] = value;
+}
 
 function MockResponse(){
     EventEmitter.call(this);
@@ -56,6 +60,7 @@ MockResponse.prototype.writeHead = function(statusCode, statusMessage, headers){
     for(var key in headers) {
         this.headers[key] = headers[key];
     }
+    this.headersSent = true;
 }
 
 MockResponse.prototype.setHeader = function(name, value) {
@@ -80,22 +85,40 @@ http.IncomingMessage = MockRequest;
 http.ServerResponse = MockResponse;
 
 var server = require('../app');
-exports.request = function(method, url, header, callback) {
+exports.request = function(method, url, header, body, callback) {
     if(!callback && typeof header == 'function') {
         callback = header;
         header = {};
     }
     var req = new MockRequest(url, method);
     var res = new MockResponse();
+    if(body && typeof body == 'object') {
+        if(typeof body == 'object') {
+            req.setHeader('Accept', 'application/json');
+            req.setHeader('Content-Type', 'application/json');
+            body = JSON.stringify(body);
+        }
+        req.setHeader('Content-Length', Buffer.byteLength(body));
+    }
     server.emit('request', req, res);
+    process.nextTick(function(){
+            if(body) {
+                req.emit('data', new Buffer(body));
+            }
+            req.emit('end');
+    })
     res.on('finish', function(){
             if(res.statusCode > 400) {
-                return callback(new Error('Status: res.statusCode' + res.statusMessage), req, res);
+                return callback(new Error('Status: res.statusCode ' + res.statusCode + ' ' + res.statusMessage), req, res);
             }
             callback(null, req, res);
     })
 }
-exports.get = exports.request.bind(exports, 'get');
-exports.post = exports.request.bind(exports, 'post');
+exports.get = function(url, callback) {
+    exports.request('GET', url, {}, null, callback);
+}
+exports.post = function(url, body, callback) {
+    exports.request('POST', url, {}, body, callback);
+}
 
 
