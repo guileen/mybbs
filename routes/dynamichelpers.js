@@ -5,10 +5,11 @@ module.exports = function(req, res, next) {
     res.locals.hasLogin = !!user;
     next();
     var timer = setTimeout(function(){
-        res.writeHead(500, 'Timeout');
+        // res.writeHead(500, 'Timeout');
         res.end('Timeout');
-    }, 10000);
+    }, 1000);
     res.on('finish', function() {
+        console.log('on finish')
         // on finish
         clearTimeout(timer);
     })

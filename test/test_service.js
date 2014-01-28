@@ -2,15 +2,17 @@ var should = require('should');
 var cclog = require('cclog');
 var service = require('./context').service;
 var homegroup = require('../lib/services/homegroup');
+var userdao = require('../lib/services/userdao');
+var topicdao = require('../lib/services/topicdao');
 
 describe('service', function(){
 
         var uid1, uid2, gid1, gid2, tid1, tid2;
         before(function(done) {
-                service.createUser({email:'test1@bar.com', password:'pass123'}, function(err, user) {
+                userdao.create({email:'test1@bar.com', password:'pass123'}, function(err, user) {
                         if(err) return done(err);
                         uid1 = user.id;
-                        service.createUser({email:'test2@bar.com', password:'pass123'}, function(err, user) {
+                        userdao.create({email:'test2@bar.com', password:'pass123'}, function(err, user) {
                                 if(err) {return done(err);}
                                 uid2 = user.id;
                                 service.createGroup({name: 'group1', owner:uid1}, function(err, group) {
@@ -33,7 +35,7 @@ describe('service', function(){
         // 只测试致命bug，创建用户，不可重名
         describe('#createUser', function(){
                 it('should save successfully', function(done) {
-                        service.createUser({email:'foo@bar.com', password:'pass123'}, function(err, user) {
+                        userdao.create({email:'foo@bar.com', password:'pass123'}, function(err, user) {
                                 if(err) return done(err);
                                 user.email.should.equal('foo@bar.com');
                                 user.password.should.not.equal('pass123')
@@ -43,9 +45,9 @@ describe('service', function(){
                 });
 
                 it('should not save duplicate', function(done) {
-                        service.createUser({email:'foo1@bar.com'}, function(err, bar) {
+                        userdao.create({email:'foo1@bar.com'}, function(err, bar) {
                                 if(err) done(err);
-                                service.createUser({username:'bar'}, function(err, bar) {
+                                userdao.create({username:'bar'}, function(err, bar) {
                                         should.exists(err);
                                         done();
                                 });
@@ -84,7 +86,7 @@ describe('service', function(){
         // 发帖
         describe('#createTopic', function(){
                 it('should create topic successfully', function(done) {
-                        service.topic.create({uid: uid1, gid: gid1}, function(err, data) {
+                        topicdao.create({uid: uid1, gid: gid1}, function(err, data) {
                             if(err) {return done(err);}
                             tid1 = data.id;
                             done();
@@ -94,21 +96,21 @@ describe('service', function(){
 
         describe('#getTopic', function() {
                 before(function(done) {
-                        service.topic.create({uid: uid1, gid: gid1, text: 'show me the'}, function (err, data) {
+                        topicdao.create({uid: uid1, gid: gid1, text: 'show me the'}, function (err, data) {
                                 if(err) return done(err);
                                 tid2 = data.id;
                                 done();
                         })
                 })
                 it('should get topic successfully', function(done){
-                        service.topic.get(tid2, done);
+                        topicdao.get(tid2, done);
                 })
         })
 
         // 回复
         describe('#createReply', function() {
                 it('should create reply successfully', function(done) {
-                        service.createReply({uid:uid1, tid: tid1}, done);
+                        topicdao.createComment({uid:uid1, tid: tid1}, done);
                 })
         })
 

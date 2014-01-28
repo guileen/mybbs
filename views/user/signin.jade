@@ -5,6 +5,7 @@ block variables
 block content
   .container
     .center-block.fixw-sm
+      #alertContainer
       ol.breadcrumb
         li: a(href='/') 首页
         li.active 登录
@@ -12,7 +13,7 @@ block content
       form#signInForm(action='/signin', method='post')
         .form-group
           label.sr-only(for='InputEmail') 帐号
-          input#InputEmail.form-control(name='email', type='email', placeholder='邮箱/手机号/用户名', autofocus)
+          input#InputEmail.form-control(name='email', type='text', placeholder='ID/邮箱', autofocus)
         .form-group
           label.sr-only(for='InputPassword') 密码
           input#InputPassword.form-control(name='password', type='password', placeholder='密码')
@@ -22,6 +23,10 @@ block content
         a(href='/signup') 注册帐号
         span &nbsp;&nbsp;|&nbsp;&nbsp;
         a(href='') 找回密码
+
+    if code == 'notexists'
+      script.
+        alertError('用户不存在')
 
     script.
       autoValidate('#signupform');

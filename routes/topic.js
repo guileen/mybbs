@@ -1,9 +1,10 @@
 var cclog = require('cclog');
+var topicdao = require('../lib/services/topicdao')
 module.exports = function(app) {
 
   // tiopic view by slug url
   app.get('/t/:tid', function(req, res, next) {
-          app.services.topic.getDetail(req.params.tid, function(err, topic) {
+          topicdao.getDetail(req.params.tid, function(err, topic) {
                   if(err) {return callback(err);}
                   cclog(topic);
                   res.format({
@@ -33,7 +34,7 @@ module.exports = function(app) {
 
   app.post('/topic/create', function(req, res, next) {
           var body = req.body;
-          app.services.topic.create({
+          topicdao.create({
                   gid: body.gid
                 , uid: req.session.user.id
                 , txt: body.txt
@@ -49,7 +50,7 @@ module.exports = function(app) {
 
   app.post('/topic/comment', function(req, res, next) {
       var body = req.body;
-      app.services.topic.createComment({
+      topicdao.createComment({
           tid: body.tid
         , txt: body.txt
         , uid: req.session.user.id

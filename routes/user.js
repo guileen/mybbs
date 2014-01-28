@@ -1,4 +1,5 @@
 var util = require('../lib/util');
+var userdao = require('../lib/services/userdao');
 
 module.exports = function(app) {
 
@@ -9,7 +10,7 @@ module.exports = function(app) {
   app.post('/signup', function(req, res) {
       var body = req.body;
       if(body.agree) {
-        app.services.createUser({
+        userdao.create({
             nickname: body.nickname
           , password: body.password
           , email: body.email
@@ -46,14 +47,16 @@ module.exports = function(app) {
   });
 
   app.post('/signin', function(req, res, next) {
-          var body = req.body;
-          if(body.email) {
-              app.services.getUserByEmail(body.email, function(err, userInfo) {
+          var email = req.body.email;
+          if(email) {
+              userdao.getByEmailOrId(body.email, function(err, userInfo) {
                       if(err) {return callback(err);}
                       if(!userInfo) {
                           return res.format({
                                   html: function() {
-                                      res.redirect('/');
+                                    res.render('user/signin', {
+                                        code: 'notexists'
+                                    })
                                   }
                                 , json: function() {
                                       res.send({code: 'notexist'});
