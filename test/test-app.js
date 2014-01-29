@@ -16,29 +16,51 @@ describe('app.js', function(){
         })
 })
 
-function shouldget(path, onEnd) {
-    it('should get ' + path, function(done) {
-            client.get(path, function(req, res) {
-                    if(onEnd) {
-                        onEnd(req, res);
-                    } else if(res.statusCode >= 400){
-                        return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
-                    }
-                    done();
-            });
+function shouldget(path, done, onEnd) {
+    client.get(path, function(req, res) {
+            if(onEnd) {
+                onEnd(req, res);
+            } else if(res.statusCode >= 400){
+                return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
+            }
+            done();
+    });
+}
+
+function shouldnotget(path, done) {
+    shouldget(path, done, function onEnd(req, res) {
+            res.statusCode.should.be.below(500);
+            res.statusCode.should.not.eql(200);
     })
 }
 
-function shouldpost(path, body, onEnd) {
+function shouldpost(path, body, done, onEnd) {
+    client.post(path, body, function(req, res) {
+            if(onEnd) {
+                onEnd(req, res);
+            } else if(res.statusCode >= 400){
+                return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
+            }
+            done();
+    });
+}
+
+function shouldnotpost(path, body, done) {
+    shouldpost(path, body, done, function onEnd(req, res) {
+            res.statusCode.should.less.than(500);
+            res.statusCode.should.not.eql(200);
+    })
+}
+
+function itshouldget(path, onEnd) {
+    it('should get ' + path, function(done) {
+            shouldget(path, done, onEnd);
+    })
+}
+
+function itshouldpost(path, body, onEnd) {
     it('should post ' + path, function(done) {
-            client.post(path, body, function(req, res) {
-                    if(onEnd) {
-                        onEnd(req, res);
-                    } else if(res.statusCode >= 400){
-                        return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
-                    }
-                    done();
-            });
+            shouldpost(path, body, done, onEnd);
     })
 }
 
@@ -51,6 +73,8 @@ before(function(done) {
         }
         function signin(callback) {
             client.post('/signin', {email: 'user1@ibbs.cc', password:'123456'}, function(req, res) {
+                    console.log('req headers', req.headers);
+                    console.log('res headers', res.headers);
                     var user = req.session.user;
                     user.nickname.should.eql('user1');
                     uid1 = user.id;
@@ -59,6 +83,8 @@ before(function(done) {
         }
         function createGroup(callback) {
             client.post('/group/create', {name: 'group1', privacy:'1'}, function(req, res) {
+                    console.log('req headers', req.headers);
+                    console.log('res headers', res.headers);
                     var data = JSON.parse(res.sentcontent);
                     console.log(data);
                     data.name.should.eql('group1');
@@ -90,19 +116,56 @@ before(function(done) {
 })
 
 describe('Guest', function(){
-        shouldget('/');
-        shouldget('/signin');
-        shouldget('/signup');
+        itshouldget('/');
+        itshouldget('/signin');
+        itshouldget('/signup');
+        it('should get /g/:gid', function(done) {
+                shouldget('/g/' + gid1, done);
+        })
+        it('should get /g/:gid/detail', function(done) {
+                shouldget('/g/'+gid1+'/detail', done);
+        })
+        it('should not get /g/:gid/join', function(done) {
+                shouldnotget('/g/'+gid1+'/join', done);
+        })
+        it('should get /u/:uid', function(done) {
+                shouldget('/u/'+uid1, done);
+        })
+        it('should not get /t/:tid', function(done) {
+                shouldget('/t/'+tid1, done);
+        })
 })
 
-describe('User', function(){
+describe('None-member-user', function(){
         var uid2;
-        shouldget('/');
-        shouldget('/signin');
-        shouldget('/signup');
-        shouldpost('/signup', {nickname: '风清扬', password: '123456', email: 'gl@gl.com'});
-        shouldpost('/signin', {email: 'gl@gl.com', password: '123456'}, function(req, res) {
+        itshouldget('/');
+        itshouldget('/signin');
+        itshouldget('/signup');
+        itshouldpost('/signup', {nickname: '风清扬', password: '123456', email: 'gl@gl.com'});
+        itshouldpost('/signin', {email: 'gl@gl.com', password: '123456'}, function(req, res) {
                 req.session.user.nickname.should.eql('风清扬');
                 uid2 = req.session.user.id;
         });
+        it('should get /g/:gid', function(done) {
+                shouldget('/g/' + gid1, done);
+        });
+        it('should get /g/:gid/detail', function(done) {
+                shouldget('/g/'+gid1+'/detail', done);
+        });
+        it('should get /u/:uid', function(done) {
+                shouldget('/u/'+uid1, done);
+        });
+        it('should get /t/:tid', function(done) {
+                shouldget('/t/'+tid1, done);
+        });
+
+
+        // ====== test join group should not be called before others======
+        it('should get /g/:gid/join', function(done) {
+                shouldget('/g/'+gid1+'/join', done);
+        });
 });
+
+describe('Member user', function(){
+
+})

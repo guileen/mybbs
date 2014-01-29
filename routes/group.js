@@ -13,22 +13,24 @@ module.exports = function(app) {
             res.writeHead(404, 'Not Found');
             return res.end('No such group');
           }
-      groupdao.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
           homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
+              var user = req.session.user;
+          groupdao.isMember(user && user.id, gid, function(err, isJoinedGroup) {
               res.render('group/list', {
                   group: group
                 , topics: topics
                 , isJoinedGroup: isJoinedGroup
               })
           })
-      })
+          })
       })
   });
 
   app.get('/g/:group/detail', function(req, res) {
       var gid = req.params.group;
+      var user = req.session.user;
       groupdao.getGroup(gid, function(err, group) {
-          groupdao.isMember(req.session.user.id, gid, function(err, isJoinedGroup) {
+          groupdao.isMember(user && user.id, gid, function(err, isJoinedGroup) {
               groupdao.getMembers(gid, 0, 50, function(err, members) {
                   if(err) console.log(err.stack || err);
                   console.log(members);
@@ -40,12 +42,13 @@ module.exports = function(app) {
               })
           })
       })
-
   })
 
   // group view by slug url
   app.get('/g/:group/join', function(req, res, next) {
       var gid = req.params.group;
+      var user = req.session.user;
+      console.log(user);
       groupdao.joinGroup(req.session.user.id, req.params.group, function(err) {
           res.redirect('/g/' + gid);
       })
@@ -85,6 +88,7 @@ module.exports = function(app) {
 
   app.post('/group/create', function(req, res, next) {
           var body = req.body;
+          console.log(req.session.user);
           groupdao.createGroup({
                   name: body.name
                 , owner: req.session.user.id

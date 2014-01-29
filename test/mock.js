@@ -88,6 +88,7 @@ exports.httpClient = function (server) {
     var cookiejar = {};
     var parseCookie = require('cookie').parse;
     function request(method, url, header, body, callback) {
+        console.log('=======', cookiejar);
         if(!callback && typeof header == 'function') {
             callback = header;
             header = {};
