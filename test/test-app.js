@@ -18,10 +18,11 @@ describe('app.js', function(){
 
 function shouldget(path, done, onEnd) {
     client.get(path, function(req, res) {
+            if(res.error) {
+                return done(res.error);
+            }
             if(onEnd) {
                 onEnd(req, res);
-            } else if(res.error) {
-                return done(res.error);
             } else if(res.statusCode >= 400){
                 return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
             }
@@ -38,10 +39,11 @@ function shouldnotget(path, done) {
 
 function shouldpost(path, body, done, onEnd) {
     client.post(path, body, function(req, res) {
+            if(res.error) {
+                return done(res.error);
+            }
             if(onEnd) {
                 onEnd(req, res);
-            } else if(res.error) {
-                return done(res.error);
             } else if(res.statusCode >= 400){
                 return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
             }

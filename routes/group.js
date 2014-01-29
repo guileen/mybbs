@@ -33,7 +33,6 @@ module.exports = function(app) {
           groupdao.isMember(user && user.id, gid, function(err, isJoinedGroup) {
               groupdao.getMembers(gid, 0, 50, function(err, members) {
                   if(err) console.log(err.stack || err);
-                  console.log(members);
                   res.render('group/detail', {
                       group: group
                     , isJoinedGroup: isJoinedGroup
@@ -48,8 +47,8 @@ module.exports = function(app) {
   app.get('/g/:group/join', function(req, res, next) {
       var gid = req.params.group;
       var user = req.session.user;
-      console.log(user);
-      groupdao.joinGroup(req.session.user.id, req.params.group, function(err) {
+      if(!user) return res.send(403, 'Not Login');
+      groupdao.joinGroup(user.id, req.params.group, function(err) {
           res.redirect('/g/' + gid);
       })
   });
@@ -88,7 +87,6 @@ module.exports = function(app) {
 
   app.post('/group/create', function(req, res, next) {
           var body = req.body;
-          console.log(req.session.user);
           groupdao.createGroup({
                   name: body.name
                 , owner: req.session.user.id

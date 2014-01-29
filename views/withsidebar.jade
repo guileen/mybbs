@@ -20,21 +20,23 @@ block content
         .bottom-padding
       .sidenav.col-md-4
         .line-gap
-        a.btn.btn-default.btn-block.side-control= user.nickname
+        a.btn.btn-default.btn-block.side-control= user ? user.nickname : '游客'
 
-        a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create?gid=#{group && group.id || ""}') +新建贴子
-        .btn-group-vertical.btn-block.side-control
-          a.btn.btn-default.btn-block(href='#') 我的贴子
-          a.btn.btn-default.btn-block(href='#') 我的收藏
-          a.btn.btn-default.btn-block(href='#') 我的评论
-        .btn-group-vertical.btn-block.side-control
-          each group, index in user.joinedGroups
-            a.btn.btn-default.btn-block(href='/g/#{group.id}')= group.name
-          //- a.btn.btn-default(href='#') 更多...
-          a.btn.btn-default(type='button', href="/group/explore") 加入社团
-          a.btn.btn-default.btn-success(type='button', href="/group/create") 创建社团*
+        if user
+          a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create?gid=#{group && group.id || ""}') +新建贴子
+          .btn-group-vertical.btn-block.side-control
+            a.btn.btn-default.btn-block(href='#') 我的贴子
+            a.btn.btn-default.btn-block(href='#') 我的收藏
+            a.btn.btn-default.btn-block(href='#') 我的评论
+          .btn-group-vertical.btn-block.side-control
+            if user.joinedGroups
+              each group, index in user.joinedGroups
+                a.btn.btn-default.btn-block(href='/g/#{group.id}')= group.name
+            //- a.btn.btn-default(href='#') 更多...
+            a.btn.btn-default(type='button', href="/group/explore") 加入社团
+            a.btn.btn-default.btn-success(type='button', href="/group/create") 创建社团*
 
-        a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
+          a.btn.btn-danger.btn-block.side-control(href='/signout') 退出我的帐号
 
   script.
     window.onpopstate = function(e) {
