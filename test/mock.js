@@ -34,6 +34,8 @@ function MockResponse(){
     this.headers = {};
     this._removedHeader = {};
     this.output = [];
+    this.statusCode = 200;
+    this.statusMessage = 'OK';
     this.outputEncodings = [];
 }
 util.inherits(MockResponse, EventEmitter);
@@ -43,9 +45,6 @@ MockResponse.prototype.write = function(str){
 }
 
 MockResponse.prototype.end = function(str){
-    if(!this.statusCode) {
-        this.writeHead(200);
-    }
     this.write(str);
     this.isFinished = true;
     this.emit('finish');
