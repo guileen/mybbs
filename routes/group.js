@@ -2,6 +2,7 @@ var homegroup = require('../lib/services/homegroup');
 var explorer = require('../lib/services/explorer');
 var groupdao = require('../lib/services/groupdao');
 var common = require('../common/common');
+var helpers = require('./helpers');
 
 module.exports = function(app) {
 
@@ -52,7 +53,7 @@ module.exports = function(app) {
   })
 
   // group view by slug url
-  app.get('/g/:group/join', function(req, res, next) {
+  app.get('/g/:group/join', helpers.requireLogin, function(req, res, next) {
       var gid = req.params.group;
       var user = req.session.user;
       if(!user) return res.send(403, 'Not Login');
@@ -90,11 +91,11 @@ module.exports = function(app) {
   })
 
   // group.
-  app.get('/group/create', function(req, res, next) {
+  app.get('/group/create', helpers.requireLogin, function(req, res, next) {
           res.render('group/create');
   });
 
-  app.post('/group/create', function(req, res, next) {
+  app.post('/group/create', helpers.requireLogin, function(req, res, next) {
           var body = req.body;
           groupdao.createGroup({
                   name: body.name

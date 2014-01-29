@@ -170,7 +170,10 @@ describe('Guest', function(){
         itshouldget('/signin');
         itshouldget('/signup');
         itshouldget('/group/explore');
+        itshouldnotget('/group/create');
+        itshouldnotpost('/group/create', {name:'foo', privacy:'1'});
         itshouldnotget('/topic/create');
+        itshouldnotpost('/topic/create', {txt:'blablablabla', gid: opengroup});
         it('should NOT get /g/:privategroup', function(done) {
                 shouldnotget('/g/' + privateGroup, done);
         })
