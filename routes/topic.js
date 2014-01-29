@@ -1,14 +1,20 @@
 var cclog = require('cclog');
-var topicdao = require('../lib/services/topicdao')
+var topicdao = require('../lib/services/topicdao');
+var groupdao = require('../lib/services/groupdao');
 module.exports = function(app) {
 
   // tiopic view by slug url
   app.get('/t/:tid', function(req, res, next) {
           topicdao.getDetail(req.params.tid, function(err, topic) {
+              var user = req.session.user;
+              groupdao.isMember(user && user.id, topic.group.id, function(err, isMember) {
                   if(err) throw err;
                   if(!topic) {
                       res.writeHead(404, 'Not Found');
                       return res.end('No such topic');
+                  }
+                  if(topic.group.privacy == '1' && !isMember) {
+                      res.writeHead(403, 'Not allowed')
                   }
                   res.format({
                       json: function() {
@@ -18,6 +24,7 @@ module.exports = function(app) {
                         res.render('topic/detail', {topic: topic});
                       }
                   })
+              })
           });
   });
 

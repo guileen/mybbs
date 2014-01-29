@@ -1,5 +1,6 @@
 var cclog = require('cclog');
 var homegroup = require('../lib/services/homegroup');
+var groupdao = require('../lib/services/groupdao');
 module.exports = function(app) {
 
   require('./user')(app);
@@ -15,13 +16,12 @@ module.exports = function(app) {
           return res.render('welcome');
       }
       homegroup.getHomeGroup(user.id, function(err, homeGroups) {
-          cclog('=========== groups ============= ', JSON.stringify(homeGroups));
           if(err) {return callback(err);}
           user.joinedGroups = [];
           if(homeGroups.length == 0) {
             return res.redirect('/group/explore')
           }
-          app.services.getJoinedGroups(user.id, function(err, joinedGroups) {
+          groupdao.getJoinedGroups(user.id, function(err, joinedGroups) {
                   if(err) {return callback(err);}
                   user.joinedGroups = joinedGroups;
                   res.render('home', {

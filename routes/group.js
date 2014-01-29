@@ -13,13 +13,17 @@ module.exports = function(app) {
             res.writeHead(404, 'Not Found');
             return res.end('No such group');
           }
+          var user = req.session.user;
+          groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
           homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
-              var user = req.session.user;
-          groupdao.isMember(user && user.id, gid, function(err, isJoinedGroup) {
+              if(group.privacy == '1') {
+                  if(!user) return res.send(403, 'not allowed');
+                  if(!isGroupMember) topics = [];
+              }
               res.render('group/list', {
                   group: group
                 , topics: topics
-                , isJoinedGroup: isJoinedGroup
+                , isGroupMember: isGroupMember
               })
           })
           })
@@ -30,12 +34,15 @@ module.exports = function(app) {
       var gid = req.params.group;
       var user = req.session.user;
       groupdao.getGroup(gid, function(err, group) {
-          groupdao.isMember(user && user.id, gid, function(err, isJoinedGroup) {
+          groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
+              if(group.privacy == '1' && !isGroupMember) {
+                  return res.send(403, 'not allowed')
+              }
               groupdao.getMembers(gid, 0, 50, function(err, members) {
                   if(err) console.log(err.stack || err);
                   res.render('group/detail', {
                       group: group
-                    , isJoinedGroup: isJoinedGroup
+                    , isGroupMember: isGroupMember
                     , members: members
                   })
               })
@@ -49,6 +56,7 @@ module.exports = function(app) {
       var user = req.session.user;
       if(!user) return res.send(403, 'Not Login');
       groupdao.joinGroup(user.id, req.params.group, function(err) {
+          if(err) throw err;
           res.redirect('/g/' + gid);
       })
   });

@@ -3,6 +3,19 @@ var userdao = require('../lib/services/userdao');
 
 module.exports = function(app) {
 
+  app.get('/u/:uid', function(req, res) {
+          var uid = req.params.uid;
+          userdao.get(uid, function(err, user) {
+                  if(err) throw err;
+                  if(!user) {
+                      return res.send(404, 'No such user');
+                  }
+                  res.render('user/info', {
+                          userInfo: user
+                  });
+          })
+  })
+
   app.get('/signup', function(req, res) {
       res.render('user/signup', {});
   });

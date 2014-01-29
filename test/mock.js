@@ -35,7 +35,7 @@ function MockResponse(){
     this._removedHeader = {};
     this.output = [];
     this.statusCode = 200;
-    this.statusMessage = 'OK';
+    this.statusMessage = '';
     this.outputEncodings = [];
 }
 util.inherits(MockResponse, EventEmitter);
