@@ -5,6 +5,7 @@ var server = require('../app');
 var client = mock.httpClient(server);
 var should = require('should')
 var async = require('async')
+var common = require('../common/common')
 var groupdao = require('../lib/services/groupdao');
 
 describe('app.js', function(){
@@ -83,7 +84,7 @@ function itshouldnotpost(path, body, onEnd) {
     })
 }
 
-var uid1, privateGroup, privateTopic, opengroup, opentopic, hidegroup;
+var uid1, teamGroup, teamTopic, opengroup, opentopic, personalGroup;
 before(function(done) {
         function signup(callback) {
             console.log('signup');
@@ -102,35 +103,35 @@ before(function(done) {
         }
         function createGroup(callback) {
             console.log('create team group');
-            client.post('/group/create', {name: 'group1', privacy:'1'}, function(req, res) {
+            client.post('/group/create', {name: 'group1', privacy:common.PRIVACY_TEAM}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
-                    privateGroup = data.id;
-                    should.exists(privateGroup);
+                    teamGroup = data.id;
+                    should.exists(teamGroup);
                     callback();
             })
         }
         function createTopic(callback) {
             console.log('create team topic');
-            client.post('/topic/create', {gid: privateGroup, txt:'blablabla....'}, function(req, res) {
+            client.post('/topic/create', {gid: teamGroup, txt:'blablabla....'}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
-                    privateTopic = data.id;
+                    teamTopic = data.id;
                     callback();
             });
         }
         function createHideGroup(callback) {
             console.log('create hide group');
-            client.post('/group/create', {name: 'group1', privacy:'2'}, function(req, res) {
+            client.post('/group/create', {name: 'group1', privacy:common.PRIVACY_PERSONAL}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
-                    hidegroup = data.id;
-                    should.exists(hidegroup);
+                    personalGroup = data.id;
+                    should.exists(personalGroup);
                     callback();
             })
         }
         function createOpenGroup(callback) {
             console.log('create open group');
-            client.post('/group/create', {name: 'group1', privacy:'3'}, function(req, res) {
+            client.post('/group/create', {name: 'group1', privacy:common.PRIVACY_PUBLIC}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
                     opengroup = data.id;
@@ -174,20 +175,20 @@ describe('Guest', function(){
         itshouldnotpost('/group/create', {name:'foo', privacy:'1'});
         itshouldnotget('/topic/create');
         itshouldnotpost('/topic/create', {txt:'blablablabla', gid: opengroup});
-        it('should NOT get /g/:privategroup', function(done) {
-                shouldnotget('/g/' + privateGroup, done);
+        it('should NOT get /g/:teamgroup', function(done) {
+                shouldnotget('/g/' + teamGroup, done);
         })
         it('should get /u/:uid', function(done) {
                 shouldget('/u/'+uid1, done);
         })
-        it('should NOT get /g/:privategroup/detail', function(done) {
-                shouldnotget('/g/'+privateGroup+'/detail', done);
+        it('should NOT get /g/:teamgroup/detail', function(done) {
+                shouldnotget('/g/'+teamGroup+'/detail', done);
         })
-        it('should NOT get /g/:privategroup/join', function(done) {
-                shouldnotget('/g/'+privateGroup+'/join', done);
+        it('should NOT get /g/:teamgroup/join', function(done) {
+                shouldnotget('/g/'+teamGroup+'/join', done);
         })
-        it('should NOT get /t/privatetopic', function(done) {
-                shouldnotget('/t/'+privateTopic, done);
+        it('should NOT get /t/teamtopic', function(done) {
+                shouldnotget('/t/'+teamTopic, done);
         })
         it('should get /g/:opengroup/detail', function(done) {
                 shouldget('/g/'+opengroup+'/detail', done);
@@ -220,19 +221,19 @@ describe('User', function(){
                 shouldget('/u/'+uid1, done);
         });
 
-        // private group
-        it('should get /g/:privategroup', function(done) {
-                shouldget('/g/' + privateGroup, done);
+        // team group
+        it('should get /g/:teamgroup', function(done) {
+                shouldget('/g/' + teamGroup, done);
         });
-        it('should NOT get /g/:privategroup/detail', function(done) {
-                shouldnotget('/g/'+privateGroup+'/detail', done);
+        it('should NOT get /g/:teamgroup/detail', function(done) {
+                shouldnotget('/g/'+teamGroup+'/detail', done);
         });
-        it('should NOT get /t/privatetopic', function(done) {
-                shouldnotget('/t/'+privateTopic, done);
+        it('should NOT get /t/teamtopic', function(done) {
+                shouldnotget('/t/'+teamTopic, done);
         });
-        it('should get /g/:privategroup/join', function(done) {
-                shouldget('/g/'+privateGroup+'/join', done, function(req, res) {
-                        groupdao.isMember(req.session.user.id, privateGroup, function(err, isMember) {
+        it('should get /g/:teamgroup/join', function(done) {
+                shouldget('/g/'+teamGroup+'/join', done, function(req, res) {
+                        groupdao.isMember(req.session.user.id, teamGroup, function(err, isMember) {
                                 should.not.exists(err);
                                 isMember.should.be.ok;
                         })
@@ -240,8 +241,8 @@ describe('User', function(){
         });
         describe('Member', function() {
 
-                it('should get /t/privatetopic after join', function(done) {
-                        shouldget('/t/'+privateTopic, done);
+                it('should get /t/teamtopic after join', function(done) {
+                        shouldget('/t/'+teamTopic, done);
                 });
 
         })
