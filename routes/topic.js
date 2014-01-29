@@ -2,6 +2,7 @@ var cclog = require('cclog');
 var topicdao = require('../lib/services/topicdao');
 var groupdao = require('../lib/services/groupdao');
 var common = require('../common/common')
+var helpers = require('./helpers')
 module.exports = function(app) {
 
   // tiopic view by slug url
@@ -30,8 +31,9 @@ module.exports = function(app) {
   });
 
   // tiopic.
-  app.get('/topic/create', function(req, res, next) {
-      app.services.getJoinedGroups(req.session.user.id, function(err, joinedGroups) {
+  app.get('/topic/create', helpers.requireLogin, function(req, res, next) {
+      var user = req.session.user;
+      groupdao.getJoinedGroups(user && user.id, function(err, joinedGroups) {
           if(err) {
             cclog.error(err.message);
             return res.error(err);
@@ -43,7 +45,7 @@ module.exports = function(app) {
       });
   });
 
-  app.post('/topic/create', function(req, res, next) {
+  app.post('/topic/create', helpers.requireLogin, function(req, res, next) {
           var body = req.body;
           topicdao.create({
                   gid: body.gid
@@ -59,7 +61,7 @@ module.exports = function(app) {
           })
   });
 
-  app.post('/topic/comment', function(req, res, next) {
+  app.post('/topic/comment', helpers.requireLogin, function(req, res, next) {
       var body = req.body;
       topicdao.createComment({
           tid: body.tid

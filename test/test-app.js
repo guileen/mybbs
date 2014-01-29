@@ -8,7 +8,7 @@ var async = require('async')
 var groupdao = require('../lib/services/groupdao');
 
 describe('app.js', function(){
-        it('should 404', function(done) {
+        it('should not get /blabla', function(done) {
                 http.ServerResponse.should.equal(mock.MockResponse);
                 client.get('/foo', function(req, res) {
                         res.statusCode.should.eql(404);
@@ -72,13 +72,13 @@ function itshouldpost(path, body, onEnd) {
 }
 
 function itshouldnotget(path, onEnd) {
-    it('should get ' + path, function(done) {
+    it('should not get ' + path, function(done) {
             shouldnotget(path, done, onEnd);
     })
 }
 
 function itshouldnotpost(path, body, onEnd) {
-    it('should post ' + path, function(done) {
+    it('should not post ' + path, function(done) {
             shouldnotpost(path, body, done, onEnd);
     })
 }

@@ -10,6 +10,7 @@ var http = require('http');
 var path = require('path');
 var RedisStore = require('connect-redis')(express);
 var config = require('./config');
+var helpers = require('./routes/helpers');
 
 var app = express();
 
@@ -18,7 +19,8 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
-app.use(express.logger('dev'));
+if('test' != app.get('env'))
+    app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
@@ -31,7 +33,8 @@ app.use(express.session({
       })
     , secret: 'my bbs secret'
 }));
-app.use(require('./routes/dynamicHelpers'));
+app.use(helpers.dynamicContext);
+app.use(helpers.timeout(1000));
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public')
     , debug: true
