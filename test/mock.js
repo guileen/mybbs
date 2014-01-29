@@ -31,7 +31,7 @@ function MockResponse(){
     EventEmitter.call(this);
     this.sentcontent = '';
     this.isFinished;
-    this.headers = {};
+    this._headers = this.headers = {};  // fix express middlewares, which use res._headers
     this._removedHeader = {};
     this.output = [];
     this.statusCode = 200;
@@ -91,7 +91,6 @@ exports.httpClient = function (server) {
     var cookiejar = {};
     var parseCookie = require('cookie').parse;
     function request(method, url, header, body, callback) {
-        console.log('=======', cookiejar);
         if(!callback && typeof header == 'function') {
             callback = header;
             header = {};

@@ -20,6 +20,8 @@ function shouldget(path, done, onEnd) {
     client.get(path, function(req, res) {
             if(onEnd) {
                 onEnd(req, res);
+            } else if(res.error) {
+                return done(res.error);
             } else if(res.statusCode >= 400){
                 return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
             }
@@ -38,6 +40,8 @@ function shouldpost(path, body, done, onEnd) {
     client.post(path, body, function(req, res) {
             if(onEnd) {
                 onEnd(req, res);
+            } else if(res.error) {
+                return done(res.error);
             } else if(res.statusCode >= 400){
                 return done(new Error('Status: ' + res.statusCode + ' ' + res.statusMessage));
             }
@@ -73,8 +77,6 @@ before(function(done) {
         }
         function signin(callback) {
             client.post('/signin', {email: 'user1@ibbs.cc', password:'123456'}, function(req, res) {
-                    console.log('req headers', req.headers);
-                    console.log('res headers', res.headers);
                     var user = req.session.user;
                     user.nickname.should.eql('user1');
                     uid1 = user.id;
@@ -83,10 +85,7 @@ before(function(done) {
         }
         function createGroup(callback) {
             client.post('/group/create', {name: 'group1', privacy:'1'}, function(req, res) {
-                    console.log('req headers', req.headers);
-                    console.log('res headers', res.headers);
                     var data = JSON.parse(res.sentcontent);
-                    console.log(data);
                     data.name.should.eql('group1');
                     gid1 = data.id;
                     should.exists(gid1);

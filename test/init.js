@@ -1,3 +1,4 @@
+process.env.NODE_ENV = 'test';
 // reset config with test config.
 var config = require('../config');
 var test_config = require('./config');

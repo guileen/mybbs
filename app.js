@@ -44,7 +44,12 @@ app.locals({
     hello: 'world'
 });
 
-
+if ('test' == app.get('env')) {
+    app.use(function(err, req, res, next) {
+            res.error = err;
+            next(err);
+    })
+}
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
@@ -62,6 +67,7 @@ redisClient.select(config.database, function(err) {
 routes(app);
 
 var server = module.exports = http.createServer(app);
+server.app = app;
 if(!module.parent) {
   server.listen(app.get('port'), function(){
       console.log('Express server listening on port ' + app.get('port'));
