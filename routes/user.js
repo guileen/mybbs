@@ -52,7 +52,7 @@ module.exports = function(app) {
   });
 
   app.get('/signin', function(req, res, next) {
-      res.render('user/signin', {})
+      res.render('user/signin', {lasturl: req.query.lasturl})
   });
 
   app.post('/signin', function(req, res, next) {
@@ -61,41 +61,46 @@ module.exports = function(app) {
           if(email) {
               userdao.getByEmailOrId(email, function(err, userInfo) {
                       if(err) {return callback(err);}
+                      var errcode;
                       if(!userInfo) {
+                          errcode = 'notexist';
+                      } else if(!util.secrets.equals(body.password, userInfo.password)) {
+                          errcode = 'badpass';
+                      }
+                      if(errcode) {
                           return res.format({
                                   html: function() {
-                                    res.render('user/signin', {
-                                        code: 'notexists'
-                                    })
+                                      res.render('user/signin', {
+                                          code: errcode
+                                        , email: email
+                                        , lasturl: body.lasturl
+                                      })
                                   }
                                 , json: function() {
-                                      res.send({code: 'notexist'});
+                                      res.send(403, {code: errcode});
                                   }
                           })
                       }
-                      if(util.secrets.equals(body.password, userInfo.password)) {
-                          req.session.regenerate(function(){
-                                  req.session.user = userInfo;
-                                  // remember me or not
-                                  if(body.rememberme) {
-                                      req.session.cookie.expires = false;
-                                      req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
-                                  } else {
-                                      req.session.cookie.expires = false;
-                                      req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
-                                  }
-                                  // TODO last url.
-                                  return res.format({
-                                          html: function(){
-                                              res.redirect('/');
-                                          },
+                      req.session.regenerate(function(){
+                              req.session.user = userInfo;
+                              // remember me or not
+                              if(body.rememberme) {
+                                  req.session.cookie.expires = false;
+                                  req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
+                              } else {
+                                  req.session.cookie.expires = false;
+                                  req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
+                              }
+                              res.format({
+                                      html: function(){
+                                          res.redirect(body.lasturl || '/');
+                                      },
 
-                                          json: function(){
-                                              res.send({code: 'success'});
-                                          }
-                                  });
-                          });
-                      }
+                                      json: function(){
+                                          res.send({code: 'success'});
+                                      }
+                              });
+                      });
               })
           }
   })

@@ -10,7 +10,7 @@ exports.timeout = function(time) {
     return function(req, res, next) {
         var timer = setTimeout(function(){
                 if(!res.headersSent)
-                    res.writeHead(500, 'Timeout');
+                    res.writeHead(408, 'Request Timeout');
                 res.end('Timeout');
         }, time);
         res.on('finish', function() {

@@ -8,7 +8,7 @@ var async = require('async')
 var groupdao = require('../lib/services/groupdao');
 
 describe('app.js', function(){
-        it('should not get /blabla', function(done) {
+        it('should NOT get /blabla', function(done) {
                 http.ServerResponse.should.equal(mock.MockResponse);
                 client.get('/foo', function(req, res) {
                         res.statusCode.should.eql(404);
@@ -54,7 +54,7 @@ function shouldpost(path, body, done, onEnd) {
 
 function shouldnotpost(path, body, done) {
     shouldpost(path, body, done, function onEnd(req, res) {
-            res.statusCode.should.less.than(500);
+            res.statusCode.should.be.below(500);
             res.statusCode.should.not.eql(200);
     })
 }
@@ -72,13 +72,13 @@ function itshouldpost(path, body, onEnd) {
 }
 
 function itshouldnotget(path, onEnd) {
-    it('should not get ' + path, function(done) {
+    it('should NOT get ' + path, function(done) {
             shouldnotget(path, done, onEnd);
     })
 }
 
 function itshouldnotpost(path, body, onEnd) {
-    it('should not post ' + path, function(done) {
+    it('should NOT post ' + path, function(done) {
             shouldnotpost(path, body, done, onEnd);
     })
 }
@@ -86,11 +86,13 @@ function itshouldnotpost(path, body, onEnd) {
 var uid1, privateGroup, privateTopic, opengroup, opentopic, hidegroup;
 before(function(done) {
         function signup(callback) {
+            console.log('signup');
             client.post('/signup', {nickname:'user1', password:'123456', email: 'user1@ibbs.cc'}, function(req, res) {
                     callback();
             })
         }
         function signin(callback) {
+            console.log('signin');
             client.post('/signin', {email: 'user1@ibbs.cc', password:'123456'}, function(req, res) {
                     var user = req.session.user;
                     user.nickname.should.eql('user1');
@@ -99,6 +101,7 @@ before(function(done) {
             })
         }
         function createGroup(callback) {
+            console.log('create team group');
             client.post('/group/create', {name: 'group1', privacy:'1'}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
@@ -108,6 +111,7 @@ before(function(done) {
             })
         }
         function createTopic(callback) {
+            console.log('create team topic');
             client.post('/topic/create', {gid: privateGroup, txt:'blablabla....'}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     privateTopic = data.id;
@@ -115,6 +119,7 @@ before(function(done) {
             });
         }
         function createHideGroup(callback) {
+            console.log('create hide group');
             client.post('/group/create', {name: 'group1', privacy:'2'}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
@@ -124,6 +129,7 @@ before(function(done) {
             })
         }
         function createOpenGroup(callback) {
+            console.log('create open group');
             client.post('/group/create', {name: 'group1', privacy:'3'}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
@@ -133,6 +139,7 @@ before(function(done) {
             })
         }
         function createOpenTopic(callback) {
+            console.log('create open topic');
             client.post('/topic/create', {gid: opengroup, txt:'blablabla....'}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     opentopic = data.id;
@@ -140,6 +147,7 @@ before(function(done) {
             });
         }
         function signout(callback) {
+            console.log('signout');
             client.get('/signout', function(req, res) {
                     should.not.exists(req.session.user);
                     callback();
@@ -163,25 +171,25 @@ describe('Guest', function(){
         itshouldget('/signup');
         itshouldget('/group/explore');
         itshouldnotget('/topic/create');
-        it('should not get /g/:privategroup', function(done) {
+        it('should NOT get /g/:privategroup', function(done) {
                 shouldnotget('/g/' + privateGroup, done);
         })
         it('should get /u/:uid', function(done) {
                 shouldget('/u/'+uid1, done);
         })
-        it('should not get /g/:privategroup/detail', function(done) {
+        it('should NOT get /g/:privategroup/detail', function(done) {
                 shouldnotget('/g/'+privateGroup+'/detail', done);
         })
-        it('should not get /g/:privategroup/join', function(done) {
+        it('should NOT get /g/:privategroup/join', function(done) {
                 shouldnotget('/g/'+privateGroup+'/join', done);
         })
-        it('should not get /t/privatetopic', function(done) {
+        it('should NOT get /t/privatetopic', function(done) {
                 shouldnotget('/t/'+privateTopic, done);
         })
         it('should get /g/:opengroup/detail', function(done) {
                 shouldget('/g/'+opengroup+'/detail', done);
         })
-        it('should not get /g/:opengroup/join', function(done) {
+        it('should NOT get /g/:opengroup/join', function(done) {
                 shouldnotget('/g/'+opengroup+'/join', done);
         })
         it('should get /t/:opentid', function(done) {
@@ -192,6 +200,12 @@ describe('Guest', function(){
 describe('User', function(){
         var uid2;
         itshouldpost('/signup', {nickname: '风清扬', password: '123456', email: 'gl@gl.com'});
+        it('should NOT /signin with bad username', function(done) {
+                shouldnotpost('/signin', {email: 'glbalbal@gl.com', password: '1234'}, done);
+        })
+        it('should NOT /signin with bad password', function(done) {
+                shouldnotpost('/signin', {email: 'gl@gl.com', password: '1234'}, done);
+        })
         itshouldpost('/signin', {email: 'gl@gl.com', password: '123456'}, function(req, res) {
                 req.session.user.nickname.should.eql('风清扬');
                 uid2 = req.session.user.id;
@@ -207,10 +221,10 @@ describe('User', function(){
         it('should get /g/:privategroup', function(done) {
                 shouldget('/g/' + privateGroup, done);
         });
-        it('should not get /g/:privategroup/detail', function(done) {
+        it('should NOT get /g/:privategroup/detail', function(done) {
                 shouldnotget('/g/'+privateGroup+'/detail', done);
         });
-        it('should not get /t/privatetopic', function(done) {
+        it('should NOT get /t/privatetopic', function(done) {
                 shouldnotget('/t/'+privateTopic, done);
         });
         it('should get /g/:privategroup/join', function(done) {

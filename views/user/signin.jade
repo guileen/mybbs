@@ -9,14 +9,17 @@ block content
       ol.breadcrumb
         li: a(href='/') 首页
         li.active 登录
-      p
+      if lasturl
+        .alert.alert-info
+          登录后继续您的操作
       form#signInForm(action='/signin', method='post')
+        input(type='hidden', name='lasturl', value=lasturl)
         .form-group
           label.sr-only(for='InputEmail') 帐号
-          input#InputEmail.form-control(name='email', type='text', placeholder='ID/邮箱', autofocus)
+          input#InputEmail.form-control(name='email', type='text', placeholder='ID/邮箱', autofocus=!email, value=email)
         .form-group
           label.sr-only(for='InputPassword') 密码
-          input#InputPassword.form-control(name='password', type='password', placeholder='密码')
+          input#InputPassword.form-control(name='password', type='password', placeholder='密码', autofocus=!!email)
         button#signInButton.btn.btn-success.btn-block(type='submit') 登录
       p
       .text-center
@@ -24,9 +27,12 @@ block content
         span &nbsp;&nbsp;|&nbsp;&nbsp;
         a(href='') 找回密码
 
-    if code == 'notexists'
+    if code
       script.
-        alertError('用户不存在')
+        alertError({
+          notexists: '用户不存在',
+          badpass: '密码错误'
+        }['#{code}']);
 
     script.
       autoValidate('#signupform');
