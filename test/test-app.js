@@ -71,7 +71,19 @@ function itshouldpost(path, body, onEnd) {
     })
 }
 
-var uid1, privateGroup, privateTopic, opengroup, opentopic;
+function itshouldnotget(path, onEnd) {
+    it('should get ' + path, function(done) {
+            shouldnotget(path, done, onEnd);
+    })
+}
+
+function itshouldnotpost(path, body, onEnd) {
+    it('should post ' + path, function(done) {
+            shouldnotpost(path, body, done, onEnd);
+    })
+}
+
+var uid1, privateGroup, privateTopic, opengroup, opentopic, hidegroup;
 before(function(done) {
         function signup(callback) {
             client.post('/signup', {nickname:'user1', password:'123456', email: 'user1@ibbs.cc'}, function(req, res) {
@@ -102,8 +114,17 @@ before(function(done) {
                     callback();
             });
         }
+        function createHideGroup(callback) {
+            client.post('/group/create', {name: 'group1', privacy:'2'}, function(req, res) {
+                    var data = JSON.parse(res.sentcontent);
+                    data.name.should.eql('group1');
+                    hidegroup = data.id;
+                    should.exists(hidegroup);
+                    callback();
+            })
+        }
         function createOpenGroup(callback) {
-            client.post('/group/create', {name: 'group1', privacy:'0'}, function(req, res) {
+            client.post('/group/create', {name: 'group1', privacy:'3'}, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
                     opengroup = data.id;
@@ -129,6 +150,7 @@ before(function(done) {
               , signin
               , createGroup
               , createTopic
+              , createHideGroup
               , createOpenGroup
               , createOpenTopic
               , signout
@@ -140,6 +162,7 @@ describe('Guest', function(){
         itshouldget('/signin');
         itshouldget('/signup');
         itshouldget('/group/explore');
+        itshouldnotget('/topic/create');
         it('should not get /g/:privategroup', function(done) {
                 shouldnotget('/g/' + privateGroup, done);
         })
@@ -175,6 +198,7 @@ describe('User', function(){
         });
         itshouldget('/');
         itshouldget('/group/explore');
+        itshouldget('/topic/create');
         it('should get /u/:uid', function(done) {
                 shouldget('/u/'+uid1, done);
         });
@@ -197,9 +221,13 @@ describe('User', function(){
                         })
                 });
         });
-        it('should get /t/privatetopic after join', function(done) {
-                shouldget('/t/'+privateTopic, done);
-        });
+        describe('Member', function() {
+
+                it('should get /t/privatetopic after join', function(done) {
+                        shouldget('/t/'+privateTopic, done);
+                });
+
+        })
         // open group
         it('should get /g/:opengroup', function(done) {
                 shouldget('/g/'+opengroup, done);

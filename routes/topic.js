@@ -1,6 +1,7 @@
 var cclog = require('cclog');
 var topicdao = require('../lib/services/topicdao');
 var groupdao = require('../lib/services/groupdao');
+var common = require('../common/common')
 module.exports = function(app) {
 
   // tiopic view by slug url
@@ -13,7 +14,7 @@ module.exports = function(app) {
                       res.writeHead(404, 'Not Found');
                       return res.end('No such topic');
                   }
-                  if(topic.group.privacy == '1' && !isMember) {
+                  if(topic.group.privacy == common.PRIVACY_TEAM && !isMember) {
                       res.writeHead(403, 'Not allowed')
                   }
                   res.format({

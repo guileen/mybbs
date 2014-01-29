@@ -1,6 +1,7 @@
 var homegroup = require('../lib/services/homegroup');
 var explorer = require('../lib/services/explorer');
 var groupdao = require('../lib/services/groupdao');
+var common = require('../common/common');
 
 module.exports = function(app) {
 
@@ -16,7 +17,7 @@ module.exports = function(app) {
           var user = req.session.user;
           groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
           homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
-              if(group.privacy == '1') {
+              if(group.privacy == common.PRIVACY_TEAM) {
                   if(!user) return res.send(403, 'not allowed');
                   if(!isGroupMember) topics = [];
               }
@@ -35,7 +36,7 @@ module.exports = function(app) {
       var user = req.session.user;
       groupdao.getGroup(gid, function(err, group) {
           groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
-              if(group.privacy == '1' && !isGroupMember) {
+              if(group.privacy == common.PRIVACY_TEAM && !isGroupMember) {
                   return res.send(403, 'not allowed')
               }
               groupdao.getMembers(gid, 0, 50, function(err, members) {

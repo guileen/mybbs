@@ -15,9 +15,14 @@ block content
         .form-group
           label(for='InputPrivacy') 内容隐私
           select#InputPrivacy.form-control(name='privacy')
-            option(value='0', disabled) 公开社团 - 所有人可见(暂未开放)
-            option(value='1', selected) 私密社团 - 仅对群内成员可见
-          span.help-block 私密社团只能通过群组号码找到
+            option(value='1', selected) 圈子或团队-仅成员可见
+            option(value='2') 私人领地-仅可以通过社团ID搜索到
+            option(value='3', disabled) 公共社区(等级不足)
+          span.help-block
+            a(href='') 如何选择？
+        p 点击按钮意味着你同意
+          input(name='agree', type='hidden', value='true')
+          a(href='/tos-group') 《社团服务条款》
         //- TODO 第一版暂时是自由加入
         //- .form-group
         //-   //- 设定群问题，可以满足3种需求，1，自由加入，2，限制加入，3. 审核加入
