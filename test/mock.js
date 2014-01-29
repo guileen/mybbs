@@ -45,6 +45,9 @@ MockResponse.prototype.write = function(str){
 }
 
 MockResponse.prototype.end = function(str){
+    if(!this.headersSent) {
+        this.writeHead(this.statusCode, this.statusMessage);
+    }
     this.write(str);
     this.isFinished = true;
     this.emit('finish');
