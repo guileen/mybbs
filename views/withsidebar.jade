@@ -20,7 +20,7 @@ block content
         .bottom-padding
       .sidenav.col-md-4
         .line-gap
-        a.btn.btn-default.btn-block.side-control= user ? user.nickname : '游客'
+        a.btn.btn-default.btn-block.side-control(href="/u/#{user && user.id}")= user ? user.nickname : '游客'
 
         if user
           a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create?gid=#{group && group.id || ""}') +新建贴子
