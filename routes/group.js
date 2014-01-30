@@ -180,9 +180,10 @@ module.exports = function(app) {
       var gid = req.params.gid;
       var uid = req.session.user.id;
       var count = parseInt(req.body.count) || 0;
+      var remark = req.body.remark;
       groupdao.refCount(gid, uid, function(err, refcount) {
           if(refcount > 10) return res.send(403, {code: 'exceed-max'});
-          groupdao.makeGroupRefCode(gid, uid, count, function(err, code) {
+          groupdao.makeGroupRefCode(gid, uid, count, remark, function(err, code) {
               res.format({
                   json: function() {
                     res.send({refcode: code, count: count});
