@@ -190,14 +190,14 @@ describe('Guest', function(){
         it('should get /gr/:teamRefCode', function(done) {
                 shouldget('/gr/'+teamRefCode, done);
         })
-        it('should NOT get /gr/:teamRefCode/join', function(done) {
-                shouldnotget('/gr/'+teamRefCode+'/join', done);
+        it('should NOT post /gr/:teamRefCode/join', function(done) {
+                shouldnotpost('/gr/'+teamRefCode+'/join', {}, done);
         })
         it('should NOT get /g/:teamgroup/detail', function(done) {
                 shouldnotget('/g/'+teamGroup+'/detail', done);
         })
-        it('should NOT get /g/:teamgroup/join', function(done) {
-                shouldnotget('/g/'+teamGroup+'/join', done);
+        it('should NOT post /g/:teamgroup/join', function(done) {
+                shouldnotpost('/g/'+teamGroup+'/join', {}, done);
         })
         it('should NOT get /t/teamtopic', function(done) {
                 shouldnotget('/t/'+teamTopic, done);
@@ -205,8 +205,8 @@ describe('Guest', function(){
         it('should get /g/:opengroup/detail', function(done) {
                 shouldget('/g/'+opengroup+'/detail', done);
         })
-        it('should NOT get /g/:opengroup/join', function(done) {
-                shouldnotget('/g/'+opengroup+'/join', done);
+        it('should NOT post /g/:opengroup/join', function(done) {
+                shouldnotpost('/g/'+opengroup+'/join', {}, done);
         })
         it('should get /t/:opentid', function(done) {
                 shouldget('/t/'+opentopic, done);
@@ -243,8 +243,8 @@ describe('User', function(){
         it('should get /t/:opentid', function(done) {
                 shouldget('/t/'+opentopic, done);
         })
-        it('should get /g/:opengroup/join', function(done) {
-                shouldget('/g/'+opengroup+'/join', done);
+        it('should post /g/:opengroup/join', function(done) {
+                shouldpost('/g/'+opengroup+'/join', {}, done);
         })
         it('should get / after join', function(done) {
                 shouldget('/', done);
@@ -260,14 +260,14 @@ describe('User', function(){
         it('should NOT get /t/teamtopic', function(done) {
                 shouldnotget('/t/'+teamTopic, done);
         });
-        it('should NOT get /g/:teamgroup/join', function(done) {
-                shouldnotget('/g/' + teamGroup + '/join', done);
+        it('should NOT post /g/:teamgroup/join', function(done) {
+                shouldnotpost('/g/' + teamGroup + '/join', {}, done);
         });
         it('should get /gr/:teamRefCode', function(done) {
                 shouldget('/gr/'+teamRefCode, done);
         })
-        it('should get /gr/:teamRefCode/join', function(done) {
-                shouldget('/gr/'+teamRefCode+'/join', done, function(req, res) {
+        it('should post /gr/:teamRefCode/join', function(done) {
+                shouldpost('/gr/'+teamRefCode+'/join', {}, done, function(req, res) {
                         var uid = req.session.user.id;
                         groupdao.isMember(uid, teamGroup, function(err, isMember) {
                                 should.not.exists(err);
@@ -295,7 +295,7 @@ describe('User', function(){
                 })
 
                 it('should not join if already a group member /gr/:code/join', function(done) {
-                        shouldnotget('/gr/'+myRefCode+'/join', done);
+                        shouldnotpost('/gr/'+myRefCode+'/join', {}, done);
                 })
 
                 it('should get /g/:gid/refstats after make code', function(done) {

@@ -52,7 +52,7 @@ module.exports = function(app) {
   })
 
   // group view by slug url
-  app.get('/g/:group/join', helpers.requireLogin, function(req, res, next) {
+  app.post('/g/:group/join', helpers.requireLogin, function(req, res, next) {
       var gid = req.params.group;
       var user = req.session.user;
       if(!user) return res.send(403, 'Not Login');
@@ -191,7 +191,7 @@ module.exports = function(app) {
       })
   });
 
-  app.get('/gr/:code/join', helpers.requireLogin, function(req, res, next) {
+  app.post('/gr/:code/join', helpers.requireLogin, function(req, res, next) {
       groupdao.joinWithRefCode(req.session.user.id, req.params.code, function(err, info) {
           if(err) throw err;
           res.redirect('/g/' + info.gid);
