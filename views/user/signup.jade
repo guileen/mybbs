@@ -8,6 +8,7 @@ block content
           li.active 注册
         #alertContainer.center-block
         form#signupform(action='/signup', method='post')
+          input(type='hidden', name='lasturl', value=lasturl)
           .form-group
             label(for='InputNickname') 昵称
             input#InputNickname.form-control(name='nickname', type='text', placeholder='昵称', required, maxlength=25, pattern='^[0-9a-zA-Z\\u4e00-\\u9fbf_-]{2,25}$', value=nickname)

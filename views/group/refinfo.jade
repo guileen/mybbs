@@ -7,14 +7,25 @@ block content
       ol.breadcrumb
         li: a(href='/') 首页
         li: a(href='/g/#{group.id}')= group.name
-        if user
-          li: a(href='/g/#{group.id}/refstas') Ref统计
-        li.active Ref详细
+        li.active 英雄帖
+      h3 英雄帖
+      p 天下风云出我辈
+      p 一入江湖岁月催
+      p 皇图霸业谈笑间
+      p 不胜人生一场醉
+      p 诸位英雄
+      p 发帖人：
+        a(href='/u/#{refUser.id}') #{refUser.nickname}
       p Code: #{refInfo.code}
       p link: #{baseUrl}/gr/#{refInfo.code}
       p total: #{refInfo.total?refInfo.total:'无限'}
       p left: #{refInfo.total?refInfo.left:'无限'}
-      if !isMember
+      p accept: #{refInfo.accept}
+      p
+        form(action='/gr/#{refInfo.code}/join', method='post')
+          button.btn.btn-primary(type='submit', disabled=isMember) 接受邀请
+
+      each accepter, i in accepters
         p
-          form(action='/gr/#{refInfo.code}/join', method='post')
-            button.btn.btn-primary(type='submit') 接受邀请
+          a(href='/u/#{accepter.id}') #{accepter.nickname}
+          |&nbsp;在 #{acceptTimes[i]} 接受了该英雄贴

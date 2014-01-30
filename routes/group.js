@@ -2,6 +2,7 @@ var homegroup = require('../lib/services/homegroup');
 var explorer = require('../lib/services/explorer');
 var groupdao = require('../lib/services/groupdao');
 var common = require('../common/common');
+var cclog = require('cclog');
 var helpers = require('./helpers');
 
 module.exports = function(app) {
@@ -175,9 +176,12 @@ module.exports = function(app) {
 
   app.get('/gr/:code', function(req, res, next) {
       var user = req.session.user;
-      groupdao.getRefCodeInfo(req.params.code, function(err, refInfo) {
+      var code = req.params.code;
+      groupdao.getRefCodeInfo(code, function(err, refInfo) {
           if(err) throw err;
-          groupdao.isMember(user && user.uid, refInfo.gid, function(err, isMember){
+          groupdao.isMember(user && user.id, refInfo.gid, function(err, isMember){
+
+          groupdao.getLatestAccepters(code, 5, function(err, accepters, acceptTimes) {
 
           if(err) throw err;
           res.render('group/refinfo', {
@@ -185,15 +189,25 @@ module.exports = function(app) {
             , group: refInfo.group
             , refUser: refInfo.user
             , isMember: isMember
+            , accepters: accepters
+            , acceptTimes: acceptTimes
+          })
+
           })
 
           })
       })
   });
 
+  app.get('/gr/:code/join', helpers.requireLogin, function(req, res, next) {
+      res.redirect('/gr/'+req.params.code);
+  })
+
   app.post('/gr/:code/join', helpers.requireLogin, function(req, res, next) {
       groupdao.joinWithRefCode(req.session.user.id, req.params.code, function(err, info) {
-          if(err) throw err;
+          if(err) {
+            return res.send(500, err.message);
+          }
           res.redirect('/g/' + info.gid);
       });
   })

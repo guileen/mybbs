@@ -11,7 +11,9 @@ block content
         li.active 登录
       if lasturl
         .alert.alert-info
-          登录后继续您的操作
+          li 登录后将继续您的操作
+          li 你也可以
+            a.btn.btn-primary.btn-sm(href='/signup?lasturl=#{lasturl}') 注册后继续
       form#signInForm(action='/signin', method='post')
         input(type='hidden', name='lasturl', value=lasturl)
         .form-group
@@ -23,7 +25,7 @@ block content
         button#signInButton.btn.btn-success.btn-block(type='submit') 登录
       p
       .text-center
-        a(href='/signup') 注册帐号
+        a(href='/signup?lasturl=#{lasturl}') 注册帐号
         span &nbsp;&nbsp;|&nbsp;&nbsp;
         a(href='') 找回密码
 

@@ -7,10 +7,11 @@ block main
 
   each refInfo in refList
     .well
-      p Code: #{refInfo.code}
-      p link: #{baseUrl}/gr/#{refInfo.code}
-      p total: #{refInfo.total > 0?refInfo.total:'无限'}
-      p left: #{refInfo.total > 0?refInfo.left:'无限'}
+      h4 remark: #{refInfo.remark}
+      input.form-control(value='#{baseUrl}/gr/#{refInfo.code}')
+      if refInfo.total > 0
+        p #{refInfo.left} / #{refInfo.total}
+      p 已有#{refInfo.accept}人接受此邀请
 
   .well
     form(action='/g/#{group.id}/makeref', method='post')

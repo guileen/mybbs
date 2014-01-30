@@ -17,7 +17,12 @@ module.exports = function(app) {
   })
 
   app.get('/signup', function(req, res) {
-      res.render('user/signup', {});
+          var body = req.body;
+          res.render('user/signup', {
+                  nickname: body.nickname
+                , email: body.email
+                , lasturl: req.query.lasturl
+          });
   });
 
   app.post('/signup', function(req, res) {
@@ -45,8 +50,7 @@ module.exports = function(app) {
                   req.session.cookie.expires = true;
                   req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
                 }
-                // TODO last url.
-                res.redirect('/');
+                res.redirect(body.lasturl || '/');
             })
         })
   });
@@ -63,7 +67,7 @@ module.exports = function(app) {
                       if(err) {return callback(err);}
                       var errcode;
                       if(!userInfo) {
-                          errcode = 'notexist';
+                          errcode = 'notexists';
                       } else if(!util.secrets.equals(body.password, userInfo.password)) {
                           errcode = 'badpass';
                       }
