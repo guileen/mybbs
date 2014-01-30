@@ -280,6 +280,22 @@ function submitJsonForm(form, signInButton, callback) {
   });
 }
 
+function httpGet(url, query, callback) {
+  httpRequest({
+      url: url
+    , query: query
+    , type: 'json'
+  }, callback);
+}
+
+function httpPost(url, data, callback) {
+  httpRequest({
+      url: url
+    , data: data
+    , type: 'json'
+  }, callback);
+}
+
 // OO. Nothing needed except this.
 // Dont touch Object.prototype, it's a nightmair of for(var k in obj)
 function merge(a, b) {
@@ -320,6 +336,8 @@ window.u = window.util = {
   formSerialize: formSerialize,
   formDeserialize: formDeserialize,
   ajax: httpRequest,
+  httpGet: httpGet,
+  httpPost: httpPost,
   jsonForm: jsonForm,
   submitJsonForm: submitJsonForm,
   set: set,

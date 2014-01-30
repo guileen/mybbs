@@ -1,0 +1,19 @@
+extend ../layout
+
+block content
+  .container
+    .center-block.fixw-sm
+      #alertContainer
+      ol.breadcrumb
+        li: a(href='/') 首页
+        li: a(href='/g/#{group.id}')= group.name
+        if user
+          li: a(href='/g/#{group.id}/refstas') Ref统计
+        li.active Ref详细
+      p Code: #{refInfo.code}
+      p link: #{baseUrl}/gr/#{refInfo.code}
+      p total: #{refInfo.total?refInfo.total:'无限'}
+      p left: #{refInfo.total?refInfo.left:'无限'}
+      if !isMember
+        p
+          a(href='/gr/#{refInfo.code}/join') 加入

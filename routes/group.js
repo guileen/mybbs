@@ -19,8 +19,7 @@ module.exports = function(app) {
           groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
           homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
               if(group.privacy == common.PRIVACY_TEAM) {
-                  if(!user) return res.send(403, 'not allowed');
-                  if(!isGroupMember) topics = [];
+                  if(!isGroupMember) return res.send(403, 'not allowed');
               }
               res.render('group/list', {
                   group: group
@@ -57,9 +56,14 @@ module.exports = function(app) {
       var gid = req.params.group;
       var user = req.session.user;
       if(!user) return res.send(403, 'Not Login');
-      groupdao.joinGroup(user.id, req.params.group, function(err) {
-          if(err) throw err;
-          res.redirect('/g/' + gid);
+      groupdao.getGroup(gid, function(err, group) {
+          if(group.privacy == common.PRIVACY_TEAM) {
+              return res.send(403, 'Only can join by invitation');
+          }
+          groupdao.joinGroup(user.id, req.params.group, function(err) {
+              if(err) throw err;
+              res.redirect('/g/' + gid);
+          })
       })
   });
 
@@ -133,6 +137,65 @@ module.exports = function(app) {
               groups: groups
           })
       })
+  })
+
+  // ref codes
+  app.get('/g/:gid/refstats', helpers.requireLogin, function(req, res, next) {
+      var gid = req.params.gid;
+      groupdao.getGroup(gid, function(err, group) {
+          if(err) throw err;
+      groupdao.getAllRefCodeInfo(req.params.gid, req.session.user.id, function(err, refList) {
+          if(err) throw err;
+          res.render('group/refstats', {
+              refList: refList
+            , group: group
+          })
+      })
+      })
+  })
+
+  app.post('/g/:gid/makeref', helpers.requireLogin, function(req, res, next) {
+      var gid = req.params.gid;
+      var uid = req.session.user.id;
+      var count = parseInt(req.body.count) || 0;
+      groupdao.refCount(gid, uid, function(err, refcount) {
+          if(refcount > 10) return res.send(403, {code: 'exceed-max'});
+          groupdao.makeGroupRefCode(gid, uid, count, function(err, code) {
+              res.format({
+                  json: function() {
+                    res.send({refcode: code, count: count});
+                  }
+                , html: function() {
+                    res.redirect('/g/'+gid+'/refstats');
+                  }
+              })
+          })
+      })
+  })
+
+  app.get('/gr/:code', function(req, res, next) {
+      var user = req.session.user;
+      groupdao.getRefCodeInfo(req.params.code, function(err, refInfo) {
+          if(err) throw err;
+          groupdao.isMember(user && user.uid, refInfo.gid, function(err, isMember){
+
+          if(err) throw err;
+          res.render('group/refinfo', {
+              refInfo: refInfo
+            , group: refInfo.group
+            , refUser: refInfo.user
+            , isMember: isMember
+          })
+
+          })
+      })
+  });
+
+  app.get('/gr/:code/join', helpers.requireLogin, function(req, res, next) {
+      groupdao.joinWithRefCode(req.session.user.id, req.params.code, function(err, info) {
+          if(err) throw err;
+          res.redirect('/g/' + info.gid);
+      });
   })
 
 }

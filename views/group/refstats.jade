@@ -1,0 +1,24 @@
+extends ../withsidebar
+block main
+  ol.breadcrumb
+    li: a(href='/') 首页
+    li: a(href='/g/#{group.id}')= group.name
+    li.active Ref统计
+
+  each refInfo in refList
+    .well
+      p Code: #{refInfo.code}
+      p link: #{baseUrl}/gr/#{refInfo.code}
+      p total: #{refInfo.total > 0?refInfo.total:'无限'}
+      p left: #{refInfo.total > 0?refInfo.left:'无限'}
+
+  .well
+    form(action='/g/#{group.id}/makeref', method='post')
+      .form-group
+        label(for='InputCount') 使用次数
+        input#InputCount.form-control(name='count', value=0)
+        span.help-block 不限使用次数请输入0
+      .form-group
+        label(for='InputRemark') 备注
+        input#InputRemark.form-control(name='count', value='')
+      button#submitButton.btn.btn-success.btn-block(type='submit') 创建邀请码

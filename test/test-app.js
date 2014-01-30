@@ -84,80 +84,86 @@ function itshouldnotpost(path, body, onEnd) {
     })
 }
 
-var uid1, teamGroup, teamTopic, opengroup, opentopic, personalGroup;
+var uid1, uid2, teamGroup, teamTopic, teamRefCode, opengroup, opentopic, personalGroup;
 before(function(done) {
-        function signup(callback) {
+        function signupUser1(callback) {
             console.log('signup');
-            client.post('/signup', {nickname:'user1', password:'123456', email: 'user1@ibbs.cc'}, function(req, res) {
-                    callback();
-            })
+            shouldpost('/signup', {nickname:'user1', password:'123456', email: 'user1@ibbs.cc'}, callback)
         }
-        function signin(callback) {
+        function signupUser2(callback) {
+            console.log('signup');
+            shouldpost('/signup', {nickname:'user2', password:'123456', email: 'user2@ibbs.cc'}, callback)
+        }
+        function signinUser1(callback) {
             console.log('signin');
-            client.post('/signin', {email: 'user1@ibbs.cc', password:'123456'}, function(req, res) {
+            shouldpost('/signin', {email: 'user1@ibbs.cc', password:'123456'}, callback, function(req, res) {
                     var user = req.session.user;
                     user.nickname.should.eql('user1');
                     uid1 = user.id;
-                    callback();
             })
         }
         function createGroup(callback) {
             console.log('create team group');
-            client.post('/group/create', {name: 'group1', privacy:common.PRIVACY_TEAM}, function(req, res) {
+            shouldpost('/group/create', {name: 'group1', privacy:common.PRIVACY_TEAM}, callback, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
                     teamGroup = data.id;
                     should.exists(teamGroup);
-                    callback();
             })
+        }
+        function createTeamRefCode(callback) {
+                shouldpost('/g/'+teamGroup+'/makeref', {count: 0}, callback, function(req, res) {
+                        console.log(res.sentcontent);
+                        var data = JSON.parse(res.sentcontent);
+                        teamRefCode = data.refcode;
+                        teamRefCode.should.be.ok;
+                        data.count.should.eql(0);
+                });
         }
         function createTopic(callback) {
             console.log('create team topic');
-            client.post('/topic/create', {gid: teamGroup, txt:'blablabla....'}, function(req, res) {
+            shouldpost('/topic/create', {gid: teamGroup, txt:'blablabla....'}, callback, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     teamTopic = data.id;
-                    callback();
             });
         }
         function createHideGroup(callback) {
             console.log('create hide group');
-            client.post('/group/create', {name: 'group1', privacy:common.PRIVACY_PERSONAL}, function(req, res) {
+            shouldpost('/group/create', {name: 'group1', privacy:common.PRIVACY_PERSONAL}, callback, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
                     personalGroup = data.id;
                     should.exists(personalGroup);
-                    callback();
             })
         }
         function createOpenGroup(callback) {
             console.log('create open group');
-            client.post('/group/create', {name: 'group1', privacy:common.PRIVACY_PUBLIC}, function(req, res) {
+            shouldpost('/group/create', {name: 'group1', privacy:common.PRIVACY_PUBLIC}, callback, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     data.name.should.eql('group1');
                     opengroup = data.id;
                     should.exists(opengroup);
-                    callback();
             })
         }
         function createOpenTopic(callback) {
             console.log('create open topic');
-            client.post('/topic/create', {gid: opengroup, txt:'blablabla....'}, function(req, res) {
+            shouldpost('/topic/create', {gid: opengroup, txt:'blablabla....'}, callback, function(req, res) {
                     var data = JSON.parse(res.sentcontent);
                     opentopic = data.id;
-                    callback();
             });
         }
         function signout(callback) {
             console.log('signout');
-            client.get('/signout', function(req, res) {
+            shouldget('/signout', callback, function(req, res) {
                     should.not.exists(req.session.user);
-                    callback();
             });
         }
         async.series([
-                signup
-              , signin
+                signupUser1
+              , signupUser2
+              , signinUser1
               , createGroup
+              , createTeamRefCode
               , createTopic
               , createHideGroup
               , createOpenGroup
@@ -180,6 +186,12 @@ describe('Guest', function(){
         })
         it('should get /u/:uid', function(done) {
                 shouldget('/u/'+uid1, done);
+        })
+        it('should get /gr/:teamRefCode', function(done) {
+                shouldget('/gr/'+teamRefCode, done);
+        })
+        it('should NOT get /gr/:teamRefCode/join', function(done) {
+                shouldnotget('/gr/'+teamRefCode+'/join', done);
         })
         it('should NOT get /g/:teamgroup/detail', function(done) {
                 shouldnotget('/g/'+teamGroup+'/detail', done);
@@ -221,31 +233,6 @@ describe('User', function(){
                 shouldget('/u/'+uid1, done);
         });
 
-        // team group
-        it('should get /g/:teamgroup', function(done) {
-                shouldget('/g/' + teamGroup, done);
-        });
-        it('should NOT get /g/:teamgroup/detail', function(done) {
-                shouldnotget('/g/'+teamGroup+'/detail', done);
-        });
-        it('should NOT get /t/teamtopic', function(done) {
-                shouldnotget('/t/'+teamTopic, done);
-        });
-        it('should get /g/:teamgroup/join', function(done) {
-                shouldget('/g/'+teamGroup+'/join', done, function(req, res) {
-                        groupdao.isMember(req.session.user.id, teamGroup, function(err, isMember) {
-                                should.not.exists(err);
-                                isMember.should.be.ok;
-                        })
-                });
-        });
-        describe('Member', function() {
-
-                it('should get /t/teamtopic after join', function(done) {
-                        shouldget('/t/'+teamTopic, done);
-                });
-
-        })
         // open group
         it('should get /g/:opengroup', function(done) {
                 shouldget('/g/'+opengroup, done);
@@ -261,6 +248,72 @@ describe('User', function(){
         })
         it('should get / after join', function(done) {
                 shouldget('/', done);
+        })
+
+        // team group
+        it('should not get /g/:teamgroup', function(done) {
+                shouldnotget('/g/' + teamGroup, done);
+        });
+        it('should NOT get /g/:teamgroup/detail', function(done) {
+                shouldnotget('/g/'+teamGroup+'/detail', done);
+        });
+        it('should NOT get /t/teamtopic', function(done) {
+                shouldnotget('/t/'+teamTopic, done);
+        });
+        it('should NOT get /g/:teamgroup/join', function(done) {
+                shouldnotget('/g/' + teamGroup + '/join', done);
+        });
+        it('should get /gr/:teamRefCode', function(done) {
+                shouldget('/gr/'+teamRefCode, done);
+        })
+        it('should get /gr/:teamRefCode/join', function(done) {
+                shouldget('/gr/'+teamRefCode+'/join', done, function(req, res) {
+                        var uid = req.session.user.id;
+                        groupdao.isMember(uid, teamGroup, function(err, isMember) {
+                                should.not.exists(err);
+                                isMember.should.be.ok;
+                        })
+                });
+        })
+        describe('Member', function() {
+                it('should get /t/teamtopic after join', function(done) {
+                        shouldget('/t/'+teamTopic, done);
+                });
+
+                it('should get /g/:gid/refstats', function(done) {
+                        shouldget('/g/'+teamGroup+'/refstats', done);
+                });
+
+                var myRefCode;
+                it('should post /g/:gid/makeref', function(done) {
+                        shouldpost('/g/'+teamGroup+'/makeref', {count: 0}, done, function(req, res) {
+                                var data = JSON.parse(res.sentcontent);
+                                myRefCode = data.refcode;
+                                should.exists(myRefCode)
+                                data.count.should.eql(0);
+                        });
+                })
+
+                it('should not join if already a group member /gr/:code/join', function(done) {
+                        shouldnotget('/gr/'+myRefCode+'/join', done);
+                })
+
+                it('should get /g/:gid/refstats after make code', function(done) {
+                        shouldget('/g/'+teamGroup+'/refstats', done);
+                });
+
+                describe('User1', function() {
+                        before(function(done) {
+                                async.series([
+                                        shouldget.bind(null, '/signout')
+                                      , shouldpost.bind(null, '/signin', {email:'user1@ibbs.cc', password:'123456'})
+                                ], done)
+                        })
+                        it('should get /g/:gid/refstats after member join', function(done) {
+                                shouldget('/g/'+teamGroup+'/refstats', done);
+                        });
+
+                })
         })
 
 });
