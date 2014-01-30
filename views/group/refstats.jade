@@ -3,11 +3,12 @@ block main
   ol.breadcrumb
     li: a(href='/') 首页
     li: a(href='/g/#{group.id}')= group.name
-    li.active Ref统计
+    li.active 我的英雄帖
 
+  ul.list-group
   each refInfo in refList
-    .well
-      h4 remark: #{refInfo.remark}
+    li.list-group-item
+      a(href='#{baseUrl}/gr/#{refInfo.code}')= refInfo.remark ? refInfo.remark : '详情'
       input.form-control(value='#{baseUrl}/gr/#{refInfo.code}')
       if refInfo.total > 0
         p #{refInfo.left} / #{refInfo.total}
@@ -22,4 +23,4 @@ block main
       .form-group
         label(for='InputRemark') 备注
         input#InputRemark.form-control(name='count', value='')
-      button#submitButton.btn.btn-success.btn-block(type='submit') 创建邀请码
+      button#submitButton.btn.btn-success.btn-block(type='submit') 创建英雄帖

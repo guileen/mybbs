@@ -7,6 +7,8 @@ block content
       ol.breadcrumb
         li: a(href='/') 首页
         li: a(href='/g/#{group.id}')= group.name
+        if user.id == refUser.id
+          li: a(href='/g/#{group.id}/refstats') 我的英雄帖
         li.active 英雄帖
       h3 英雄帖
       p 天下风云出我辈
