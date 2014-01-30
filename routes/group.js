@@ -40,9 +40,30 @@ module.exports = function(app) {
               if(group.privacy == common.PRIVACY_TEAM && !isGroupMember) {
                   return res.send(403, 'not allowed')
               }
+              groupdao.getTopInviters(gid, 50, function(err, users, invites) {
+                  if(err) throw err;
+                  res.render('group/detail', {
+                      group: group
+                    , isGroupMember: isGroupMember
+                    , users: users
+                    , invites: invites
+                  })
+              })
+          })
+      })
+  })
+
+  app.get('/g/:group/members', function(req, res) {
+      var gid = req.params.group;
+      var user = req.session.user;
+      groupdao.getGroup(gid, function(err, group) {
+          groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
+              if(group.privacy == common.PRIVACY_TEAM && !isGroupMember) {
+                  return res.send(403, 'not allowed')
+              }
               groupdao.getMembers(gid, 0, 50, function(err, members) {
                   if(err) console.log(err.stack || err);
-                  res.render('group/detail', {
+                  res.render('group/members', {
                       group: group
                     , isGroupMember: isGroupMember
                     , members: members
