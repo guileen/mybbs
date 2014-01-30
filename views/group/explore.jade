@@ -11,7 +11,8 @@ block main
   each group in groups
     .well
       a(href='/g/#{group.id}') #{group.name}
-      a.btn.btn-default.btn-sm(href='/g/#{group.id}/join') 加入
+      form(action='/g/#{group.id}/join', method='post')
+        button.btn.btn-default.btn-sm(type='submit') 加入
   p 你也可以创建自己的社团
   a.btn.btn-default(type='button', href="/group/create") 创建社团+
 
@@ -23,7 +24,10 @@ block main
       if(reply.length == 0) {
           alertError('没有这个社团');
         } else if(reply.length == 1) {
-          location.href = '/g/' + reply[0].id + '/join';
+          u.httpPost('/g/' + reply[0].id + '/join', {}, function(err, data){
+              if(err) return alertError(err);
+              location.href = '/g/' + reply[0].id;
+          })
         } else {
       }
     });

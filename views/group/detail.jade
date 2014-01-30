@@ -1,7 +1,9 @@
 extends ../withsidebar
 block main
   if !isGroupMember
-    a.btn.btn-primary.pull-right(href='/g/#{group.id}/join') 加入
+    .pull-right
+      form(action='/g/#{group.id}/join', method='post')
+        button.btn.btn-primary(type='submit') 加入
   //- h4 #{group.name} 
   ol.breadcrumb
     li: a(href='/') 首页

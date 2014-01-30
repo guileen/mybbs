@@ -16,4 +16,5 @@ block content
       p left: #{refInfo.total?refInfo.left:'无限'}
       if !isMember
         p
-          a(href='/gr/#{refInfo.code}/join') 加入
+          form(action='/gr/#{refInfo.code}/join', method='post')
+            button.btn.btn-primary(type='submit') 接受邀请
