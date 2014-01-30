@@ -193,8 +193,8 @@ describe('Guest', function(){
         it('should NOT post /gr/:teamRefCode/join', function(done) {
                 shouldnotpost('/gr/'+teamRefCode+'/join', {}, done);
         })
-        it('should NOT get /g/:teamgroup/detail', function(done) {
-                shouldnotget('/g/'+teamGroup+'/detail', done);
+        it('should NOT get /g/:teamgroup/admin', function(done) {
+                shouldnotget('/g/'+teamGroup+'/admin', done);
         })
         it('should NOT post /g/:teamgroup/join', function(done) {
                 shouldnotpost('/g/'+teamGroup+'/join', {}, done);
@@ -202,8 +202,8 @@ describe('Guest', function(){
         it('should NOT get /t/teamtopic', function(done) {
                 shouldnotget('/t/'+teamTopic, done);
         })
-        it('should get /g/:opengroup/detail', function(done) {
-                shouldget('/g/'+opengroup+'/detail', done);
+        it('should get /g/:opengroup/admin', function(done) {
+                shouldget('/g/'+opengroup+'/admin', done);
         })
         it('should NOT post /g/:opengroup/join', function(done) {
                 shouldnotpost('/g/'+opengroup+'/join', {}, done);
@@ -237,8 +237,8 @@ describe('User', function(){
         it('should get /g/:opengroup', function(done) {
                 shouldget('/g/'+opengroup, done);
         })
-        it('should get /g/:opengroup/detail', function(done) {
-                shouldget('/g/'+opengroup+'/detail', done);
+        it('should get /g/:opengroup/admin', function(done) {
+                shouldget('/g/'+opengroup+'/admin', done);
         })
         it('should get /t/:opentid', function(done) {
                 shouldget('/t/'+opentopic, done);
@@ -254,8 +254,8 @@ describe('User', function(){
         it('should not get /g/:teamgroup', function(done) {
                 shouldnotget('/g/' + teamGroup, done);
         });
-        it('should NOT get /g/:teamgroup/detail', function(done) {
-                shouldnotget('/g/'+teamGroup+'/detail', done);
+        it('should NOT get /g/:teamgroup/admin', function(done) {
+                shouldnotget('/g/'+teamGroup+'/admin', done);
         });
         it('should NOT get /t/teamtopic', function(done) {
                 shouldnotget('/t/'+teamTopic, done);

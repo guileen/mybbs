@@ -32,7 +32,7 @@ module.exports = function(app) {
       })
   });
 
-  app.get('/g/:group/detail', function(req, res) {
+  app.get('/g/:group/admin', function(req, res) {
       var gid = req.params.group;
       var user = req.session.user;
       groupdao.getGroup(gid, function(err, group) {
@@ -42,7 +42,7 @@ module.exports = function(app) {
               }
               groupdao.getTopInviters(gid, 50, function(err, users, invites) {
                   if(err) throw err;
-                  res.render('group/detail', {
+                  res.render('group/admin', {
                       group: group
                     , isGroupMember: isGroupMember
                     , users: users

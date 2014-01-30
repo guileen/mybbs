@@ -16,7 +16,7 @@ block main
   .btn-group.pull-right
     a.mb-hide.btn.btn-primary(href="/topic/create?gid=#{group.id}") 发帖
     if isGroupMember
-      a.btn.btn-default(href="/g/#{group.id}/detail") 管理
+      a.btn.btn-default(href="/g/#{group.id}/admin") 管理
     else
       form(action='/g/#{group.id}/join', method='post')
         button.btn.btn-primary(type='submit') 加入
