@@ -7,7 +7,7 @@ block content
       ol.breadcrumb
         li: a(href='/') 首页
         li: a(href='/g/#{group.id}')= group.name
-        if user.id == refUser.id
+        if user && user.id == refUser.id
           li: a(href='/g/#{group.id}/refstats') 我的英雄帖
         li.active 英雄帖
       h3 英雄帖
@@ -25,7 +25,7 @@ block content
       p accept: #{refInfo.accept}
       p
         form(action='/gr/#{refInfo.code}/join', method='post')
-          button.btn.btn-primary(type='submit', disabled=isMember) 接受邀请
+          button.btn.btn-primary(type='submit', disabled=!!isMember) 接受邀请
 
       each accepter, i in accepters
         p
