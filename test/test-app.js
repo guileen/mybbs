@@ -286,17 +286,18 @@ describe('User', function(){
 
                 var myRefCode;
                 it('should post /g/:gid/makeref', function(done) {
-                        shouldpost('/g/'+teamGroup+'/makeref', {count: 0}, done, function(req, res) {
+                        shouldpost('/g/'+teamGroup+'/makeref', {count: 1}, done, function(req, res) {
                                 var data = JSON.parse(res.sentcontent);
                                 myRefCode = data.refcode;
                                 should.exists(myRefCode)
-                                data.count.should.eql(0);
+                                data.count.should.eql(1);
                         });
                 })
 
                 it('should not join if already a group member /gr/:code/join', function(done) {
                         shouldnotpost('/gr/'+myRefCode+'/join', {}, done);
                 })
+                // TODO myRefCode should only use once
 
                 it('should get /g/:gid/refstats after make code', function(done) {
                         shouldget('/g/'+teamGroup+'/refstats', done);

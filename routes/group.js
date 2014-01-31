@@ -8,84 +8,42 @@ var helpers = require('./helpers');
 module.exports = function(app) {
 
   // group view by slug url
-  app.get('/g/:group', function(req, res, next) {
-      var gid = req.params.group;
-      groupdao.getGroup(gid, function(err, group) {
-          if(err) throw err;
-          if(!group) {
-            res.writeHead(404, 'Not Found');
-            return res.end('No such group');
-          }
-          var user = req.session.user;
-          groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
-          homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
-              if(group.privacy == common.PRIVACY_TEAM) {
-                  if(!isGroupMember) return res.send(403, 'not allowed');
-              }
-              res.render('group/list', {
-                  group: group
-                , topics: topics
-                , isGroupMember: isGroupMember
-              })
-          })
+  app.get('/g/:gid', helpers.initGroup, function(req, res, next) {
+      var gid = req.params.gid;
+      homegroup.getGroupTopics(gid, 0, -1, function(err, topics) {
+          res.render('group/list', {
+              topics: topics
           })
       })
   });
 
-  app.get('/g/:group/admin', function(req, res) {
-      var gid = req.params.group;
-      var user = req.session.user;
-      groupdao.getGroup(gid, function(err, group) {
-          groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
-              if(group.privacy == common.PRIVACY_TEAM && !isGroupMember) {
-                  return res.send(403, 'not allowed')
-              }
-              groupdao.getTopInviters(gid, 50, function(err, users, invites) {
-                  if(err) throw err;
-                  res.render('group/admin', {
-                      group: group
-                    , isGroupMember: isGroupMember
-                    , users: users
-                    , invites: invites
-                  })
-              })
+  app.get('/g/:gid/admin', helpers.initGroup, function(req, res) {
+      var gid = req.params.gid;
+      groupdao.getTopInviters(gid, 50, function(err, users, invites) {
+          if(err) throw err;
+          res.render('group/admin', {
+              users: users
+            , invites: invites
           })
       })
   })
 
-  app.get('/g/:group/members', function(req, res) {
-      var gid = req.params.group;
-      var user = req.session.user;
-      groupdao.getGroup(gid, function(err, group) {
-          groupdao.isMember(user && user.id, gid, function(err, isGroupMember) {
-              if(group.privacy == common.PRIVACY_TEAM && !isGroupMember) {
-                  return res.send(403, 'not allowed')
-              }
-              groupdao.getMembers(gid, 0, 50, function(err, members) {
-                  if(err) console.log(err.stack || err);
-                  res.render('group/members', {
-                      group: group
-                    , isGroupMember: isGroupMember
-                    , members: members
-                  })
-              })
+  app.get('/g/:gid/members', helpers.initGroup, function(req, res) {
+      var gid = req.params.gid;
+      groupdao.getMembers(gid, 0, 50, function(err, members) {
+          if(err) console.log(err.stack || err);
+          res.render('group/members', {
+              members: members
           })
       })
   })
 
   // group view by slug url
-  app.post('/g/:group/join', helpers.requireLogin, function(req, res, next) {
-      var gid = req.params.group;
-      var user = req.session.user;
-      if(!user) return res.send(403, 'Not Login');
-      groupdao.getGroup(gid, function(err, group) {
-          if(group.privacy == common.PRIVACY_TEAM) {
-              return res.send(403, 'Only can join by invitation');
-          }
-          groupdao.joinGroup(user.id, req.params.group, function(err) {
-              if(err) throw err;
-              res.redirect('/g/' + gid);
-          })
+  app.post('/g/:gid/join', helpers.requireLogin, helpers.initGroup, function(req, res, next) {
+      var gid = req.params.gid;
+      groupdao.joinGroup(req.session.user.id, gid, function(err) {
+          if(err) throw err;
+          res.redirect('/g/' + gid);
       })
   });
 
@@ -162,21 +120,16 @@ module.exports = function(app) {
   })
 
   // ref codes
-  app.get('/g/:gid/refstats', helpers.requireLogin, function(req, res, next) {
-      var gid = req.params.gid;
-      groupdao.getGroup(gid, function(err, group) {
-          if(err) throw err;
+  app.get('/g/:gid/refstats', helpers.requireLogin, helpers.initGroup, function(req, res, next) {
       groupdao.getAllRefCodeInfo(req.params.gid, req.session.user.id, function(err, refList) {
           if(err) throw err;
           res.render('group/refstats', {
               refList: refList
-            , group: group
           })
-      })
       })
   })
 
-  app.post('/g/:gid/makeref', helpers.requireLogin, function(req, res, next) {
+  app.post('/g/:gid/makeref', helpers.requireLogin, helpers.initGroup, helpers.requireMember, function(req, res, next) {
       var gid = req.params.gid;
       var uid = req.session.user.id;
       var count = parseInt(req.body.count) || 0;

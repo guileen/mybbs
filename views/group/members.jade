@@ -1,6 +1,6 @@
 extends ../withsidebar
 block main
-  if !isGroupMember
+  if !isMember
     .pull-right
       form(action='/g/#{group.id}/join', method='post')
         button.btn.btn-primary(type='submit') 加入

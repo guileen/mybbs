@@ -21,10 +21,11 @@ block main
   .well
     form(action='/g/#{group.id}/makeref', method='post')
       .form-group
-        label(for='InputCount') 使用次数
+        label(for='InputCount') 受邀人数限制
         input#InputCount.form-control(name='count', value=0)
-        span.help-block 不限使用次数请输入0
+        .help-block 你可以限制某个英雄帖可以限制使用次数，不限使用次数请输入0
       .form-group
         label(for='InputRemark') 备注
         input#InputRemark.form-control(name='remark', value='')
+        .help-block 你可以创建多个英雄帖投放在不同的地方，备注可以用来标注这些来源. 如：“老三班QQ群”
       button#submitButton.btn.btn-success.btn-block(type='submit') 创建英雄帖
