@@ -18,6 +18,21 @@ function alertError(msg) {
   return fixedAlert(msg, 'danger');
 }
 
+function makeWSClient() {
+    var ws = new WebSocket('ws://dev:3000');
+    ws.onopen = function() {
+        client.onopen && client.onopen();
+    }
+    ws.onmessage = function(e) {
+        client.emit(JSON.parse(e.data));
+    }
+    var client = ProtocolHandler();
+    client.send = function(msg) {
+        ws.send(JSON.stringify(msg));
+    }
+    return client;
+}
+
 (function(exports) {
     function log(txt) {
       var el = u.q('#logger');
@@ -29,7 +44,7 @@ function alertError(msg) {
     }
     function main() {
       initShowNavBtn();
-      window.onPageLoad && window.onPageLoad()
+      window.onDomReady && window.onDomReady()
     }
 
     function initShowNavBtn() {

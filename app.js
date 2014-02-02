@@ -58,6 +58,10 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// init mqhub
+var mqhub = require('./mqhub');
+global.mqhub = mqhub.MQHub(mqhub.MemMQ());
+
 // init service.
 var redis = require('redis');
 var services = require('./lib/services');
@@ -69,8 +73,9 @@ redisClient.select(config.database, function(err) {
 
 routes(app);
 
-var server = module.exports = http.createServer(app);
-server.app = app;
+var server = exports.server = http.createServer(app);
+exports.app = app;
+exports.spserver = require('./websocket')(server);
 if(!module.parent) {
   server.listen(app.get('port'), function(){
       console.log('Express server listening on port ' + app.get('port'));

@@ -6,6 +6,8 @@ extends ../withsidebar
 //-       button#sendbtn.btn.btn-primary.navbar-btn.pull-right(onclick='submitForm()') 更多...
 //-       button.btn.btn-default.navbar-btn(onclick='javascript:window.history.go(-1);return false;') 返回
 //-   .navbar-padding.mb-show
+block head
+  script(src='/js/topic.js')
 
 block fixed-buttons
   .pull-right
@@ -58,28 +60,3 @@ block main
         button#sendbtn.btn.btn-primary(style='width:100%;height:100%', type='submit') 发送
       div(style='margin-right:65px')
         textarea#inputText.form-control(name='txt', placeholder='输入内容')
-  script.
-    var inputText = u.q('#inputText')
-    function showComment(e) {
-      e.preventDefault();
-      inputText.focus();
-    }
-    inputText.onfocus = function() {
-      u.addClass(u.q('#fixed-buttons'), 'hide');
-      if(showIntpuTimer) clearTimeout(showIntpuTimer);
-    }
-    var showIntpuTimer;
-    inputText.onblur = function() {
-      showIntpuTimer = setTimeout(function(){
-        u.removeClass(u.q('#fixed-buttons'), 'hide');
-      }, 500);
-    }
-    u.jsonForm('#commentform', '#sendbtn', function(err, reply) {
-      console.log(err);
-      console.log(reply);
-      u.html('<p><a>#' + reply.rid + '</a>&nbsp;<a>#{user.nickname}</a>: '+reply.txt+'</p>', '#reply-container');
-      var input = u.q('#inputText');
-      input.value = '';
-      input.focus();
-      window.scroll(0, 10000)
-    })

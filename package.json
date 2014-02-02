@@ -7,11 +7,13 @@
   },
   "dependencies": {
     "cclog": "latest",
+    "steampunk": "latest",
     "express": "3.4.7",
     "jade": "*",
     "less-middleware": "*",
     "redis": "*",
     "async": "*",
+    "ws": "*",
     "connect-redis": "1.4.6"
   },
   "devDependencies": {

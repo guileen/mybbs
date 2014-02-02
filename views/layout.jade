@@ -9,8 +9,12 @@ html
     script(type='text/javascript', src='/js/util.js')
     script(type='text/javascript', src='/fastclick/lib/fastclick.js')
     script(type='text/javascript', src='/js/bootstrap-validation.js')
+    script(type='text/javascript', src='/js/protocol.js')
     script(type='text/javascript', src='/js/main.js')
     meta(name='viewport', content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no')
+    script.
+      var nickname = '#{user.nickname}';
+    block head
   body(class=bodyClass, data-page=bodyClass)
     block content
     script.
