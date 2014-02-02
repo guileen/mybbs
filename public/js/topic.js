@@ -17,22 +17,23 @@ function onDomReady() {
   u.jsonForm('#commentform', '#sendbtn', function(err, reply) {
       console.log(err);
       console.log(reply);
-      u.html('<p><a>#' + reply.rid + '</a>&nbsp;<a>' + nickname + '</a>: '+reply.txt+'</p>', '#reply-container');
-      var input = u.q('#inputText');
-      input.value = '';
-      input.focus();
-      window.scroll(0, 10000)
   });
 
   var client = makeWSClient();
   client.onopen = function() {
-      client.sub('hello');
-      client.onpub = function(key, message) {
-        console.log(key, message);
+    var pubkey = 't.'+tid+'.reply';
+      client.sub(pubkey);
+      client.onpub = function(key, reply) {
+        if(key == pubkey){
+          u.html('<p><a>#' + reply.rid + '</a>&nbsp;<a>' + nickname + '</a>: '+reply.txt+'</p>', '#reply-container');
+          var input = u.q('#inputText');
+          input.value = '';
+          input.focus();
+          window.scroll(0, 10000)
+        }
       }
-
-      setTimeout(function() {
-          client.unsub('hello');
-      }, 10000);
+      // setTimeout(function() {
+      //     client.unsub('hello');
+      // }, 10000);
   };
 }

@@ -7,6 +7,8 @@ extends ../withsidebar
 //-       button.btn.btn-default.navbar-btn(onclick='javascript:window.history.go(-1);return false;') 返回
 //-   .navbar-padding.mb-show
 block head
+  script.
+    var tid = '#{topic.id}';
   script(src='/js/topic.js')
 
 block fixed-buttons
