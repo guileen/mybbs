@@ -19,21 +19,23 @@ function onDomReady() {
       console.log(reply);
   });
 
-  var client = makeWSClient();
-  client.onopen = function() {
-    var pubkey = 't.'+tid+'.reply';
-      client.sub(pubkey);
-      client.onpub = function(key, reply) {
+  window.wsclient = makeWSClient();
+  wsclient.onopen = function() {
+      var pubkey = 't.'+tid+'.reply';
+      wsclient.sub(pubkey);
+      wsclient.onpub = function(key, reply) {
         if(key == pubkey){
-          u.html('<p><a>#' + reply.rid + '</a>&nbsp;<a>' + nickname + '</a>: '+reply.txt+'</p>', '#reply-container');
-          var input = u.q('#inputText');
-          input.value = '';
-          input.focus();
-          window.scroll(0, 10000)
+          getAsync('u', reply.uid, 24*3600*1000, function(uinfo) {
+              u.html('<p><a>#' + reply.rid + '</a>&nbsp;<a>' + uinfo.nickname + '</a>: '+reply.txt+'</p>', '#reply-container');
+              var input = u.q('#inputText');
+              input.value = '';
+              input.focus();
+              window.scroll(0, 10000)
+          })
         }
       }
       // setTimeout(function() {
-      //     client.unsub('hello');
+      //     wsclient.unsub('hello');
       // }, 10000);
   };
 }

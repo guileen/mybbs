@@ -24,6 +24,7 @@ module.exports = function(httpServer) {
     wss.on('connection', function(ws) {
             var id = getClientId(ws.upgradeReq);
             var client = factory.getClient(id);
+            client.open = true;
 
             ws.on('message', function(data, flags) {
                     client.emit(JSON.parse(data));

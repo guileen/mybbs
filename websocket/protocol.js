@@ -5,7 +5,9 @@ var CODE_SUB = 1
   , CODE_PUB = 3
   , CODE_REQ = 4
   , CODE_RES = 5
-  , CODE_BAD_REQ = 6
+  , CODE_ERR = 6
+  , CODE_BAD_REQ = 7
+  , ERR_NOT_OPEN = 'NOTOPEN'
   ;
 
 exports.ProtocolHandler = function ProtocolHandler() {
@@ -16,8 +18,9 @@ exports.ProtocolHandler = function ProtocolHandler() {
       , req: req
       , badreq: badreq
       , emit: emit
+      , open: false
     };
-    var reqid = 0;
+    var reqid = 1;
     var callbacks = new Array(255);
     function emit(data) {
         var code = data[0];
@@ -35,19 +38,24 @@ exports.ProtocolHandler = function ProtocolHandler() {
             break;
           case CODE_REQ:
             var id = data[0];
-            var args = data[1];
-            args.push(function response(data) {
+            data[1].push(function response(err, data) {
                     if(id) {
-                        client.send([CODE_RES, [id, data]]);
+                        if(err) {
+                            console.error('error:' + (err && err.stack));
+                            client.send([CODE_ERR, [id]]);
+                        } else {
+                            client.send([CODE_RES, [id, data]]);
+                        }
                     }
             });
-            client.onreq.apply(null, args);
+            client.onreq.apply(null, data[1]);
             break;
           case CODE_RES:
             // response
             var id = data[0];
-            callbacks[id](data[1]);
+            callbacks[id](null, data[1]);
             callbacks[id] = null;
+            break;
           case CODE_BAD_REQ:
             throw new Error('unknow request method');
           default:
@@ -72,15 +80,16 @@ exports.ProtocolHandler = function ProtocolHandler() {
         var cb, id = -1;
         if(typeof args[args.length - 1] == 'function') {
             cb = args.pop();
+            if(!client.open) return cb(ERR_NOT_OPEN);
             id = reqid ++;
-            if(reqid > 255) reqid = 0;
+            if(reqid > 255) reqid = 1;
             callbacks[id] = cb;
         }
-        client.send([2, [id, args]]);
+        client.send([CODE_REQ, [id, args]]);
     }
 
-    function badreq(err) {
-        this.send([CODE_BAD_REQ, err]);
+    function badreq(id, err) {
+        client.send([CODE_BAD_REQ, [id, err]]);
     }
 
     return client;

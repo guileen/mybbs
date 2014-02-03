@@ -4,6 +4,7 @@
 // LRU pool.
 var LRUCache = require('./lrucache')
 var ProtocolHandler = require('./protocol').ProtocolHandler;
+var api = require('./api');
 
 function ClientFactory() {
     // TODO careful about memory leak.
@@ -59,6 +60,14 @@ function makeClient(id) {
         client.pubsub.unsub(channel);
     }
     client.onpub = function(channel, message) {
+    }
+    client.onreq = function() {
+      var cmd = arguments[0];
+      var handler = api[cmd];
+      if(!handler) {
+        return client.badreq(null, cmd);
+      }
+      handler.apply(null, Array.prototype.slice.call(arguments, 1));
     }
     client.init = function() {
         if(!client.pubsub) {

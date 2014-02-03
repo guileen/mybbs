@@ -18,19 +18,37 @@ function alertError(msg) {
   return fixedAlert(msg, 'danger');
 }
 
+// get from local or cache, ttl(time to live) is optional
+function getAsync(type, id, ttl, callback) {
+    if(!callback) {
+        callback = ttl;
+        ttl = 0;
+    }
+    var key = type+'/'+id;
+    var v = u.get(key);
+    v && (ttl && v._t + ttl < Date.now() || !ttl)
+      ? callback(v)
+      : wsclient.req(type, id, function(err, data) {
+              if(err && !v) throw err;
+              data && u.set(key, data);
+              callback(data || v);
+      })
+}
+
 function makeWSClient() {
     var ws = new WebSocket('ws://dev:3000');
     ws.onopen = function() {
-        client.onopen && client.onopen();
+        wsclient.onopen && wsclient.onopen();
+        wsclient.open = true;
     }
     ws.onmessage = function(e) {
-        client.emit(JSON.parse(e.data));
+        wsclient.emit(JSON.parse(e.data));
     }
-    var client = ProtocolHandler();
-    client.send = function(msg) {
+    window.wsclient = ProtocolHandler();
+    wsclient.send = function(msg) {
         ws.send(JSON.stringify(msg));
     }
-    return client;
+    return wsclient;
 }
 
 (function(exports) {

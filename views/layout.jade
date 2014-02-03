@@ -13,7 +13,7 @@ html
     script(type='text/javascript', src='/js/main.js')
     meta(name='viewport', content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no')
     script.
-      var nickname = '#{user.nickname}';
+      var nickname = '#{user && user.nickname}';
     block head
   body(class=bodyClass, data-page=bodyClass)
     block content

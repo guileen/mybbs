@@ -63,49 +63,43 @@ module.exports = function(app) {
           var body = req.body;
           var email = body.email;
           if(email) {
-              userdao.getByEmailOrId(email, function(err, userInfo) {
-                      if(err) {return callback(err);}
-                      var errcode;
-                      if(!userInfo) {
-                          errcode = 'notexists';
-                      } else if(!util.secrets.equals(body.password, userInfo.password)) {
-                          errcode = 'badpass';
-                      }
-                      if(errcode) {
-                          return res.format({
-                                  html: function() {
-                                      res.render('user/signin', {
-                                          code: errcode
-                                        , email: email
-                                        , lasturl: body.lasturl
-                                      })
-                                  }
-                                , json: function() {
-                                      res.send(403, {code: errcode});
-                                  }
+              userdao.verifyByEmailOrId(email, body.password, function(err, userInfo) {
+                  if(err) {
+                    return res.format({
+                        html: function() {
+                          res.render('user/signin', {
+                              code: err.code
+                            , email: email
+                            , lasturl: body.lasturl
                           })
-                      }
-                      req.session.regenerate(function(){
-                              req.session.user = userInfo;
-                              // remember me or not
-                              if(body.rememberme) {
-                                  req.session.cookie.expires = false;
-                                  req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
-                              } else {
-                                  req.session.cookie.expires = false;
-                                  req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
-                              }
-                              res.format({
-                                      html: function(){
-                                          res.redirect(body.lasturl || '/');
-                                      },
+                        }
+                      , json: function() {
+                          res.send(403, {code: errcode});
+                        }
 
-                                      json: function(){
-                                          res.send({code: 'success'});
-                                      }
-                              });
+                    })
+                  }
+                  req.session.regenerate(function(){
+                      req.session.user = userInfo;
+                      // remember me or not
+                      if(body.rememberme) {
+                        req.session.cookie.expires = false;
+                        req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
+                      } else {
+                        req.session.cookie.expires = false;
+                        req.session.cookie.maxAge = 3 * 365 * 24 * 60 * 60 * 1000;
+                      }
+                      res.format({
+                          html: function(){
+                            res.redirect(body.lasturl || '/');
+                          },
+
+                          json: function(){
+                            res.send({code: 'success'});
+                          }
                       });
-              })
+                  });
+              });
           }
   })
 
