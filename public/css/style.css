@@ -19,6 +19,12 @@
 .breadcrumb {
   margin-bottom: 5px;
 }
+.clickable {
+  cursor: pointer;
+}
+.light {
+  color: #888;
+}
 .btn-qq {
   color: #ffffff;
   background-color: #0d6bca;

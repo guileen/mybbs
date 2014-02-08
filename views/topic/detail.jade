@@ -14,12 +14,12 @@ block head
 block fixed-buttons
   .pull-right
     .btn-group
-      button#btn-refresh.btn.btn-float
-        span.glyphicon.glyphicon-share
-        | 234
-      a#btn-newpost.btn.btn-default.btn-float(href='#', onclick='showComment(event)')
+      //- button#btn-refresh.btn.btn-float
+      //-   span.glyphicon.glyphicon-share
+      //-   | 234
+      #btn-showcomment.btn.btn-default.btn-float
         span.glyphicon.glyphicon-comment
-        | 153
+        | #{topic.replies}
 
 block main
   ol.breadcrumb
@@ -30,13 +30,13 @@ block main
   // posts
   .post-cell
     p
-      span.pull-right= topic.create
+      span.pull-right= humanDate(topic.create)
       a(href='/u/#{topic.author.id}', onclick='showComment()')= topic.author.nickname
-    p= topic.txt
+    p!= p(topic.txt)
     p
       .btn-group.pull-right
-        button.btn.btn-default.btn-sm.mb-hide 转发 156
-        button.btn.btn-default.btn-sm.mb-hide 评论 156
+        //- button.btn.btn-default.btn-sm.mb-hide 转发 156
+        button.btn.btn-default.btn-sm.mb-hide 评论 #{topic.replies || 0}
         //- button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
         //-   span.caret
         //- ul.dropdown-menu
@@ -45,8 +45,8 @@ block main
         //-   li: a(href="#") 垃圾信息
         //-   li: a(href="#") 查看源文件
       .btn-group
-        button.btn.btn-default.btn-sm 赞 1000
-        button.btn.btn-default.btn-sm 踩 200
+      //-   button.btn.btn-default.btn-sm 赞 1000
+      //-   button.btn.btn-default.btn-sm 踩 200
 
   .reply-cell
     #reply-container
@@ -55,10 +55,11 @@ block main
           a ##{reply.rid}
           &nbsp;
           a= reply.user.nickname
-          | : #{reply.txt}
+          | :&nbsp;
+          != e(reply.txt)
     form#commentform(action='/topic/comment', method='post')
       input(type='hidden', name='tid', value=topic.id)
       div(style='width:65px;height:100%;padding:0 5px;').pull-right.center-block
         button#sendbtn.btn.btn-primary(style='width:100%;height:100%', type='submit') 发送
       div(style='margin-right:65px')
-        textarea#inputText.form-control(name='txt', placeholder='输入内容')
+        textarea#inputText.form-control(name='txt', placeholder='输入内容', required)

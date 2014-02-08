@@ -1,3 +1,16 @@
+mixin topiclist(topics)
+  each topic in topics
+    .list-group-item.clickable(onclick="javascript:location.href='/t/#{topic.id}'")
+      p.list-group-item-text
+        a.pull-left(href='/u/#{topic.uid}')= topic.author.nickname
+        span :&nbsp;#{shortTxt(topic.txt, 140)}
+        p.pull-right.light
+          span= humanDate(topic.create)
+          &nbsp;
+          &nbsp;
+          span.glyphicon.glyphicon-comment
+          &nbsp;#{topic.replies || '0'}
+
 block variables
 - title = title ? 'mytxtbbs-' + title : 'mytxtbbs'
 doctype 5

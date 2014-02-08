@@ -24,10 +24,10 @@ block content
 
         if user
           a.btn.btn-primary.btn-block.mb-hide.side-control(href='/topic/create?gid=#{group && group.id || ""}') +新建贴子
-          .btn-group-vertical.btn-block.side-control
-            a.btn.btn-default.btn-block(href='#') 我的贴子
-            a.btn.btn-default.btn-block(href='#') 我的收藏
-            a.btn.btn-default.btn-block(href='#') 我的评论
+          //- .btn-group-vertical.btn-block.side-control
+          //-   a.btn.btn-default.btn-block(href='#') 我的贴子
+          //-   a.btn.btn-default.btn-block(href='#') 我的收藏
+          //-   a.btn.btn-default.btn-block(href='#') 我的评论
           .btn-group-vertical.btn-block.side-control
             if user.joinedGroups
               each group, index in user.joinedGroups

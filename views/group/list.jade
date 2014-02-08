@@ -14,7 +14,7 @@ block main
   //-     span.input-group-btn
   //-       button.btn.btn-default 搜索
   .btn-group.pull-right
-    a.mb-hide.btn.btn-primary(href="/topic/create?gid=#{group.id}") 发帖
+    a.btn.btn-primary(href="/topic/create?gid=#{group.id}") 发帖
     if isMember
       a.btn.btn-default(href="/g/#{group.id}/admin") 管理
     else
@@ -30,9 +30,7 @@ block main
 
   .list-group
     if topics.length
-      each topic in topics
-        a.list-group-item(href='/t/#{topic.id}')
-          p.list-group-item-text= topic.txt
+      +topiclist(topics)
     else
       .fixw-sm.center-block
         a.btn.btn-primary.btn-block.side-control(href='/topic/create?gid=#{group.id}') 在 [#{group.name}] 发布第一个贴子

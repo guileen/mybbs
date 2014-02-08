@@ -36,7 +36,7 @@ function getWindowSize() {
 
 // createHTMLElement
 var __nothing_dummyFregment;
-function createHTMLElement(html, el) {
+function createHTMLElement(html, el, prepend) {
   if(!__nothing_dummyFregment){
     __nothing_dummyFregment = document.createElement();
   }
@@ -44,7 +44,7 @@ function createHTMLElement(html, el) {
   var result = __nothing_dummyFregment.firstChild;
   if(el){
     if(typeof el == 'string') el = $(el);
-    el.appendChild(result);
+    prepend && el.firstChild ? el.insertBefore(result, el.firstChild) : el.appendChild(result);
   }
   return result;
 }

@@ -20,9 +20,7 @@ block main
       a.list-group-item(href='/g/#{group.id}').group-name
         h5.list-group-item-heading= group.name
       if topics.length
-        each topic in topics
-          a.list-group-item(href='/t/#{topic.id}')
-            p.list-group-item-text= topic.txt
+        +topiclist(topics)
       else
         a.list-group-item(href="/topic/create?gid=#{group.id}")
           p.list-group-item-text

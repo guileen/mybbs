@@ -8,15 +8,17 @@ module.exports = function(app) {
   // tiopic view by slug url
   app.get('/t/:tid', function(req, res, next) {
           topicdao.getDetail(req.params.tid, function(err, topic) {
+              if(err) return next(err);
               var user = req.session.user;
               groupdao.isMember(user && user.id, topic.group.id, function(err, isMember) {
-                  if(err) throw err;
+                  if(err) return next(err);
                   if(!topic) {
                       res.writeHead(404, 'Not Found');
                       return res.end('No such topic');
                   }
+                  console.log('view topic 000001')
                   if(topic.group.privacy == common.PRIVACY_TEAM && !isMember) {
-                      res.writeHead(403, 'Not allowed')
+                      return res.send(403, 'Not allowed')
                   }
                   res.format({
                       json: function() {
@@ -68,7 +70,7 @@ module.exports = function(app) {
         , txt: body.txt
         , uid: req.session.user.id
         }, function(err, data) {
-          if(err) {return callback(err);}
+          if(err) {return next(err);}
           res.json(data);
       })
   })

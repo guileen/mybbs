@@ -1,5 +1,8 @@
 function fixedAlert(msg, name) {
   var container = u.q('#alertContainer');
+  if(!container) {
+    container = u.html('<div id="alertContainer" class="text-center" style="position:fixed;top:3px;left:5px;right:5px;"></div>', document.body, 1);
+  }
   var result = u.html('<div class="alert alert-' + name + '">' + msg + '</div>', container);
   setTimeout(function(){
       container.removeChild(result);

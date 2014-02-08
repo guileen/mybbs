@@ -32,6 +32,8 @@ block content
         function submitForm() {
           if(_formstep == 0) {
             console.log('step 1');
+            var txt = u.q('#inputText').value;
+            if(txt.trim().length < 5) return alertError('未达到质量要求');
             u.addClass(u.q('#form-step1'), 'hide');
             u.removeClass(u.q('#form-step2'), 'hide');
             _formstep = 1;

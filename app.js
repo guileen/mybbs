@@ -11,6 +11,7 @@ var path = require('path');
 var RedisStore = require('connect-redis')(express);
 var config = require('./config');
 var helpers = require('./routes/helpers');
+var common = require('./common/common');
 
 var app = express();
 
@@ -45,6 +46,12 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 
 app.locals({
     hello: 'world'
+  , humanDate: common.humanDate
+  , shortTxt: function(txt, len) {
+      return txt.length > len + 10 ? txt.substring(0, len) + '...' : txt;
+    }
+  , e: common.htmlTxt
+  , p: common.htmlTxtP
 });
 
 if ('test' == app.get('env')) {

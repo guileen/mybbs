@@ -1,5 +1,9 @@
 var util = require('../lib/util');
+var config = require('../config');
 var userdao = require('../lib/services/userdao');
+var groupdao = require('../lib/services/groupdao');
+var async = require('async');
+var cclog = require('cclog');
 
 module.exports = function(app) {
 
@@ -40,6 +44,7 @@ module.exports = function(app) {
               res.writeHead(500)
               return res.send('error')
             }
+            async.each(config.initgroups, groupdao.joinGroup.bind(null, userInfo.id), cclog.ifError);
             req.session.regenerate(function(){
                 req.session.user = userInfo;
                 // remember me or not
@@ -50,7 +55,7 @@ module.exports = function(app) {
                   req.session.cookie.expires = true;
                   req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
                 }
-                res.redirect(body.lasturl || '/');
+                res.redirect(body.lasturl || ('/t/' + config.inittopic));
             })
         })
   });

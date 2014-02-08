@@ -1,17 +1,19 @@
 function onDomReady() {
   var inputText = u.q('#inputText')
-  function showComment(e) {
+  u.q('#btn-showcomment').onclick=function showComment(e) {
     e.preventDefault();
     inputText.focus();
   }
   inputText.onfocus = function() {
     u.addClass(u.q('#fixed-buttons'), 'hide');
+    u.addClass(u.q('.bottom-padding'), 'hide');
     if(showIntpuTimer) clearTimeout(showIntpuTimer);
   }
   var showIntpuTimer;
   inputText.onblur = function() {
     showIntpuTimer = setTimeout(function(){
         u.removeClass(u.q('#fixed-buttons'), 'hide');
+        u.removeClass(u.q('.bottom-padding'), 'hide');
     }, 500);
   }
   u.jsonForm('#commentform', '#sendbtn', function(err, reply) {
