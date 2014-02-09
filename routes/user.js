@@ -55,7 +55,7 @@ module.exports = function(app) {
                   req.session.cookie.expires = true;
                   req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
                 }
-                res.redirect(body.lasturl || ('/t/' + config.inittopic));
+                res.redirect(body.lasturl != 'undefined' && body.lasturl || ('/t/' + config.inittopic));
             })
         })
   });

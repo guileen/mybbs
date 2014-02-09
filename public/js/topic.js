@@ -21,7 +21,11 @@ function onDomReady() {
       console.log(reply);
   });
 
-  window.wsclient = makeWSClient();
+  try{
+    window.wsclient = makeWSClient();
+  }catch(e) {
+    alertError('ws error' + e.stack);
+  }
   wsclient.onopen = function() {
       var pubkey = 't.'+tid+'.reply';
       wsclient.sub(pubkey);

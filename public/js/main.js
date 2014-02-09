@@ -39,7 +39,10 @@ function getAsync(type, id, ttl, callback) {
 }
 
 function makeWSClient() {
-    var ws = new WebSocket('ws://dev:3000');
+    var ws = new WebSocket(wsurl);
+    ws.onerror = function(err) {
+      alertError('ws error' + err.stack);
+    }
     ws.onopen = function() {
         wsclient.onopen && wsclient.onopen();
         wsclient.open = true;

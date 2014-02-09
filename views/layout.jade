@@ -19,13 +19,14 @@ html
     title= title
     link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet', href='/css/style.css')
-    script(type='text/javascript', src='/js/util.js')
-    script(type='text/javascript', src='/fastclick/lib/fastclick.js')
-    script(type='text/javascript', src='/js/bootstrap-validation.js')
-    script(type='text/javascript', src='/js/protocol.js')
-    script(type='text/javascript', src='/js/main.js')
+    script(src='/js/config-dev.js')
+    script(src='/js/util.js')
+    script(src='/fastclick/lib/fastclick.js')
+    script(src='/js/bootstrap-validation.js')
+    script(src='/js/protocol.js')
+    script(src='/js/main.js')
     meta(name='viewport', content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no')
-    script.
+    script
       var nickname = '#{user && user.nickname}';
     block head
   body(class=bodyClass, data-page=bodyClass)

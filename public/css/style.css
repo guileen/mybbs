@@ -114,6 +114,10 @@ fieldset[disabled] .btn-weibo.active {
   font-size: 16px;
   border: none;
 }
+.main-column {
+  margin: 0px;
+  padding: 5px;
+}
 .post-cell {
   margin-bottom: 15px;
   padding: 5px;
@@ -230,10 +234,6 @@ a.group-name {
   .container .row {
     margin: 0px;
     padding: 0px;
-  }
-  .container .row .main-column {
-    margin: 0px;
-    padding: 5px;
   }
   .center-block {
     padding: 0 10px;
