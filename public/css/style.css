@@ -173,7 +173,7 @@ button:click {
   outline: none;
 }
 #topicform textarea {
-  border: none;
+  border: 1px solid #ccc;
   overflow: auto;
   outline: none;
   box-shadow: none;
@@ -225,6 +225,9 @@ button:click {
 a.group-name {
   background-color: #ccddee;
 }
+.bottom-padding {
+  height: 45px;
+}
 @media screen and (max-width: 800px) {
   .container {
     margin: 0px;
@@ -266,9 +269,6 @@ a.group-name {
     position: fixed;
     left: 10px;
     bottom: 10px;
-  }
-  .bottom-padding {
-    height: 45px;
   }
   .right-button-group {
     z-index: 10001;

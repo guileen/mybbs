@@ -18,8 +18,7 @@ block main
     if isMember
       a.btn.btn-default(href="/g/#{group.id}/admin") 管理
     else
-      form(action='/g/#{group.id}/join', method='post')
-        button.btn.btn-primary(type='submit') 加入
+      button.btn.btn-default(type='submit', onclick="javascript:joinGroup('#{group.id}')") 加入
 
   ol.breadcrumb
     li: a(href='/') 首页

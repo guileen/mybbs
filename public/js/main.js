@@ -21,6 +21,13 @@ function alertError(msg) {
   return fixedAlert(msg, 'danger');
 }
 
+function joinGroup(gid) {
+  u.httpPost('/g/' + gid + '/join', {}, function(err, data){
+      if(err) return alertError(err);
+      location.href = '/g/' + gid;
+  })
+}
+
 // get from local or cache, ttl(time to live) is optional
 function getAsync(type, id, ttl, callback) {
     if(!callback) {

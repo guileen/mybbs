@@ -12,11 +12,15 @@ block content
   //- .navbar-padding
   .container(style='max-width:600px;')
     .center-block
+      h3 发帖
       form#topicform(action='/topic/create', method='post')
-        #form-step1
+        textarea#inputText(name='txt', placeholder='输入内容')
+        .form-group
+          label(for='InputKeyword') 关键字
+          input#InputKeyword.form-control(name='keywords', type='text')
+        if(gid)
           input(type='hidden', name='gid', value=gid);
-          textarea#inputText(name='txt', placeholder='输入内容')
-        #form-step2.hide
+        else
           .form-group
             label(for='InputGroup') 发布到群组
             select#InputGroup(name='gid').form-control
@@ -24,20 +28,12 @@ block content
                 option(value='', selected) 无
               each group in joinedGroups
                 option(value=group.id, selected=group.id==gid)= group.name
-          .form-group
-            label(for='InputKeyword') 关键字
-            input#InputKeyword.form-control(name='keywords', type='text')
+      .bottom-padding
       script.
         var _formstep = 0;
         function submitForm() {
-          if(_formstep == 0) {
-            console.log('step 1');
             var txt = u.q('#inputText').value;
             if(txt.trim().length < 5) return alertError('未达到质量要求');
-            u.addClass(u.q('#form-step1'), 'hide');
-            u.removeClass(u.q('#form-step2'), 'hide');
-            _formstep = 1;
-          } else {
             u.submitJsonForm('#topicform', '#sendbtn', function(err, reply) {
               console.log(reply);
               if(reply.err) {
@@ -65,10 +61,10 @@ block content
                 location.href = '/';
               }
             });
-          }
         }
         function onresize() {
-          var h = u.getWindowSize().h - 45;
+          var h = u.getWindowSize().h;
+          h  -= h > 300 ? 180 : 45;
           u.q('#inputText').style.height = h + 'px';
         }
         onresize();
