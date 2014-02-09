@@ -11,6 +11,15 @@ mixin topiclist(topics)
           span.glyphicon.glyphicon-comment
           &nbsp;#{topic.replies || '0'}
 
+mixin admin_tabs(group, active)
+  ul.nav.nav-tabs
+    li(class=active == 'topref' && 'active')
+      a(href='/g/#{group.id}/admin') 英雄榜
+    li(class=active == 'refstats' && 'active')
+      a(href='/g/#{group.id}/refstats') 我的英雄帖
+    li(class=active == 'members' && 'active')
+      a(href='/g/#{group.id}/members') 成员管理
+
 block variables
 - title = title ? 'mytxtbbs-' + title : 'mytxtbbs'
 doctype 5

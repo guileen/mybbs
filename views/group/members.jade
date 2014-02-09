@@ -11,15 +11,14 @@ block main
     li: a(href='/g/#{group.id}/admin') 管理
     li.active 成员列表
 
-  a.btn.btn-primary(href='/g/#{group.id}/refstats') 我的英雄帖
-  a.btn.btn-primary(href='/g/#{group.id}/members') 成员管理
+  +admin_tabs(group, 'members');
 
   h4 成员列表
 
   for member in members
     p
       .btn-group.pull-right
-        button.btn.btn-primary.btn-xs 设为管理员
-        button.btn.btn-danger.btn-xs 移除
+        //- button.btn.btn-primary.btn-xs 设为管理员
+        button.btn.btn-danger.btn-xs 阻止
       a(href='/u/#{member.id}')= member.nickname
 
