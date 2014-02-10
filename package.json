@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "cclog": "latest",
-    "steampunk": "latest",
     "express": "3.4.7",
     "jade": "*",
     "less-middleware": "*",

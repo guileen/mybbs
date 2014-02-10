@@ -1,6 +1,10 @@
 PUBLIC_DIR = ./public
 BOWER_DIR = ./bower_components
 
+install:
+	npm install -d
+	bower isntall
+
 stats:
 	gitstats . ./out
 	open ./out/index.html
