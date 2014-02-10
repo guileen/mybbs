@@ -22,6 +22,7 @@ app.set('view engine', 'jade');
 app.use(express.favicon());
 if('test' != app.get('env'))
     app.use(express.logger('dev'));
+app.use(express.compress());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
@@ -41,6 +42,7 @@ app.use(require('less-middleware')({ src: path.join(__dirname, 'public')
     , debug: true
     , paths: [path.join(__dirname, 'public/less')]
 }));
+app.use(express.staticCache());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
